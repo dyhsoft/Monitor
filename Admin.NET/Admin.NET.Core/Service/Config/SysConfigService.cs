@@ -109,9 +109,11 @@ public class SysConfigService : IDynamicApiController, ITransient
         var config = await _sysConfigRep.GetFirstAsync(u => u.Id == input.Id);
 
         // 禁止删除系统参数
-        if (config.SysFlag == YesNoEnum.Y) throw Oops.Oh(ErrorCodeEnum.D9001);
+        if (config.SysFlag == YesNoEnum.Y)
+        { throw Oops.Oh(ErrorCodeEnum.D9001); }
 
-        await _sysConfigRep.DeleteAsync(config);
+        else
+        { await _sysConfigRep.DeleteAsync(config); }
 
         Remove(config);
     }
