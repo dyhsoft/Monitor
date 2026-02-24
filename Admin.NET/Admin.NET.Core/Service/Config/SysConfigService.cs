@@ -111,7 +111,6 @@ public class SysConfigService : IDynamicApiController, ITransient
         // 禁止删除系统参数
         if (config.SysFlag == YesNoEnum.Y)
         { throw Oops.Oh(ErrorCodeEnum.D9001); }
-
         else
         { await _sysConfigRep.DeleteAsync(config); }
 
