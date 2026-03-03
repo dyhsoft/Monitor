@@ -12,43 +12,58 @@
  * Do not edit the class manually.
  */
 
+import { SysFileProvider } from './sys-file-provider';
  /**
- * 翻译表输入参数
+ * 全局返回结果
  *
  * @export
- * @interface ListSysLangTextInput
+ * @interface AdminResultSysFileProvider
  */
-export interface ListSysLangTextInput {
+export interface AdminResultSysFileProvider {
 
     /**
-     * 所属实体名
-     *
-     * @type {string}
-     * @memberof ListSysLangTextInput
-     */
-    entityName: string;
-
-    /**
-     * 所属实体ID
+     * 状态码
      *
      * @type {number}
-     * @memberof ListSysLangTextInput
+     * @memberof AdminResultSysFileProvider
      */
-    entityId: number;
+    code?: number;
 
     /**
-     * 字段名
+     * 类型success、warning、error
      *
      * @type {string}
-     * @memberof ListSysLangTextInput
+     * @memberof AdminResultSysFileProvider
      */
-    fieldName: string;
+    type?: string | null;
 
     /**
-     * 语言代码
+     * 错误信息
      *
      * @type {string}
-     * @memberof ListSysLangTextInput
+     * @memberof AdminResultSysFileProvider
      */
-    langCode?: string | null;
+    message?: string | null;
+
+    /**
+     * @type {SysFileProvider}
+     * @memberof AdminResultSysFileProvider
+     */
+    result?: SysFileProvider;
+
+    /**
+     * 附加数据
+     *
+     * @type {any}
+     * @memberof AdminResultSysFileProvider
+     */
+    extras?: any | null;
+
+    /**
+     * 时间
+     *
+     * @type {Date}
+     * @memberof AdminResultSysFileProvider
+     */
+    time?: Date;
 }

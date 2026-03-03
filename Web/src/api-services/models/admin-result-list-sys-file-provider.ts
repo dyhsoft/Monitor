@@ -12,67 +12,60 @@
  * Do not edit the class manually.
  */
 
+import { SysFileProvider } from './sys-file-provider';
  /**
- * 
+ * 全局返回结果
  *
  * @export
- * @interface SysFileUploadFileBody
+ * @interface AdminResultListSysFileProvider
  */
-export interface SysFileUploadFileBody {
+export interface AdminResultListSysFileProvider {
 
     /**
-     * 文件
-     *
-     * @type {Blob}
-     * @memberof SysFileUploadFileBody
-     */
-    file: Blob;
-
-    /**
-     * 文件类别
-     *
-     * @type {string}
-     * @memberof SysFileUploadFileBody
-     */
-    fileType?: string;
-
-    /**
-     * 是否公开
-     *
-     * @type {boolean}
-     * @memberof SysFileUploadFileBody
-     */
-    isPublic?: boolean;
-
-    /**
-     * 允许格式：.jpeg.jpg.png.bmp.gif.tif
-     *
-     * @type {string}
-     * @memberof SysFileUploadFileBody
-     */
-    allowSuffix?: string;
-
-    /**
-     * 指定存储桶名称
-     *
-     * @type {string}
-     * @memberof SysFileUploadFileBody
-     */
-    bucketName?: string;
-
-    /**
-     * 指定存储提供者ID
+     * 状态码
      *
      * @type {number}
-     * @memberof SysFileUploadFileBody
+     * @memberof AdminResultListSysFileProvider
      */
-    providerId?: number;
+    code?: number;
 
     /**
-     * 业务数据Id
+     * 类型success、warning、error
      *
-     * @type {number}
-     * @memberof SysFileUploadFileBody
+     * @type {string}
+     * @memberof AdminResultListSysFileProvider
      */
-    dataId?: number;
+    type?: string | null;
+
+    /**
+     * 错误信息
+     *
+     * @type {string}
+     * @memberof AdminResultListSysFileProvider
+     */
+    message?: string | null;
+
+    /**
+     * 数据
+     *
+     * @type {Array<SysFileProvider>}
+     * @memberof AdminResultListSysFileProvider
+     */
+    result?: Array<SysFileProvider> | null;
+
+    /**
+     * 附加数据
+     *
+     * @type {any}
+     * @memberof AdminResultListSysFileProvider
+     */
+    extras?: any | null;
+
+    /**
+     * 时间
+     *
+     * @type {Date}
+     * @memberof AdminResultListSysFileProvider
+     */
+    time?: Date;
 }
