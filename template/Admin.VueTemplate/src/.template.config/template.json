@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Run2948",
+  "classifications": [
+    "Furion",
+    "Extras",
+    "Vue",
+    "Antd",
+    "snowy",
+    "k-form-design"
+  ],
+  "name": "Furion Extras Vue Template",
+  "identity": "Furion.Extras.Vue.Template",
+  "shortName": "fevt",
+  "tags": {
+    "language": "JavaScript",
+    "type": "project"
+  },
+  "sourceName": "Admin.VueApp",
+  "preferNameDirectory": true,
+  "symbols": {
+    "EnableTenant": {
+      "type": "parameter",
+      "dataType": "bool",
+      "defaultValue": "true"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(!EnableTenant)",
+          "exclude": [
+            "src/api/modular/system/tenantManage.js",
+            "src/views/system/tenant/*"
+          ]
+        }
+      ]
+    }
+  ]
+}

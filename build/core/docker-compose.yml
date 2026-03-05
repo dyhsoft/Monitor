@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+      
+  feat:
+    image: feat
+    container_name: feat_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5566:80"

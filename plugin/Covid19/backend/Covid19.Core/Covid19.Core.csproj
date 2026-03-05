@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <NoWarn>1701;1702;1591</NoWarn>
+    <DocumentationFile>Covid19.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Covid19.Core.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Furion.Extras.AspNetCore" Version="1.0.34" />
+  </ItemGroup>
+
+</Project>
