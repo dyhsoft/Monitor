@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
+using Admin.NET.EntityFramework.Core;
 
 namespace Admin.NET.Application.CoalMine.CoalDataAccess;
 
@@ -270,6 +271,134 @@ public class CoalDataParser
             "PSLCDSS" => DataFileType.PSLCDSS,
             _ => DataFileType.Unknown
         };
+    }
+
+    /// <summary>
+    /// 解析人员定位实时数据 (RYSS)
+    /// 返回 PersonLocation 实体列表
+    /// </summary>
+    public static List<PersonLocation> ParseRYSS(string content)
+    {
+        var list = new List<PersonLocation>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            // 跳过文件头，从第一行数据开始
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 5)
+                {
+                    var location = new PersonLocation
+                    {
+                        CardId = parts[0].Trim(),
+                        PersonName = parts[1].Trim(),
+                        AreaCode = parts[2].Trim(),
+                        AreaName = parts[2].Trim(), // TODO: 区域名称映射
+                        StationId = parts.Length > 5 ? parts[5].Trim() : "",
+                        StationName = parts.Length > 6 ? parts[6].Trim() : "",
+                        UpdateTime = DateTime.Now
+                    };
+
+                    // 解析时间
+                    if (DateTime.TryParse(parts[3].Trim(), out var inTime))
+                        location.InTime = inTime;
+                    if (DateTime.TryParse(parts[4].Trim(), out var updateTime))
+                        location.UpdateTime = updateTime;
+
+                    list.Add(location);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析RYSS数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析水仓水位数据 (CGKCDSS)
+    /// 返回 WaterRealtime 实体列表
+    /// </summary>
+    public static List<WaterRealtime> ParseCGKCDSS(string content)
+    {
+        var list = new List<WaterRealtime>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 5)
+                {
+                    var water = new WaterRealtime
+                    {
+                        SensorCode = parts[0].Trim(),
+                        SensorName = parts.Length > 1 ? parts[1].Trim() : "",
+                        Status = parts.Length > 2 && int.TryParse(parts[2].Trim(), out var status) ? status : 0,
+                        WaterLevel = parts.Length > 3 && decimal.TryParse(parts[3].Trim(), out var wl) ? wl : null,
+                        Temperature = parts.Length > 4 && decimal.TryParse(parts[4].Trim(), out var temp) ? temp : null,
+                        UpdateTime = parts.Length > 5 && DateTime.TryParse(parts[5].Trim(), out var ut) ? ut : DateTime.Now
+                    };
+                    list.Add(water);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析CGKCDSS数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析排水流量数据 (PSLCDSS)
+    /// 返回 WaterRealtime 实体列表
+    /// </summary>
+    public static List<WaterRealtime> ParsePSLCDSS(string content)
+    {
+        var list = new List<WaterRealtime>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 5)
+                {
+                    var water = new WaterRealtime
+                    {
+                        SensorCode = parts[0].Trim(),
+                        SensorName = parts.Length > 1 ? parts[1].Trim() : "",
+                        Status = parts.Length > 2 && int.TryParse(parts[2].Trim(), out var status) ? status : 0,
+                        FlowRate = parts.Length > 3 && decimal.TryParse(parts[3].Trim(), out var flow) ? flow : null,
+                        UpdateTime = parts.Length > 4 && DateTime.TryParse(parts[4].Trim(), out var ut) ? ut : DateTime.Now
+                    };
+                    list.Add(water);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析PSLCDSS数据失败: {ex.Message}");
+        }
+        return list;
     }
 
     /// <summary>
