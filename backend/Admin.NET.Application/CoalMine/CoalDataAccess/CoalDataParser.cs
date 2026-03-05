@@ -92,8 +92,8 @@ public class CoalDataParser
         var parts = line.Split(_options.FieldSeparator.ToCharArray());
         if (parts.Length < 3) return null;
 
-        var mineCode =Trim();
-        var mineName = parts parts[0].[1].Trim();
+        var mineCode = parts[0].Trim();
+        var mineName = parts[1].Trim();
 
         // 从文件名获取数据类型 (在文件头之前)
         var dataTypeMatch = Regex.Match(line, @"^(\d{10})_(\w+)_");
