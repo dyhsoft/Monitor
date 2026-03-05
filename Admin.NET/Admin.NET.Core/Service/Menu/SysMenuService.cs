@@ -337,7 +337,7 @@ public class SysMenuService : IDynamicApiController, ITransient
         var permissions = _sysCacheService.Get<List<string>>(CacheConst.KeyUserButton + userId);
         if (permissions != null) return permissions;
 
-        var menuIdList = _userManager.SuperAdmin || _userManager.SysAdmin ? new() : await GetMenuIdList();
+        var menuIdList = _userManager.SuperAdmin ? new() : await GetMenuIdList();
         if (menuIdList.Count <= 0 && !_userManager.SuperAdmin)
         {
             //_sysCacheService.Set(CacheConst.KeyUserButton + userId, new List<string>(), TimeSpan.FromDays(7));
