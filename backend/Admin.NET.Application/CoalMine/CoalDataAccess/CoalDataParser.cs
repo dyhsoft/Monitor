@@ -437,4 +437,352 @@ public class CoalDataParser
 
         return Encoding.UTF8;
     }
+
+    /// <summary>
+    /// 解析人员初始化数据 (RYCS)
+    /// 返回人员卡号信息列表
+    /// </summary>
+    /// <remarks>
+    /// 数据格式: 卡号;姓名;部门;工种;职位;电话;照片标识
+    /// </remarks>
+    public static List<Dictionary<string, object>> ParseRYCS(string content)
+    {
+        var list = new List<Dictionary<string, object>>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 2)
+                {
+                    var record = new Dictionary<string, object>
+                    {
+                        ["CardId"] = parts[0].Trim(),
+                        ["PersonName"] = parts.Length > 1 ? parts[1].Trim() : "",
+                        ["Department"] = parts.Length > 2 ? parts[2].Trim() : "",
+                        ["WorkType"] = parts.Length > 3 ? parts[3].Trim() : "",
+                        ["Position"] = parts.Length > 4 ? parts[4].Trim() : "",
+                        ["Phone"] = parts.Length > 5 ? parts[5].Trim() : "",
+                        ["PhotoFlag"] = parts.Length > 6 ? parts[6].Trim() : ""
+                    };
+                    list.Add(record);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析RYCS数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析人员出勤数据 (RYCY)
+    /// 返回人员出勤记录列表
+    /// </summary>
+    /// <remarks>
+    /// 数据格式: 卡号;姓名;部门;入井时间;出井时间;工作时长;状态
+    /// </remarks>
+    public static List<Dictionary<string, object>> ParseRYCY(string content)
+    {
+        var list = new List<Dictionary<string, object>>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 2)
+                {
+                    var record = new Dictionary<string, object>
+                    {
+                        ["CardId"] = parts[0].Trim(),
+                        ["PersonName"] = parts.Length > 1 ? parts[1].Trim() : "",
+                        ["Department"] = parts.Length > 2 ? parts[2].Trim() : "",
+                        ["InTime"] = parts.Length > 3 ? parts[3].Trim() : "",
+                        ["OutTime"] = parts.Length > 4 ? parts[4].Trim() : "",
+                        ["WorkDuration"] = parts.Length > 5 ? parts[5].Trim() : "",
+                        ["Status"] = parts.Length > 6 ? parts[6].Trim() : "0"
+                    };
+                    list.Add(record);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析RYCY数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析人员区域数据 (RYQJ)
+    /// 返回区域人员统计列表
+    /// </summary>
+    /// <remarks>
+    /// 数据格式: 区域编号;区域名称;人数;进入时间
+    /// </remarks>
+    public static List<Dictionary<string, object>> ParseRYQJ(string content)
+    {
+        var list = new List<Dictionary<string, object>>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 2)
+                {
+                    var record = new Dictionary<string, object>
+                    {
+                        ["AreaCode"] = parts[0].Trim(),
+                        ["AreaName"] = parts.Length > 1 ? parts[1].Trim() : "",
+                        ["PersonCount"] = parts.Length > 2 && int.TryParse(parts[2].Trim(), out var count) ? count : 0,
+                        ["UpdateTime"] = parts.Length > 3 ? parts[3].Trim() : ""
+                    };
+                    list.Add(record);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析RYQJ数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析基站实时数据 (JZSS)
+    /// 返回基站状态列表
+    /// </summary>
+    /// <remarks>
+    /// 数据格式: 基站编号;基站名称;状态;在线人数;设备状态;最后更新时间
+    /// 状态: 0=正常, 1=故障, 2=离线
+    /// </remarks>
+    public static List<Dictionary<string, object>> ParseJZSS(string content)
+    {
+        var list = new List<Dictionary<string, object>>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 2)
+                {
+                    var record = new Dictionary<string, object>
+                    {
+                        ["StationCode"] = parts[0].Trim(),
+                        ["StationName"] = parts.Length > 1 ? parts[1].Trim() : "",
+                        ["Status"] = parts.Length > 2 && int.TryParse(parts[2].Trim(), out var status) ? status : 0,
+                        ["OnlineCount"] = parts.Length > 3 && int.TryParse(parts[3].Trim(), out var count) ? count : 0,
+                        ["DeviceStatus"] = parts.Length > 4 ? parts[4].Trim() : "",
+                        ["UpdateTime"] = parts.Length > 5 ? parts[5].Trim() : ""
+                    };
+                    list.Add(record);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析JZSS数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析开关报警数据 (KGBH)
+    /// 返回开关量报警列表
+    /// </summary>
+    /// <remarks>
+    /// 数据格式: 测点编号;类型;名称;状态;报警时间;...
+    /// 状态: 0=正常, 1=报警, 2=故障
+    /// </remarks>
+    public static List<Dictionary<string, object>> ParseKGBH(string content)
+    {
+        var list = new List<Dictionary<string, object>>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 2)
+                {
+                    var record = new Dictionary<string, object>
+                    {
+                        ["SensorCode"] = parts[0].Trim(),
+                        ["SensorType"] = parts.Length > 1 ? parts[1].Trim() : "",
+                        ["SensorName"] = parts.Length > 2 ? parts[2].Trim() : "",
+                        ["Status"] = parts.Length > 3 && int.TryParse(parts[3].Trim(), out var status) ? status : 0,
+                        ["AlarmTime"] = parts.Length > 4 ? parts[4].Trim() : "",
+                        ["Value"] = parts.Length > 5 ? parts[5].Trim() : "",
+                        ["Unit"] = parts.Length > 6 ? parts[6].Trim() : ""
+                    };
+                    list.Add(record);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析KGBH数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析调校数据 (TJSJ)
+    /// 返回设备校准记录列表
+    /// </summary>
+    /// <remarks>
+    /// 数据格式: 测点编号;类型;名称;调校前值;调校后值;调校人;调校时间
+    /// </remarks>
+    public static List<Dictionary<string, object>> ParseTJSJ(string content)
+    {
+        var list = new List<Dictionary<string, object>>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 2)
+                {
+                    var record = new Dictionary<string, object>
+                    {
+                        ["SensorCode"] = parts[0].Trim(),
+                        ["SensorType"] = parts.Length > 1 ? parts[1].Trim() : "",
+                        ["SensorName"] = parts.Length > 2 ? parts[2].Trim() : "",
+                        ["BeforeValue"] = parts.Length > 3 ? parts[3].Trim() : "",
+                        ["AfterValue"] = parts.Length > 4 ? parts[4].Trim() : "",
+                        ["Calibrator"] = parts.Length > 5 ? parts[5].Trim() : "",
+                        ["CalibrateTime"] = parts.Length > 6 ? parts[6].Trim() : ""
+                    };
+                    list.Add(record);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析TJSJ数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析异常报警数据 (YCBJ)
+    /// 返回设备异常报警列表
+    /// </summary>
+    /// <remarks>
+    /// 数据格式: 测点编号;类型;名称;异常类型;描述;时间
+    /// 异常类型: 1=传感器故障, 2=通讯故障, 3=设备异常
+    /// </remarks>
+    public static List<Dictionary<string, object>> ParseYCBJ(string content)
+    {
+        var list = new List<Dictionary<string, object>>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 2)
+                {
+                    var record = new Dictionary<string, object>
+                    {
+                        ["SensorCode"] = parts[0].Trim(),
+                        ["SensorType"] = parts.Length > 1 ? parts[1].Trim() : "",
+                        ["SensorName"] = parts.Length > 2 ? parts[2].Trim() : "",
+                        ["ExceptionType"] = parts.Length > 3 && int.TryParse(parts[3].Trim(), out var type) ? type : 0,
+                        ["Description"] = parts.Length > 4 ? parts[4].Trim() : "",
+                        ["AlarmTime"] = parts.Length > 5 ? parts[5].Trim() : ""
+                    };
+                    list.Add(record);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析YCBJ数据失败: {ex.Message}");
+        }
+        return list;
+    }
+
+    /// <summary>
+    /// 解析井下水仓流量数据 (JSLCDSS)
+    /// 返回井下水仓监测数据列表
+    /// </summary>
+    /// <remarks>
+    /// 数据格式: 测点编号;状态;流量;累计量;采集时间
+    /// </remarks>
+    public static List<Dictionary<string, object>> ParseJSLCDSS(string content)
+    {
+        var list = new List<Dictionary<string, object>>();
+        try
+        {
+            if (string.IsNullOrWhiteSpace(content)) return list;
+
+            var lines = content.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < lines.Length; i++)
+            {
+                var line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line)) continue;
+
+                var parts = line.Split(';');
+                if (parts.Length >= 2)
+                {
+                    var record = new Dictionary<string, object>
+                    {
+                        ["SensorCode"] = parts[0].Trim(),
+                        ["Status"] = parts.Length > 1 && int.TryParse(parts[1].Trim(), out var status) ? status : 0,
+                        ["FlowRate"] = parts.Length > 2 && decimal.TryParse(parts[2].Trim(), out var flow) ? flow : null,
+                        ["TotalFlow"] = parts.Length > 3 && decimal.TryParse(parts[3].Trim(), out var total) ? total : null,
+                        ["UpdateTime"] = parts.Length > 4 ? parts[4].Trim() : ""
+                    };
+                    list.Add(record);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"解析JSLCDSS数据失败: {ex.Message}");
+        }
+        return list;
+    }
 }
