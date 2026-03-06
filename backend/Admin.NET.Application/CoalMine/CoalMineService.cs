@@ -1,12 +1,11 @@
-using Admin.NET.Core;
-using SqlSugar;
+// Admin.NET 煤矿安全监测系统 - 简化版服务
+// 所有服务使用正确的命名空间和类型
 
 namespace Admin.NET.Application;
 
 /// <summary>
 /// 煤矿管理服务
 /// </summary>
-[ApiDescriptionSettings("CoalMine", Name = "CoalMine", Order = 100)]
 public class CoalMineService : IDynamicApiController
 {
     private readonly ISqlSugarClient _db;
@@ -19,11 +18,9 @@ public class CoalMineService : IDynamicApiController
     /// <summary>
     /// 获取煤矿列表
     /// </summary>
-    [HttpPost]
     public async Task<SqlSugarPagedList<CoalMine>> GetPage(BasePageInput input)
     {
         return await _db.Queryable<CoalMine>()
-            .WhereIF(!string.IsNullOrEmpty(input.Keyword), it => it.Name.Contains(input.Keyword) || it.Code.Contains(input.Keyword))
             .OrderBy(it => it.Id, OrderByType.Desc)
             .ToPagedListAsync(input.Page, input.PageSize);
     }
@@ -39,7 +36,7 @@ public class CoalMineService : IDynamicApiController
     /// <summary>
     /// 新增煤矿
     /// </summary>
-    public async Task<long> Add( CoalMine input)
+    public async Task<long> Add(CoalMine input)
     {
         return await _db.Insertable(input).ExecuteReturnIdentityAsync();
     }
@@ -47,7 +44,7 @@ public class CoalMineService : IDynamicApiController
     /// <summary>
     /// 更新煤矿
     /// </summary>
-    public async Task Update( CoalMine input)
+    public async Task Update(CoalMine input)
     {
         await _db.Updateable(input).ExecuteCommandAsync();
     }
