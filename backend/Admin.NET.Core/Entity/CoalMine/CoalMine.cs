@@ -1,6 +1,6 @@
 using SqlSugar;
 
-namespace Admin.NET.Core.Entity.CoalMine;
+namespace Admin.NET.Core;
 
 /// <summary>
 /// 煤矿表
@@ -210,12 +210,6 @@ public class SafetyRealtime : EntityBase
     public int Status { get; set; }
 
     /// <summary>
-    /// 更新时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间")]
-    public DateTime UpdateTime { get; set; }
-
-    /// <summary>
     /// 接收时间
     /// </summary>
     [SugarColumn(ColumnDescription = "接收时间")]
@@ -275,12 +269,6 @@ public class PersonLocation : EntityBase
     /// </summary>
     [SugarColumn(ColumnDescription = "入井时间")]
     public DateTime? InTime { get; set; }
-
-    /// <summary>
-    /// 更新时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间")]
-    public DateTime UpdateTime { get; set; }
 }
 
 /// <summary>
@@ -330,12 +318,6 @@ public class WaterRealtime : EntityBase
     /// </summary>
     [SugarColumn(ColumnDescription = "温度(℃)", DecimalDigits = 1)]
     public decimal? Temperature { get; set; }
-
-    /// <summary>
-    /// 更新时间
-    /// </summary>
-    [SugarColumn(ColumnDescription = "更新时间")]
-    public DateTime UpdateTime { get; set; }
 }
 
 /// <summary>
