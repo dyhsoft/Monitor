@@ -1,6 +1,0 @@
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=./Admin.NET.db",
-    "MultiTenantConnection": "Data Source=./Admin.NET_SaaS.db"
-  }
-}
