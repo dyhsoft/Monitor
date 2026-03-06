@@ -11,7 +11,7 @@ using Furion.DynamicApiController;
 using Admin.NET.ApplicationWaterMonitoring.Dtos;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationWaterMonitoring.Services;
+namespace Admin.NET.Application.CoalMine.WaterMonitoring.Services;
 
 public interface IWaterService
 {

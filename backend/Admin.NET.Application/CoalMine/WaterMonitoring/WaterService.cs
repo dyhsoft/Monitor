@@ -14,7 +14,7 @@ using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationWaterMonitoring.Services;
+namespace Admin.NET.Application.CoalMine.WaterMonitoring.Services;
 
 [ApiDescriptionSettings("CoalMine", Name = "Water", Freeze = true)]
 public class WaterService : IWaterService, ITransient

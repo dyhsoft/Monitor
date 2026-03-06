@@ -11,7 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Admin.NET.EntityFramework.Core;
 
-namespace Admin.NET.ApplicationCoalDataAccess;
+namespace Admin.NET.Application.CoalMine.CoalDataAccess;
 
 /// <summary>
 /// 煤矿数据解析器

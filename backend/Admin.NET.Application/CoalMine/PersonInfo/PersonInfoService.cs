@@ -15,7 +15,7 @@ using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationPersonInfo.Services;
+namespace Admin.NET.Application.CoalMine.PersonInfo.Services;
 
 /// <summary>
 /// 人员信息服务

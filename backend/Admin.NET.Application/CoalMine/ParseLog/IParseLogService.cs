@@ -11,7 +11,7 @@ using Furion.DynamicApiController;
 using Admin.NET.ApplicationParseLog.Dtos;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationParseLog.Services;
+namespace Admin.NET.Application.CoalMine.ParseLog.Services;
 
 public interface IParseLogService
 {

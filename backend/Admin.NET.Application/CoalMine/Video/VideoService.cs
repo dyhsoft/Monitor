@@ -14,7 +14,7 @@ using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.Application;
+namespace Admin.NET.Application.CoalMine.Video;
 
 /// <summary>
 /// 视频监控服务

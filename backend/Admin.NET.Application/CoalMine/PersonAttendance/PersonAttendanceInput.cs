@@ -8,7 +8,7 @@ using Admin.NET.Core;
 using SqlSugar;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
-namespace Admin.NET.ApplicationPersonAttendance.Dtos;
+namespace Admin.NET.Application.CoalMine.PersonAttendance.Dtos;
 
 public class PersonAttendanceInput
 {

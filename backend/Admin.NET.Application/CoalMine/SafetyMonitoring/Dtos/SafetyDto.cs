@@ -8,7 +8,7 @@ using Admin.NET.Core;
 using SqlSugar;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
-namespace Admin.NET.ApplicationSafetyMonitoring.Dtos;
+namespace Admin.NET.Application.CoalMine.SafetyMonitoring.Dtos;
 
 /// <summary>
 /// 安全监测实时数据分页查询

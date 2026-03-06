@@ -15,7 +15,7 @@ using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationPersonLocation.Services;
+namespace Admin.NET.Application.CoalMine.PersonLocation.Services;
 
 /// <summary>
 /// 人员定位服务

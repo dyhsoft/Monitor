@@ -15,7 +15,7 @@ using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using SqlSugar;
 
-namespace Admin.NET.Application;
+namespace Admin.NET.Application.CoalMine.Services;
 
 /// <summary>
 /// FTP监听服务 - 支持多目录配置

@@ -11,7 +11,7 @@ using Furion.DynamicApiController;
 using Furion.DynamicApiController;
 using System.ComponentModel.DataAnnotations;
 
-namespace Admin.NET.Application;
+namespace Admin.NET.Application.CoalMine.Services;
 
 /// <summary>
 /// 报警配置分页输入

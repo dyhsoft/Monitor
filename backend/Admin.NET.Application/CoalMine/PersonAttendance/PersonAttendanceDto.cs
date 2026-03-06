@@ -10,7 +10,7 @@ using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationPersonAttendance.Dtos;
+namespace Admin.NET.Application.CoalMine.PersonAttendance.Dtos;
 
 /// <summary>
 /// 人员出勤分页输入

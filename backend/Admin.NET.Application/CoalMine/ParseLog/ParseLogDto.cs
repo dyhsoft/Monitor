@@ -10,7 +10,7 @@ using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationParseLog.Dtos;
+namespace Admin.NET.Application.CoalMine.ParseLog.Dtos;
 
 /// <summary>
 /// 解析日志分页输入

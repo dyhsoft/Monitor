@@ -8,7 +8,7 @@ using Admin.NET.Core;
 using SqlSugar;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
-namespace Admin.NET.ApplicationWaterMonitoring.Dtos;
+namespace Admin.NET.Application.CoalMine.WaterMonitoring.Dtos;
 
 /// <summary>
 /// 水害监测分页查询

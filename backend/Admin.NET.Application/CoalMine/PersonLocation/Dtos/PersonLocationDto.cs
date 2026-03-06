@@ -8,7 +8,7 @@ using Admin.NET.Core;
 using SqlSugar;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
-namespace Admin.NET.ApplicationPersonLocation.Dtos;
+namespace Admin.NET.Application.CoalMine.PersonLocation.Dtos;
 
 /// <summary>
 /// 人员定位分页查询

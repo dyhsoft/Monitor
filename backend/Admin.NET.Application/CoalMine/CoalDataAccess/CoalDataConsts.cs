@@ -8,7 +8,7 @@ using Admin.NET.Core;
 using SqlSugar;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
-namespace Admin.NET.ApplicationCoalDataAccess;
+namespace Admin.NET.Application.CoalMine.CoalDataAccess;
 
 /// <summary>
 /// 数据文件类型枚举

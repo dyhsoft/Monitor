@@ -15,7 +15,7 @@ using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationPersonAttendance.Services;
+namespace Admin.NET.Application.CoalMine.PersonAttendance.Services;
 
 /// <summary>
 /// 人员出勤服务

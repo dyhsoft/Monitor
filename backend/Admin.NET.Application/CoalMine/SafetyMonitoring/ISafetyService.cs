@@ -11,7 +11,7 @@ using Furion.DynamicApiController;
 using Admin.NET.ApplicationSafetyMonitoring.Dtos;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationSafetyMonitoring.Services;
+namespace Admin.NET.Application.CoalMine.SafetyMonitoring.Services;
 
 /// <summary>
 /// 安全监测服务接口

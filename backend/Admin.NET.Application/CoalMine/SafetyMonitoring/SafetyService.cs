@@ -15,7 +15,7 @@ using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationSafetyMonitoring.Services;
+namespace Admin.NET.Application.CoalMine.SafetyMonitoring.Services;
 
 /// <summary>
 /// 安全监测服务

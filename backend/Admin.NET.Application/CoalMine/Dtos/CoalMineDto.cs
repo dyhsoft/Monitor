@@ -8,7 +8,7 @@ using Admin.NET.Core;
 using SqlSugar;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
-namespace Admin.NET.ApplicationDtos;
+namespace Admin.NET.Application.CoalMine.Dtos;
 
 /// <summary>
 /// 煤矿分页查询

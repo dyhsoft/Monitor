@@ -15,7 +15,7 @@ using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationServices;
+namespace Admin.NET.Application.CoalMine.Services;
 
 /// <summary>
 /// 网关配置服务

@@ -15,7 +15,7 @@ using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationParseLog.Services;
+namespace Admin.NET.Application.CoalMine.ParseLog.Services;
 
 public class ParseLogService : IParseLogService, ITransient
 {

@@ -10,7 +10,7 @@ using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationPersonInfo.Dtos;
+namespace Admin.NET.Application.CoalMine.PersonInfo.Dtos;
 
 /// <summary>
 /// 人员信息输入

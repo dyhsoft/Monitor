@@ -10,7 +10,7 @@ using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using Admin.NET.ApplicationDtos;
 
-namespace Admin.NET.ApplicationServices;
+namespace Admin.NET.Application.CoalMine.Services;
 
 /// <summary>
 /// 网关配置服务接口

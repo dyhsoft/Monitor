@@ -11,7 +11,7 @@ using Furion.DynamicApiController;
 using Admin.NET.ApplicationPersonAttendance.Dtos;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationPersonAttendance.Services;
+namespace Admin.NET.Application.CoalMine.PersonAttendance.Services;
 
 public interface IPersonAttendanceService
 {

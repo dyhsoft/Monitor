@@ -11,7 +11,7 @@ using Furion.DynamicApiController;
 using Admin.NET.ApplicationPersonInfo.Dtos;
 using SqlSugar;
 
-namespace Admin.NET.ApplicationPersonInfo.Services;
+namespace Admin.NET.Application.CoalMine.PersonInfo.Services;
 
 public interface IPersonInfoService
 {
