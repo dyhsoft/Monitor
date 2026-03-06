@@ -1,5 +1,7 @@
-// Admin.NET 煤矿安全监测系统 - 简化版服务
-// 所有服务使用正确的命名空间和类型
+using Admin.NET.Core;
+using SqlSugar;
+using Furion;
+using Furion.DynamicApiController;
 
 namespace Admin.NET.Application;
 
