@@ -973,10 +973,22 @@ public class ParseLog : EntityBase
     public long MineId { get; set; }
 
     /// <summary>
+    /// 煤矿编号
+    /// </summary>
+    [SugarColumn(Length = 20, ColumnDescription = "煤矿编号")]
+    public string MineCode { get; set; }
+
+    /// <summary>
     /// 文件名
     /// </summary>
     [SugarColumn(Length = 200, ColumnDescription = "文件名")]
     public string FileName { get; set; }
+
+    /// <summary>
+    /// 源文件路径
+    /// </summary>
+    [SugarColumn(Length = 500, ColumnDescription = "源文件路径")]
+    public string FilePath { get; set; }
 
     /// <summary>
     /// 文件类型
@@ -995,6 +1007,12 @@ public class ParseLog : EntityBase
     /// </summary>
     [SugarColumn(ColumnDescription = "文件大小")]
     public long? FileSize { get; set; }
+
+    /// <summary>
+    /// 源文件内容
+    /// </summary>
+    [SugarColumn(ColumnDescription = "源文件内容", ColumnDataType = "ntext")]
+    public string SourceContent { get; set; }
 
     /// <summary>
     /// 解析记录数
@@ -1031,4 +1049,152 @@ public class ParseLog : EntityBase
     /// </summary>
     [SugarColumn(ColumnDescription = "状态")]
     public int Status { get; set; }
+}
+
+/// <summary>
+/// 人员信息
+/// </summary>
+[SugarTable("PersonInfo", "人员信息表")]
+[Tenant(Seven = true)]
+public class PersonInfo : EntityBase
+{
+    /// <summary>
+    /// 煤矿Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "煤矿Id")]
+    public long MineId { get; set; }
+
+    /// <summary>
+    /// 姓名
+    /// </summary>
+    [SugarColumn(Length = 50, ColumnDescription = "姓名")]
+    public string PersonName { get; set; }
+
+    /// <summary>
+    /// 定位卡号
+    /// </summary>
+    [SugarColumn(Length = 20, ColumnDescription = "定位卡号")]
+    public string CardId { get; set; }
+
+    /// <summary>
+    /// 部门
+    /// </summary>
+    [SugarColumn(Length = 50, ColumnDescription = "部门")]
+    public string Department { get; set; }
+
+    /// <summary>
+    /// 工种
+    /// </summary>
+    [SugarColumn(Length = 50, ColumnDescription = "工种")]
+    public string WorkType { get; set; }
+
+    /// <summary>
+    /// 职位
+    /// </summary>
+    [SugarColumn(Length = 50, ColumnDescription = "职位")]
+    public string Position { get; set; }
+
+    /// <summary>
+    /// 电话
+    /// </summary>
+    [SugarColumn(Length = 20, ColumnDescription = "电话")]
+    public string Phone { get; set; }
+
+    /// <summary>
+    /// 身份证号
+    /// </summary>
+    [SugarColumn(Length = 18, ColumnDescription = "身份证号")]
+    public string IdCard { get; set; }
+
+    /// <summary>
+    /// 照片路径
+    /// </summary>
+    [SugarColumn(Length = 200, ColumnDescription = "照片路径")]
+    public string PhotoPath { get; set; }
+
+    /// <summary>
+    /// 状态（1=在岗，0=离岗）
+    /// </summary>
+    [SugarColumn(ColumnDescription = "状态")]
+    public int Status { get; set; } = 1;
+
+    /// <summary>
+    /// 备注
+    /// </summary>
+    [SugarColumn(Length = 500, ColumnDescription = "备注")]
+    public string Remark { get; set; }
+}
+
+/// <summary>
+/// 人员出勤记录
+/// </summary>
+[SugarTable("PersonAttendance", "人员出勤记录表")]
+[Tenant(Seven = true)]
+public class PersonAttendance : EntityBase
+{
+    /// <summary>
+    /// 煤矿Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "煤矿Id")]
+    public long MineId { get; set; }
+
+    /// <summary>
+    /// 人员信息Id
+    /// </summary>
+    [SugarColumn(ColumnDescription = "人员信息Id")]
+    public long PersonInfoId { get; set; }
+
+    /// <summary>
+    /// 定位卡号
+    /// </summary>
+    [SugarColumn(Length = 20, ColumnDescription = "定位卡号")]
+    public string CardId { get; set; }
+
+    /// <summary>
+    /// 姓名
+    /// </summary>
+    [SugarColumn(Length = 50, ColumnDescription = "姓名")]
+    public string PersonName { get; set; }
+
+    /// <summary>
+    /// 部门
+    /// </summary>
+    [SugarColumn(Length = 50, ColumnDescription = "部门")]
+    public string Department { get; set; }
+
+    /// <summary>
+    /// 工种
+    /// </summary>
+    [SugarColumn(Length = 50, ColumnDescription = "工种")]
+    public string WorkType { get; set; }
+
+    /// <summary>
+    /// 入井时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "入井时间")]
+    public DateTime? InTime { get; set; }
+
+    /// <summary>
+    /// 出井时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "出井时间")]
+    public DateTime? OutTime { get; set; }
+
+    /// <summary>
+    /// 工作时长（秒）
+    /// </summary>
+    [SugarColumn(ColumnDescription = "工作时长")]
+    public int? WorkDuration { get; set; }
+
+    /// <summary>
+    /// 状态（0=在井中，1=已出井）
+    /// </summary>
+    [SugarColumn(ColumnDescription = "状态")]
+    public int Status { get; set; }
+
+    /// <summary>
+    /// 出勤日期
+    /// </summary>
+    [SugarColumn(ColumnDescription = "出勤日期")]
+    public DateTime AttendanceDate { get; set; }
 }

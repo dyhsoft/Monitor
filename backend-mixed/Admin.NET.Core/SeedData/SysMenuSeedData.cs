@@ -194,7 +194,58 @@ namespace Admin.NET.Core
 
                 new SysMenu{Id=142307070922877, Pid=0, Pids="[0],", Name="大屏监控", Code="main_screen_monitor", Type=MenuType.MENU, Icon="desktop", Router="/monitor", Component="main/screenMonitor/index", Application="busiapp", OpenType=MenuOpenType.NONE, Visible="Y", Weight=MenuWeight.DEFAULT_WEIGHT, Sort=100, Status=CommonStatus.ENABLE },
 
-                new SysMenu{Id=142307070922878, Pid=0, Pids="[0],", Name="地理信息", Code="main_map", Type=MenuType.MENU, Icon="global", Router="/map", Component="main/map/index", Application="busiapp", OpenType=MenuOpenType.NONE, Visible="Y", Weight=MenuWeight.DEFAULT_WEIGHT, Sort=100, Status=CommonStatus.ENABLE }
+                new SysMenu{Id=142307070922878, Pid=0, Pids="[0],", Name="地理信息", Code="main_map", Type=MenuType.MENU, Icon="global", Router="/map", Component="main/map/index", Application="busiapp", OpenType=MenuOpenType.NONE, Visible="Y", Weight=MenuWeight.DEFAULT_WEIGHT, Sort=100, Status=CommonStatus.ENABLE },
+
+                // ==================== 煤矿安全监测系统菜单 ====================
+                new SysMenu{Id=190000000000001, Pid=0, Pids="[0],", Name="煤矿安全监测", Code="coal_mine", Type=MenuType.DIR, Icon="fund-projection-screen", Router="/coalmine", Component="PageView", Application="manage", OpenType=MenuOpenType.NONE, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=50, Status=CommonStatus.ENABLE },
+                
+                // 大屏展示
+                new SysMenu{Id=190000000000002, Pid=190000000000001, Pids="[0],[190000000000001],", Name="监控大屏", Code="coal_dashboard", Type=MenuType.MENU, Router="/coalmine/dashboard", Component="coalmine/DashboardIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=1, Status=CommonStatus.ENABLE },
+                
+                // 煤矿管理
+                new SysMenu{Id=190000000000003, Pid=190000000000001, Pids="[0],[190000000000001],", Name="煤矿管理", Code="coal_mine_mgr", Type=MenuType.MENU, Router="/coalmine/mine", Component="coalmine/CoalMineIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=2, Status=CommonStatus.ENABLE },
+                
+                // 安全监测
+                new SysMenu{Id=190000000000004, Pid=190000000000001, Pids="[0],[190000000000001],", Name="安全监测", Code="coal_safety", Type=MenuType.MENU, Router="/coalmine/safety", Component="coalmine/SafetyRealtimeIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=3, Status=CommonStatus.ENABLE },
+                
+                // 人员定位
+                new SysMenu{Id=190000000000005, Pid=190000000000001, Pids="[0],[190000000000001],", Name="人员定位", Code="coal_person_location", Type=MenuType.MENU, Router="/coalmine/person", Component="coalmine/PersonLocationIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=4, Status=CommonStatus.ENABLE },
+                
+                // 人员信息
+                new SysMenu{Id=190000000000006, Pid=190000000000001, Pids="[0],[190000000000001],", Name="人员信息", Code="coal_person_info", Type=MenuType.MENU, Router="/coalmine/personinfo", Component="coalmine/PersonInfoIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=5, Status=CommonStatus.ENABLE },
+                
+                // 人员出勤
+                new SysMenu{Id=190000000000007, Pid=190000000000001, Pids="[0],[190000000000001],", Name="人员出勤", Code="coal_person_attendance", Type=MenuType.MENU, Router="/coalmine/attendance", Component="coalmine/PersonAttendanceIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=6, Status=CommonStatus.ENABLE },
+                
+                // 水害监测
+                new SysMenu{Id=190000000000008, Pid=190000000000001, Pids="[0],[190000000000001],", Name="水害监测", Code="coal_water", Type=MenuType.MENU, Router="/coalmine/water", Component="coalmine/WaterRealtimeIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=7, Status=CommonStatus.ENABLE },
+                
+                // 统计分析
+                new SysMenu{Id=190000000000009, Pid=190000000000001, Pids="[0],[190000000000001],", Name="统计分析", Code="coal_statistics", Type=MenuType.MENU, Router="/coalmine/statistics", Component="coalmine/StatisticsIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=8, Status=CommonStatus.ENABLE },
+                
+                // 报警配置
+                new SysMenu{Id=190000000000010, Pid=190000000000001, Pids="[0],[190000000000001],", Name="报警配置", Code="coal_alarm_config", Type=MenuType.MENU, Router="/coalmine/alarm", Component="coalmine/AlarmConfigIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=9, Status=CommonStatus.ENABLE },
+                
+                // 视频监控
+                new SysMenu{Id=190000000000011, Pid=190000000000001, Pids="[0],[190000000000001],", Name="视频监控", Code="coal_video", Type=MenuType.MENU, Router="/coalmine/video", Component="coalmine/VideoDeviceIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=10, Status=CommonStatus.ENABLE },
+                
+                // 网关配置
+                new SysMenu{Id=190000000000012, Pid=190000000000001, Pids="[0],[190000000000001],", Name="网关配置", Code="coal_gateway", Type=MenuType.MENU, Router="/coalmine/gateway", Component="coalmine/GatewayConfigIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=11, Status=CommonStatus.ENABLE },
+                
+                // 定时任务
+                new SysMenu{Id=190000000000013, Pid=190000000000001, Pids="[0],[190000000000001],", Name="定时任务", Code="coal_job", Type=MenuType.MENU, Router="/coalmine/job", Component="coalmine/JobIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=12, Status=CommonStatus.ENABLE },
+                
+                // 报警记录
+                new SysMenu{Id=190000000000014, Pid=190000000000001, Pids="[0],[190000000000001],", Name="报警记录", Code="coal_alarm_record", Type=MenuType.MENU, Router="/coalmine/alarmrecord", Component="coalmine/AlarmRecordIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=13, Status=CommonStatus.ENABLE },
+                
+                // 历史数据
+                new SysMenu{Id=190000000000015, Pid=190000000000001, Pids="[0],[190000000000001],", Name="历史数据", Code="coal_history", Type=MenuType.MENU, Router="/coalmine/history", Component="coalmine/HistoryDataIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=14, Status=CommonStatus.ENABLE },
+                
+                // 历史文件查询
+                new SysMenu{Id=190000000000016, Pid=190000000000001, Pids="[0],[190000000000001],", Name="历史文件查询", Code="coal_parse_log", Type=MenuType.MENU, Router="/coalmine/parselog", Component="coalmine/ParseLogIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=15, Status=CommonStatus.ENABLE },
+                
+                // 解析错误查询
+                new SysMenu{Id=190000000000017, Pid=190000000000001, Pids="[0],[190000000000001],", Name="解析错误查询", Code="coal_parse_error", Type=MenuType.MENU, Router="/coalmine/parseerror", Component="coalmine/ParseErrorIndex", Application="manage", OpenType=MenuOpenType.COMPONENT, Visible="Y", Weight=MenuWeight.SUPER_ADMIN_WEIGHT, Sort=16, Status=CommonStatus.ENABLE }
             };
         }
     }

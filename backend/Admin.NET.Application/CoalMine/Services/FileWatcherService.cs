@@ -8,87 +8,155 @@ using SqlSugar;
 namespace Admin.NET.Application;
 
 /// <summary>
-/// 文件监听服务 - 监听共享文件夹
+/// 文件监听服务 - 支持多目录监听
 /// </summary>
 [ApiDescriptionSettings("CoalMine", Name = "FileWatcher", Order = 100)]
 public class FileWatcherService : IFileWatcherService, ITransient
 {
     private readonly ISqlSugarClient _db;
-    private FileSystemWatcher _watcher;
-    private readonly string _watchPath;
-    private readonly string _backupPath;
-    private readonly string _processedPath;
-    private readonly string _errorPath;
+    private readonly Dictionary<string, FileSystemWatcher> _watchers = new();
     private readonly ILogger<FileWatcherService> _logger;
+
+    // 各监测类型配置
+    private readonly WatchPathConfig _safetyConfig;
+    private readonly WatchPathConfig _personConfig;
+    private readonly WatchPathConfig _waterConfig;
+    private readonly WatchPathConfig _pressureConfig;
+    private readonly WatchPathConfig _commonConfig;
 
     public FileWatcherService(ISqlSugarClient db)
     {
         _db = db;
         _logger = App.GetService<ILogger<FileWatcherService>>();
 
-        // 配置路径（从数据库或配置读取）
-        _watchPath = App.Settings.GetValue<string>("CoalMine:WatchPath") ?? @"C:\CoalMineData\Receive";
-        _backupPath = App.Settings.GetValue<string>("CoalMine:BackupPath") ?? @"C:\CoalMineData\Backup";
-        _processedPath = App.Settings.GetValue<string>("CoalMine:ProcessedPath") ?? @"C:\CoalMineData\Processed";
-        _errorPath = App.Settings.GetValue<string>("CoalMine:ErrorPath") ?? @"C:\CoalMineData\Error";
+        // 安全监测目录配置
+        _safetyConfig = new WatchPathConfig
+        {
+            Name = "安全监测",
+            Code = "safety",
+            WatchPath = App.Settings.GetValue<string>("CoalMine:Safety:WatchPath") ?? @"C:\CoalMineData\Safety",
+            BackupPath = App.Settings.GetValue<string>("CoalMine:Safety:BackupPath") ?? @"C:\CoalMineData\Safety\Backup",
+            ProcessedPath = App.Settings.GetValue<string>("CoalMine:Safety:ProcessedPath") ?? @"C:\CoalMineData\Safety\Processed",
+            ErrorPath = App.Settings.GetValue<string>("CoalMine:Safety:ErrorPath") ?? @"C:\CoalMineData\Safety\Error",
+            FileTypes = new[] { "CDSS", "CDDY", "FZSS", "KGBH", "TJSJ", "YCBJ" }
+        };
 
-        // 确保目录存在
-        EnsureDirectoryExists(_watchPath);
-        EnsureDirectoryExists(_backupPath);
-        EnsureDirectoryExists(_processedPath);
-        EnsureDirectoryExists(_errorPath);
+        // 人员定位目录配置
+        _personConfig = new WatchPathConfig
+        {
+            Name = "人员定位",
+            Code = "person",
+            WatchPath = App.Settings.GetValue<string>("CoalMine:Person:WatchPath") ?? @"C:\CoalMineData\Person",
+            BackupPath = App.Settings.GetValue<string>("CoalMine:Person:BackupPath") ?? @"C:\CoalMineData\Person\Backup",
+            ProcessedPath = App.Settings.GetValue<string>("CoalMine:Person:ProcessedPath") ?? @"C:\CoalMineData\Person\Processed",
+            ErrorPath = App.Settings.GetValue<string>("CoalMine:Person:ErrorPath") ?? @"C:\CoalMineData\Person\Error",
+            FileTypes = new[] { "RYSS", "RYCS", "RYCY", "RYQJ", "JZSS" }
+        };
+
+        // 水害监测目录配置
+        _waterConfig = new WatchPathConfig
+        {
+            Name = "水害监测",
+            Code = "water",
+            WatchPath = App.Settings.GetValue<string>("CoalMine:Water:WatchPath") ?? @"C:\CoalMineData\Water",
+            BackupPath = App.Settings.GetValue<string>("CoalMine:Water:BackupPath") ?? @"C:\CoalMineData\Water\Backup",
+            ProcessedPath = App.Settings.GetValue<string>("CoalMine:Water:ProcessedPath") ?? @"C:\CoalMineData\Water\Processed",
+            ErrorPath = App.Settings.GetValue<string>("CoalMine:Water:ErrorPath") ?? @"C:\CoalMineData\Water\Error",
+            FileTypes = new[] { "CGKCDSS", "CGKCDDY", "JSLCDSS", "PSLCDSS" }
+        };
+
+        // 矿压监测目录配置
+        _pressureConfig = new WatchPathConfig
+        {
+            Name = "矿压监测",
+            Code = "pressure",
+            WatchPath = App.Settings.GetValue<string>("CoalMine:Pressure:WatchPath") ?? @"C:\CoalMineData\Pressure",
+            BackupPath = App.Settings.GetValue<string>("CoalMine:Pressure:BackupPath") ?? @"C:\CoalMineData\Pressure\Backup",
+            ProcessedPath = App.Settings.GetValue<string>("CoalMine:Pressure:ProcessedPath") ?? @"C:\CoalMineData\Pressure\Processed",
+            ErrorPath = App.Settings.GetValue<string>("CoalMine:Pressure:ErrorPath") ?? @"C:\CoalMineData\Pressure\Error",
+            FileTypes = new[] { "KYCDSS", "KYCDDY" }
+        };
+
+        // 通用目录配置（备用）
+        _commonConfig = new WatchPathConfig
+        {
+            Name = "通用",
+            Code = "common",
+            WatchPath = App.Settings.GetValue<string>("CoalMine:Common:WatchPath") ?? @"C:\CoalMineData\Receive",
+            BackupPath = App.Settings.GetValue<string>("CoalMine:Common:BackupPath") ?? @"C:\CoalMineData\Backup",
+            ProcessedPath = App.Settings.GetValue<string>("CoalMine:Common:ProcessedPath") ?? @"C:\CoalMineData\Processed",
+            ErrorPath = App.Settings.GetValue<string>("CoalMine:Common:ErrorPath") ?? @"C:\CoalMineData\Error"
+        };
+
+        // 确保所有目录存在
+        EnsureDirectoriesExist(_safetyConfig);
+        EnsureDirectoriesExist(_personConfig);
+        EnsureDirectoriesExist(_waterConfig);
+        EnsureDirectoriesExist(_pressureConfig);
+        EnsureDirectoriesExist(_commonConfig);
     }
 
     /// <summary>
-    /// 启动文件监听
+    /// 启动所有监听
     /// </summary>
     [HttpPost]
     public async Task<string> Start()
     {
-        if (_watcher != null && _watcher.EnableRaisingEvents)
-        {
-            return "监听已启动";
-        }
+        var results = new List<string>();
 
-        try
-        {
-            _watcher = new FileSystemWatcher(_watchPath)
-            {
-                Filter = "*.txt",
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime,
-                IncludeSubdirectories = false
-            };
+        // 启动各监测类型监听
+        results.Add(await StartWatcher(_safetyConfig));
+        results.Add(await StartWatcher(_personConfig));
+        results.Add(await StartWatcher(_waterConfig));
+        results.Add(await StartWatcher(_pressureConfig));
 
-            _watcher.Created += async (sender, e) => await OnFileCreated(e.FullPath);
-            _watcher.Error += OnWatcherError;
-
-            _watcher.EnableRaisingEvents = true;
-
-            _logger.LogInformation($"文件监听服务已启动，监听路径: {_watchPath}");
-
-            return "监听启动成功";
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "启动文件监听失败");
-            return $"启动失败: {ex.Message}";
-        }
+        return string.Join("; ", results);
     }
 
     /// <summary>
-    /// 停止文件监听
+    /// 停止所有监听
     /// </summary>
     [HttpPost]
     public string Stop()
     {
-        if (_watcher != null)
+        foreach (var watcher in _watchers.Values)
         {
-            _watcher.EnableRaisingEvents = false;
-            _watcher.Dispose();
-            _watcher = null;
-            _logger.LogInformation("文件监听服务已停止");
+            watcher.EnableRaisingEvents = false;
+            watcher.Dispose();
         }
-        return "监听已停止";
+        _watchers.Clear();
+        _logger.LogInformation("所有文件监听服务已停止");
+        return "所有监听已停止";
+    }
+
+    /// <summary>
+    /// 启动指定监测类型监听
+    /// </summary>
+    [HttpPost]
+    public async Task<string> StartType(string type)
+    {
+        var config = GetConfig(type);
+        if (config == null) return "未知的监测类型";
+        return await StartWatcher(config);
+    }
+
+    /// <summary>
+    /// 停止指定监测类型监听
+    /// </summary>
+    [HttpPost]
+    public string StopType(string type)
+    {
+        var config = GetConfig(type);
+        if (config == null) return "未知的监测类型";
+
+        if (_watchers.TryGetValue(config.Code, out var watcher))
+        {
+            watcher.EnableRaisingEvents = false;
+            watcher.Dispose();
+            _watchers.Remove(config.Code);
+        }
+
+        return $"{config.Name}监听已停止";
     }
 
     /// <summary>
@@ -98,11 +166,10 @@ public class FileWatcherService : IFileWatcherService, ITransient
     {
         return new Dictionary<string, object>
         {
-            { "isRunning", _watcher?.EnableRaisingEvents ?? false },
-            { "watchPath", _watchPath },
-            { "backupPath", _backupPath },
-            { "processedPath", _processedPath },
-            { "errorPath", _errorPath }
+            { "safety", new { name = "安全监测", path = _safetyConfig.WatchPath, running = _watchers.ContainsKey("safety") } },
+            { "person", new { name = "人员定位", path = _personConfig.WatchPath, running = _watchers.ContainsKey("person") } },
+            { "water", new { name = "水害监测", path = _waterConfig.WatchPath, running = _watchers.ContainsKey("water") } },
+            { "pressure", new { name = "矿压监测", path = _pressureConfig.WatchPath, running = _watchers.ContainsKey("pressure") } }
         };
     }
 
@@ -110,29 +177,78 @@ public class FileWatcherService : IFileWatcherService, ITransient
     /// 手动触发文件处理
     /// </summary>
     [HttpPost]
-    public async Task<Dictionary<string, object>> ProcessFile(string filePath)
+    public async Task<Dictionary<string, object>> ProcessFile(string filePath, string type = "common")
     {
-        return await ProcessFileInternal(filePath);
+        var config = GetConfig(type) ?? _commonConfig;
+        return await ProcessFileInternal(filePath, config);
+    }
+
+    /// <summary>
+    /// 获取配置
+    /// </summary>
+    private WatchPathConfig GetConfig(string type)
+    {
+        return type?.ToLower() switch
+        {
+            "safety" or "安全监测" => _safetyConfig,
+            "person" or "人员定位" => _personConfig,
+            "water" or "水害监测" => _waterConfig,
+            "pressure" or "矿压监测" => _pressureConfig,
+            _ => null
+        };
+    }
+
+    /// <summary>
+    /// 启动监听器
+    /// </summary>
+    private async Task<string> StartWatcher(WatchPathConfig config)
+    {
+        if (_watchers.ContainsKey(config.Code))
+        {
+            return $"{config.Name}监听已启动";
+        }
+
+        try
+        {
+            var watcher = new FileSystemWatcher(config.WatchPath)
+            {
+                Filter = "*.txt",
+                NotifyFilter = NotifyFilters.FileName | NotifyFilters.CreationTime,
+                IncludeSubdirectories = false
+            };
+
+            watcher.Created += async (sender, e) => await OnFileCreated(e.FullPath, config);
+            watcher.Error += OnWatcherError;
+
+            watcher.EnableRaisingEvents = true;
+            _watchers[config.Code] = watcher;
+
+            _logger.LogInformation($"{config.Name}文件监听服务已启动，监听路径: {config.WatchPath}");
+            return $"{config.Name}监听启动成功";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"启动{config.Name}文件监听失败");
+            return $"{config.Name}启动失败: {ex.Message}";
+        }
     }
 
     /// <summary>
     /// 处理新创建的文件
     /// </summary>
-    private async Task OnFileCreated(string filePath)
+    private async Task OnFileCreated(string filePath, WatchPathConfig config)
     {
         try
         {
-            // 等待文件写入完成
             await Task.Delay(1000);
 
-            // 检查文件是否被占用
             if (!IsFileReady(filePath))
             {
                 _logger.LogWarning($"文件被占用，等待重试: {filePath}");
                 await Task.Delay(2000);
             }
 
-            await ProcessFileInternal(filePath);
+            await ProcessFileInternal(filePath, config);
         }
         catch (Exception ex)
         {
@@ -143,11 +259,12 @@ public class FileWatcherService : IFileWatcherService, ITransient
     /// <summary>
     /// 处理文件内部方法
     /// </summary>
-    private async Task<Dictionary<string, object>> ProcessFileInternal(string filePath)
+    private async Task<Dictionary<string, object>> ProcessFileInternal(string filePath, WatchPathConfig config)
     {
         var result = new Dictionary<string, object>
         {
             { "filePath", filePath },
+            { "monitorType", config.Name },
             { "success", false },
             { "recordCount", 0 },
             { "error", "" }
@@ -161,80 +278,115 @@ public class FileWatcherService : IFileWatcherService, ITransient
                 return result;
             }
 
-            // 读取文件内容
-            var content = await File.ReadAllTextAsync(filePath);
+            // 备份原始文件
+            await BackupFile(filePath, config);
 
-            // 检测编码
+            // 读取并解析
             var bytes = await File.ReadAllBytesAsync(filePath);
             var encoding = CoalDataParser.DetectEncoding(bytes);
-            content = encoding.GetString(bytes);
+            var content = encoding.GetString(bytes);
 
-            // 解析数据
             var parser = new CoalDataParser();
             var parseResult = parser.Parse(content);
 
             if (!parseResult.Success)
             {
                 result["error"] = parseResult.ErrorMessage;
-                MoveToError(filePath);
+                MoveToError(filePath, config);
                 return result;
             }
 
-            // 根据数据类型处理
+            // 根据监测类型处理数据
             int recordCount = 0;
-            switch (parseResult.FileType)
-            {
-                case DataFileType.CDSS:
-                case DataFileType.CDDY:
-                case DataFileType.FZSS:
-                case DataFileType.KGBH:
-                case DataFileType.TJSJ:
-                case DataFileType.YCBJ:
-                    recordCount = await SaveSafetyData(parseResult);
-                    break;
+            if (config.Code == "safety")
+                recordCount = await SaveSafetyData(parseResult);
+            else if (config.Code == "person")
+                recordCount = await SavePersonData(parseResult);
+            else if (config.Code == "water")
+                recordCount = await SaveWaterData(parseResult);
+            else if (config.Code == "pressure")
+                recordCount = await SavePressureData(parseResult);
 
-                case DataFileType.RYSS:
-                case DataFileType.RYCS:
-                case DataFileType.RYCY:
-                case DataFileType.RYQJ:
-                case DataFileType.JZSS:
-                    recordCount = await SavePersonData(parseResult);
-                    break;
-
-                case DataFileType.CGKCDSS:
-                case DataFileType.CGKCDDY:
-                case DataFileType.JSLCDSS:
-                case DataFileType.PSLCDSS:
-                    recordCount = await SaveWaterData(parseResult);
-                    break;
-
-                default:
-                    result["error"] = "未知数据类型";
-                    MoveToError(filePath);
-                    return result;
-            }
-
-            // 记录处理日志
-            await SaveProcessLog(parseResult, recordCount);
+            // 保存解析日志
+            await SaveParseLog(parseResult, content, bytes.Length, recordCount, 0, null, config);
 
             // 移动到已处理目录
-            MoveToProcessed(filePath);
+            MoveToProcessed(filePath, config);
 
             result["success"] = true;
             result["recordCount"] = recordCount;
             result["dataType"] = parseResult.FileType.ToString();
-            result["mineCode"] = parseResult.MineCode;
 
-            _logger.LogInformation($"文件处理成功: {filePath}, 记录数: {recordCount}");
+            _logger.LogInformation($"文件处理成功: {filePath}, 类型: {config.Name}, 记录数: {recordCount}");
         }
         catch (Exception ex)
         {
+            // 保存错误日志
+            try
+            {
+                await SaveParseLog(null, "", 0, 0, 0, ex.Message, config);
+            }
+            catch { }
+
             result["error"] = ex.Message;
             _logger.LogError(ex, $"处理文件异常: {filePath}");
-            MoveToError(filePath);
+            MoveToError(filePath, config);
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 保存解析日志
+    /// </summary>
+    private async Task SaveParseLog(ParseResult parseResult, string content, long fileSize, int recordCount, int errorCount, string errorMessage, WatchPathConfig config)
+    {
+        try
+        {
+            var mine = parseResult != null ? await _db.Queryable<CoalMine>().Where(c => c.Code == parseResult.MineCode).FirstAsync() : null;
+
+            var log = new ParseLog
+            {
+                MineId = mine?.Id ?? 0,
+                MineCode = parseResult?.MineCode ?? "",
+                FileName = "",
+                FilePath = "",
+                FileType = parseResult?.FileType.ToString() ?? "",
+                Encoding = "UTF-8",
+                FileSize = fileSize,
+                SourceContent = content.Length > 64000 ? content.Substring(0, 64000) : content, // 限制内容长度
+                RecordCount = recordCount,
+                SuccessCount = recordCount - errorCount,
+                ErrorCount = errorCount,
+                ParseTime = parseResult?.ParseTimeMs,
+                ErrorMessage = errorMessage,
+                Status = string.IsNullOrEmpty(errorMessage) ? 1 : 2,
+                CreateTime = DateTime.Now
+            };
+
+            await _db.Insertable(log).ExecuteReturnIdentityAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "保存解析日志失败");
+        }
+    }
+    /// 备份原始文件
+    /// </summary>
+    private async Task BackupFile(string filePath, WatchPathConfig config)
+    {
+        try
+        {
+            var fileName = Path.GetFileName(filePath);
+            var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            var backupPath = Path.Combine(config.BackupPath, $"{timestamp}_{fileName}");
+            
+            await Task.Run(() => File.Copy(filePath, backupPath, true));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, $"备份文件失败: {filePath}");
+        }
     }
 
     /// <summary>
@@ -242,16 +394,11 @@ public class FileWatcherService : IFileWatcherService, ITransient
     /// </summary>
     private async Task<int> SaveSafetyData(ParseResult parseResult)
     {
-        // 根据煤矿编号获取煤矿ID
         var mine = await _db.Queryable<CoalMine>()
             .Where(c => c.Code == parseResult.MineCode)
             .FirstAsync();
 
-        if (mine == null)
-        {
-            _logger.LogWarning($"煤矿编号不存在: {parseResult.MineCode}");
-            return 0;
-        }
+        if (mine == null) return 0;
 
         int count = 0;
         foreach (var record in parseResult.Records)
@@ -261,7 +408,6 @@ public class FileWatcherService : IFileWatcherService, ITransient
                 var sensorCode = record.GetValueOrDefault("SensorCode")?.ToString();
                 if (string.IsNullOrEmpty(sensorCode)) continue;
 
-                // 查询是否已存在
                 var existing = await _db.Queryable<SafetyRealtime>()
                     .Where(s => s.MineId == mine.Id && s.SensorCode == sensorCode)
                     .FirstAsync();
@@ -291,7 +437,6 @@ public class FileWatcherService : IFileWatcherService, ITransient
                     await _db.Insertable(realtime).ExecuteReturnIdentityAsync();
                 }
 
-                // 同时存入历史表
                 var history = new SafetyHistory
                 {
                     MineId = mine.Id,
@@ -303,7 +448,6 @@ public class FileWatcherService : IFileWatcherService, ITransient
                     ReceivedTime = DateTime.Now
                 };
                 await _db.Insertable(history).ExecuteReturnIdentityAsync();
-
                 count++;
             }
             catch (Exception ex)
@@ -311,7 +455,6 @@ public class FileWatcherService : IFileWatcherService, ITransient
                 _logger.LogError(ex, "保存安全监测数据失败");
             }
         }
-
         return count;
     }
 
@@ -320,114 +463,56 @@ public class FileWatcherService : IFileWatcherService, ITransient
     /// </summary>
     private async Task<int> SavePersonData(ParseResult parseResult)
     {
-        // 根据煤矿编号获取煤矿ID
         var mine = await _db.Queryable<CoalMine>()
             .Where(c => c.Code == parseResult.MineCode)
             .FirstAsync();
 
-        if (mine == null)
-        {
-            _logger.LogWarning($"煤矿编号不存在: {parseResult.MineCode}");
-            return 0;
-        }
+        if (mine == null) return 0;
 
         int count = 0;
-
-        // 根据文件类型分别处理
-        switch (parseResult.FileType)
+        foreach (var record in parseResult.Records)
         {
-            case DataFileType.RYSS:
-                // 人员实时位置
-                foreach (var record in parseResult.Records)
+            try
+            {
+                var cardId = record.GetValueOrDefault("CardId")?.ToString();
+                if (string.IsNullOrEmpty(cardId)) continue;
+
+                var existing = await _db.Queryable<PersonLocation>()
+                    .Where(p => p.MineId == mine.Id && p.CardId == cardId)
+                    .FirstAsync();
+
+                if (existing != null)
                 {
-                    try
+                    existing.StationId = record.GetValueOrDefault("StationId")?.ToString();
+                    existing.StationName = record.GetValueOrDefault("StationName")?.ToString();
+                    existing.AreaCode = record.GetValueOrDefault("AreaCode")?.ToString();
+                    existing.AreaName = record.GetValueOrDefault("AreaName")?.ToString();
+                    existing.UpdateTime = DateTime.Now;
+                    await _db.Updateable(existing).ExecuteCommandAsync();
+                }
+                else
+                {
+                    var location = new PersonLocation
                     {
-                        var cardId = record.GetValueOrDefault("CardId")?.ToString();
-                        if (string.IsNullOrEmpty(cardId)) continue;
-
-                        var existing = await _db.Queryable<PersonLocation>()
-                            .Where(p => p.MineId == mine.Id && p.CardId == cardId)
-                            .FirstAsync();
-
-                        if (existing != null)
-                        {
-                            existing.StationId = record.GetValueOrDefault("StationId")?.ToString();
-                            existing.StationName = record.GetValueOrDefault("StationName")?.ToString();
-                            existing.AreaCode = record.GetValueOrDefault("AreaCode")?.ToString();
-                            existing.AreaName = record.GetValueOrDefault("AreaName")?.ToString();
-                            existing.UpdateTime = DateTime.Now;
-                            await _db.Updateable(existing).ExecuteCommandAsync();
-                        }
-                        else
-                        {
-                            var location = new PersonLocation
-                            {
-                                MineId = mine.Id,
-                                CardId = cardId,
-                                PersonName = record.GetValueOrDefault("PersonName")?.ToString(),
-                                StationId = record.GetValueOrDefault("StationId")?.ToString(),
-                                StationName = record.GetValueOrDefault("StationName")?.ToString(),
-                                AreaCode = record.GetValueOrDefault("AreaCode")?.ToString(),
-                                AreaName = record.GetValueOrDefault("AreaName")?.ToString(),
-                                InTime = DateTime.Now,
-                                UpdateTime = DateTime.Now
-                            };
-                            await _db.Insertable(location).ExecuteReturnIdentityAsync();
-                        }
-                        count++;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "保存人员实时位置失败");
-                    }
+                        MineId = mine.Id,
+                        CardId = cardId,
+                        PersonName = record.GetValueOrDefault("PersonName")?.ToString(),
+                        StationId = record.GetValueOrDefault("StationId")?.ToString(),
+                        StationName = record.GetValueOrDefault("StationName")?.ToString(),
+                        AreaCode = record.GetValueOrDefault("AreaCode")?.ToString(),
+                        AreaName = record.GetValueOrDefault("AreaName")?.ToString(),
+                        InTime = DateTime.Now,
+                        UpdateTime = DateTime.Now
+                    };
+                    await _db.Insertable(location).ExecuteReturnIdentityAsync();
                 }
-                break;
-
-            case DataFileType.RYCS:
-                // 人员初始化信息 - 可以存入人员信息表或更新现有记录
-                foreach (var record in parseResult.Records)
-                {
-                    var cardId = record.GetValueOrDefault("CardId")?.ToString();
-                    if (string.IsNullOrEmpty(cardId)) continue;
-
-                    // TODO: 存入人员信息表 PersonInfo
-                    _logger.LogInformation($"人员初始化: {cardId}, 姓名: {record.GetValueOrDefault("PersonName")}");
-                    count++;
-                }
-                break;
-
-            case DataFileType.RYCY:
-                // 人员出勤记录 - 存入历史表
-                foreach (var record in parseResult.Records)
-                {
-                    var cardId = record.GetValueOrDefault("CardId")?.ToString();
-                    if (string.IsNullOrEmpty(cardId)) continue;
-
-                    // TODO: 存入人员出勤历史表 PersonAttendance
-                    _logger.LogInformation($"人员出勤: {cardId}, 入井: {record.GetValueOrDefault("InTime")}");
-                    count++;
-                }
-                break;
-
-            case DataFileType.RYQJ:
-                // 区域人员统计 - 可用于展示
-                foreach (var record in parseResult.Records)
-                {
-                    _logger.LogInformation($"区域: {record.GetValueOrDefault("AreaCode")}, 人数: {record.GetValueOrDefault("PersonCount")}");
-                    count++;
-                }
-                break;
-
-            case DataFileType.JZSS:
-                // 基站状态
-                foreach (var record in parseResult.Records)
-                {
-                    _logger.LogInformation($"基站: {record.GetValueOrDefault("StationCode")}, 状态: {record.GetValueOrDefault("Status")}");
-                    count++;
-                }
-                break;
+                count++;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "保存人员定位数据失败");
+            }
         }
-
         return count;
     }
 
@@ -486,21 +571,16 @@ public class FileWatcherService : IFileWatcherService, ITransient
                 _logger.LogError(ex, "保存水害监测数据失败");
             }
         }
-
         return count;
     }
 
     /// <summary>
-    /// 保存处理日志
+    /// 保存矿压监测数据
     /// </summary>
-    private async Task SaveProcessLog(ParseResult parseResult, int recordCount)
+    private async Task<int> SavePressureData(ParseResult parseResult)
     {
-        try
-        {
-            // 可以存入数据库或日志文件
-            _logger.LogInformation($"数据处理完成: 类型={parseResult.FileType}, 煤矿={parseResult.MineCode}, 记录数={recordCount}, 耗时={parseResult.ParseTimeMs}ms");
-        }
-        catch { }
+        // 矿压监测目前复用安全监测表存储
+        return await SaveSafetyData(parseResult);
     }
 
     /// <summary>
@@ -513,22 +593,19 @@ public class FileWatcherService : IFileWatcherService, ITransient
             using var stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
             return true;
         }
-        catch
-        {
-            return false;
-        }
+        catch { return false; }
     }
 
     /// <summary>
     /// 移动到已处理目录
     /// </summary>
-    private void MoveToProcessed(string filePath)
+    private void MoveToProcessed(string filePath, WatchPathConfig config)
     {
         try
         {
             var fileName = Path.GetFileName(filePath);
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var newPath = Path.Combine(_processedPath, $"{timestamp}_{fileName}");
+            var newPath = Path.Combine(config.ProcessedPath, $"{timestamp}_{fileName}");
             File.Move(filePath, newPath);
         }
         catch (Exception ex)
@@ -540,13 +617,13 @@ public class FileWatcherService : IFileWatcherService, ITransient
     /// <summary>
     /// 移动到错误目录
     /// </summary>
-    private void MoveToError(string filePath)
+    private void MoveToError(string filePath, WatchPathConfig config)
     {
         try
         {
             var fileName = Path.GetFileName(filePath);
             var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var newPath = Path.Combine(_errorPath, $"{timestamp}_{fileName}");
+            var newPath = Path.Combine(config.ErrorPath, $"{timestamp}_{fileName}");
             File.Move(filePath, newPath);
         }
         catch (Exception ex)
@@ -558,12 +635,12 @@ public class FileWatcherService : IFileWatcherService, ITransient
     /// <summary>
     /// 确保目录存在
     /// </summary>
-    private void EnsureDirectoryExists(string path)
+    private void EnsureDirectoriesExist(WatchPathConfig config)
     {
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
+        if (!Directory.Exists(config.WatchPath)) Directory.CreateDirectory(config.WatchPath);
+        if (!Directory.Exists(config.BackupPath)) Directory.CreateDirectory(config.BackupPath);
+        if (!Directory.Exists(config.ProcessedPath)) Directory.CreateDirectory(config.ProcessedPath);
+        if (!Directory.Exists(config.ErrorPath)) Directory.CreateDirectory(config.ErrorPath);
     }
 
     /// <summary>
@@ -576,12 +653,28 @@ public class FileWatcherService : IFileWatcherService, ITransient
 }
 
 /// <summary>
+/// 目录配置
+/// </summary>
+public class WatchPathConfig
+{
+    public string Name { get; set; }
+    public string Code { get; set; }
+    public string WatchPath { get; set; }
+    public string BackupPath { get; set; }
+    public string ProcessedPath { get; set; }
+    public string ErrorPath { get; set; }
+    public string[] FileTypes { get; set; }
+}
+
+/// <summary>
 /// 文件监听服务接口
 /// </summary>
 public interface IFileWatcherService
 {
     Task<string> Start();
     Task<string> Stop();
+    Task<string> StartType(string type);
+    Task<string> StopType(string type);
     Task<Dictionary<string, object>> GetStatus();
-    Task<Dictionary<string, object>> ProcessFile(string filePath);
+    Task<Dictionary<string, object>> ProcessFile(string filePath, string type = "common");
 }

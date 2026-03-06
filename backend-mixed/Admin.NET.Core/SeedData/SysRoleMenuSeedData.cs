@@ -68,7 +68,26 @@ namespace Admin.NET.Core.SeedData
                 new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=142307070910561 },
                 new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=142307070910562 },
                 new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=142307070914648 }, // 菜单授权树
-                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=142307070922874 }  // 头像上传
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=142307070922874 },  // 头像上传
+
+                // ==================== 煤矿安全监测系统菜单权限 ====================
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000001 }, // 煤矿安全监测目录
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000002 }, // 监控大屏
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000003 }, // 煤矿管理
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000004 }, // 安全监测
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000005 }, // 人员定位
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000006 }, // 人员信息
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000007 }, // 人员出勤
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000008 }, // 水害监测
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000009 }, // 统计分析
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000010 }, // 报警配置
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000011 }, // 视频监控
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000012 }, // 网关配置
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000013 }, // 定时任务
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000014 }, // 报警记录
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000015 }, // 历史数据
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000016 }, // 历史文件查询
+                new SysRoleMenu{ SysRoleId=142307070910556, SysMenuId=190000000000017 }  // 解析错误查询
             };
         }
     }
