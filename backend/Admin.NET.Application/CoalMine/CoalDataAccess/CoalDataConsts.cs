@@ -1,4 +1,14 @@
-namespace Admin.NET.Application.CoalMine.CoalDataAccess;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+namespace Admin.NET.ApplicationCoalDataAccess;
 
 /// <summary>
 /// 数据文件类型枚举

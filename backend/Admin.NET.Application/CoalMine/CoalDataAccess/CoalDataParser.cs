@@ -1,8 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
 using System.Text;
 using System.Text.RegularExpressions;
 using Admin.NET.EntityFramework.Core;
 
-namespace Admin.NET.Application.CoalMine.CoalDataAccess;
+namespace Admin.NET.ApplicationCoalDataAccess;
 
 /// <summary>
 /// 煤矿数据解析器

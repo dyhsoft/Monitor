@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "i5+F2ZiXxGo3sqrWne1Q+eTo+X38l9jeeHtruqNIOTVsLzjtsqZdiZCFsd7cyKW1j9Gjuy3ankjR6o49VaFjGw==",
+  "dgSpecHash": "wwFSGbcNO/AG0YdmjHyCniaysgOCCSJgaL+x46bCwF7tQ6Mkj4DTtwkD/VoCeLmqLWuq+4nTKbgpqlQhPo86Iw==",
   "success": true,
-  "projectFilePath": "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
+  "projectFilePath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
   "expectedPackageFiles": [
     "/home/yourname/.nuget/packages/aliyun.oss.sdk.netcore/2.13.0/aliyun.oss.sdk.netcore.2.13.0.nupkg.sha512",
     "/home/yourname/.nuget/packages/ben.demystifier/0.4.1/ben.demystifier.0.4.1.nupkg.sha512",

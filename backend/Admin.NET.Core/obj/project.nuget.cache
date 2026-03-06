@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "rtm26BcWhLmq9HPTUoOiSPdnkevSV4uh2DbC7EOTY/TSxdFFFk+E41UygWFXzza4wL4UT0Px0SItKQN/ttArlQ==",
+  "dgSpecHash": "rav419/duol/KDR9mkOtwdcBnDWxEA/FFOjHbaN8mNJ1B4Eeax+7ELH5RuPrJGxCU0H3oc66YLQxboESUvR37A==",
   "success": true,
-  "projectFilePath": "/home/yourname/.openclaw/workspace/admin-net/backend/Admin.NET.Core/Admin.NET.Core.csproj",
+  "projectFilePath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Core/Admin.NET.Core.csproj",
   "expectedPackageFiles": [
     "/home/yourname/.nuget/packages/aliyun.oss.sdk.netcore/2.13.0/aliyun.oss.sdk.netcore.2.13.0.nupkg.sha512",
     "/home/yourname/.nuget/packages/ben.demystifier/0.4.1/ben.demystifier.0.4.1.nupkg.sha512",

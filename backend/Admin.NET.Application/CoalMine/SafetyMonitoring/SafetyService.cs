@@ -1,11 +1,21 @@
-using Admin.NET.Application.CoalMine.SafetyMonitoring.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+using Admin.NET.ApplicationSafetyMonitoring.Dtos;
 using Admin.NET.Core;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.Application.CoalMine.SafetyMonitoring.Services;
+namespace Admin.NET.ApplicationSafetyMonitoring.Services;
 
 /// <summary>
 /// 安全监测服务

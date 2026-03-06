@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/yourname/.openclaw/workspace/admin-net/backend/Admin.NET.Core/Admin.NET.Core.csproj": {}
+    "/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Core/Admin.NET.Core.csproj": {}
   },
   "projects": {
-    "/home/yourname/.openclaw/workspace/admin-net/backend/Admin.NET.Core/Admin.NET.Core.csproj": {
+    "/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Core/Admin.NET.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/yourname/.openclaw/workspace/admin-net/backend/Admin.NET.Core/Admin.NET.Core.csproj",
+        "projectUniqueName": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Core/Admin.NET.Core.csproj",
         "projectName": "Admin.NET.Core",
-        "projectPath": "/home/yourname/.openclaw/workspace/admin-net/backend/Admin.NET.Core/Admin.NET.Core.csproj",
+        "projectPath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Core/Admin.NET.Core.csproj",
         "packagesPath": "/home/yourname/.nuget/packages/",
-        "outputPath": "/home/yourname/.openclaw/workspace/admin-net/backend/Admin.NET.Core/obj/",
+        "outputPath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Core/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/yourname/.nuget/NuGet/NuGet.Config"
@@ -26,8 +26,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj": {
-                "projectPath": "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj"
+              "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj": {
+                "projectPath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj"
               }
             }
           }
@@ -71,14 +71,14 @@
         }
       }
     },
-    "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj": {
+    "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj": {
       "version": "1.0.35",
       "restore": {
-        "projectUniqueName": "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
+        "projectUniqueName": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
         "projectName": "Furion.Extras.AspNetCore",
-        "projectPath": "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
+        "projectPath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
         "packagesPath": "/home/yourname/.nuget/packages/",
-        "outputPath": "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/obj/",
+        "outputPath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/yourname/.nuget/NuGet/NuGet.Config"

@@ -1,4 +1,14 @@
-namespace Admin.NET.Application.CoalMine.PersonAttendance.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+namespace Admin.NET.ApplicationPersonAttendance.Dtos;
 
 public class PersonAttendanceInput
 {

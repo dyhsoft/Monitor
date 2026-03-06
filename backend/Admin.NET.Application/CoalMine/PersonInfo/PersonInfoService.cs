@@ -1,11 +1,21 @@
-using Admin.NET.Application.CoalMine.PersonInfo.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+using Admin.NET.ApplicationPersonInfo.Dtos;
 using Admin.NET.Core;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.Application.CoalMine.PersonInfo.Services;
+namespace Admin.NET.ApplicationPersonInfo.Services;
 
 /// <summary>
 /// 人员信息服务

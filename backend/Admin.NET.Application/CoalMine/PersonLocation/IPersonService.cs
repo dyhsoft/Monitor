@@ -1,7 +1,17 @@
-using Admin.NET.Application.CoalMine.PersonLocation.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+using Admin.NET.ApplicationPersonLocation.Dtos;
 using SqlSugar;
 
-namespace Admin.NET.Application.CoalMine.PersonLocation.Services;
+namespace Admin.NET.ApplicationPersonLocation.Services;
 
 /// <summary>
 /// 人员定位服务接口

@@ -1,6 +1,16 @@
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
 using SqlSugar;
 
-namespace Admin.NET.Application.CoalMine.ParseLog.Dtos;
+namespace Admin.NET.ApplicationParseLog.Dtos;
 
 /// <summary>
 /// 解析日志分页输入

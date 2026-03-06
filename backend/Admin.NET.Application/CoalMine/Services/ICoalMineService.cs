@@ -1,6 +1,16 @@
-using Admin.NET.Application.CoalMine.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+using Admin.NET.ApplicationDtos;
 
-namespace Admin.NET.Application.CoalMine.Services;
+namespace Admin.NET.ApplicationServices;
 
 /// <summary>
 /// 煤矿管理服务接口

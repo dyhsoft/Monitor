@@ -1,4 +1,14 @@
-namespace Admin.NET.Application.CoalMine.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+namespace Admin.NET.ApplicationDtos;
 
 /// <summary>
 /// 煤矿分页查询

@@ -1,0 +1,6 @@
+/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Application/obj/Debug/net8.0/Admin.NET.Application.csproj.AssemblyReference.cache
+/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Application/obj/Debug/net8.0/Admin.NET.Application.GeneratedMSBuildEditorConfig.editorconfig
+/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Application/obj/Debug/net8.0/Admin.NET.Application.AssemblyInfoInputs.cache
+/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Application/obj/Debug/net8.0/Admin.NET.Application.AssemblyInfo.cs
+/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Application/obj/Debug/net8.0/Admin.NET.Application.csproj.CoreCompileInputs.cache
+/home/yourname/.openclaw/workspace/MonitorProject/backend/Admin.NET.Application/obj/Debug/net8.0/Admin.NET.Application.sourcelink.json

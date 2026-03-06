@@ -1,4 +1,14 @@
-namespace Admin.NET.Application.CoalMine.SafetyMonitoring.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+namespace Admin.NET.ApplicationSafetyMonitoring.Dtos;
 
 /// <summary>
 /// 安全监测实时数据分页查询

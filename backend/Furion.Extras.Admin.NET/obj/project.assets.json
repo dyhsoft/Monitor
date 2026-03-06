@@ -9675,11 +9675,11 @@
   "project": {
     "version": "1.0.35",
     "restore": {
-      "projectUniqueName": "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
+      "projectUniqueName": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
       "projectName": "Furion.Extras.AspNetCore",
-      "projectPath": "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
+      "projectPath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/Furion.Extras.Admin.NET.csproj",
       "packagesPath": "/home/yourname/.nuget/packages/",
-      "outputPath": "/home/yourname/.openclaw/workspace/admin-net/backend/Furion.Extras.Admin.NET/obj/",
+      "outputPath": "/home/yourname/.openclaw/workspace/MonitorProject/backend/Furion.Extras.Admin.NET/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/yourname/.nuget/NuGet/NuGet.Config"

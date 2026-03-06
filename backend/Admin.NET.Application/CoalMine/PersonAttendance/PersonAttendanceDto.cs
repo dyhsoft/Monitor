@@ -1,6 +1,16 @@
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
 using SqlSugar;
 
-namespace Admin.NET.Application.CoalMine.PersonAttendance.Dtos;
+namespace Admin.NET.ApplicationPersonAttendance.Dtos;
 
 /// <summary>
 /// 人员出勤分页输入

@@ -1,7 +1,17 @@
-using Admin.NET.Application.CoalMine.WaterMonitoring.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+using Admin.NET.ApplicationWaterMonitoring.Dtos;
 using SqlSugar;
 
-namespace Admin.NET.Application.CoalMine.WaterMonitoring.Services;
+namespace Admin.NET.ApplicationWaterMonitoring.Services;
 
 public interface IWaterService
 {

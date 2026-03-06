@@ -1,6 +1,16 @@
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
 using SqlSugar;
 
-namespace Admin.NET.Application.CoalMine.PersonInfo.Dtos;
+namespace Admin.NET.ApplicationPersonInfo.Dtos;
 
 /// <summary>
 /// 人员信息输入

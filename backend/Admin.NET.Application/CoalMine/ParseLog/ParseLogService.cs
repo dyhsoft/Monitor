@@ -1,11 +1,21 @@
-using Admin.NET.Application.CoalMine.ParseLog.Dtos;
+using Admin.NET.EntityFramework.Core;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Admin.NET.Core;
+using SqlSugar;
+using Furion.DependencyInjection;
+using Furion.DynamicApiController;
+using Admin.NET.ApplicationParseLog.Dtos;
 using Admin.NET.Core;
 using Furion.DependencyInjection;
 using Furion.DynamicApiController;
 using Microsoft.AspNetCore.Mvc;
 using SqlSugar;
 
-namespace Admin.NET.Application.CoalMine.ParseLog.Services;
+namespace Admin.NET.ApplicationParseLog.Services;
 
 public class ParseLogService : IParseLogService, ITransient
 {
