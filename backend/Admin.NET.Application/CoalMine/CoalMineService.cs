@@ -20,10 +20,10 @@ public class CoalMineService : IDynamicApiController
     /// 获取煤矿列表
     /// </summary>
     [HttpPost]
-    public async Task<SqlSugarPagedList<CoalMine>> GetPage( BasePageInput input)
+    public async Task<SqlSugarPagedList<CoalMine>> GetPage(BasePageInput input)
     {
         return await _db.Queryable<CoalMine>()
-            .WhereIF(!string.IsNullOrEmpty(input.SearchValue), it => it.Name.Contains(input.SearchValue) || it.Code.Contains(input.SearchValue))
+            .WhereIF(!string.IsNullOrEmpty(input.Keyword), it => it.Name.Contains(input.Keyword) || it.Code.Contains(input.Keyword))
             .OrderBy(it => it.Id, OrderByType.Desc)
             .ToPagedListAsync(input.Page, input.PageSize);
     }
