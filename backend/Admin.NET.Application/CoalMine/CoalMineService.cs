@@ -20,12 +20,12 @@ public class CoalMineService : IDynamicApiController
     /// 获取煤矿列表
     /// </summary>
     [HttpPost]
-    public async Task<SqlSugarPagedList<CoalMine>> GetPage([FromBody] PageInputBase input)
+    public async Task<SqlSugarPagedList<CoalMine>> GetPage( BasePageInput input)
     {
         return await _db.Queryable<CoalMine>()
             .WhereIF(!string.IsNullOrEmpty(input.SearchValue), it => it.Name.Contains(input.SearchValue) || it.Code.Contains(input.SearchValue))
             .OrderBy(it => it.Id, OrderByType.Desc)
-            .ToPagedListAsync(input.Current, input.Size);
+            .ToPagedListAsync(input.Page, input.PageSize);
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public class CoalMineService : IDynamicApiController
     /// <summary>
     /// 新增煤矿
     /// </summary>
-    public async Task<long> Add([FromBody] CoalMine input)
+    public async Task<long> Add( CoalMine input)
     {
         return await _db.Insertable(input).ExecuteReturnIdentityAsync();
     }
@@ -47,7 +47,7 @@ public class CoalMineService : IDynamicApiController
     /// <summary>
     /// 更新煤矿
     /// </summary>
-    public async Task Update([FromBody] CoalMine input)
+    public async Task Update( CoalMine input)
     {
         await _db.Updateable(input).ExecuteCommandAsync();
     }

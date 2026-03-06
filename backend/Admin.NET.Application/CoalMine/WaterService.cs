@@ -20,11 +20,11 @@ public class WaterService : IDynamicApiController
     /// 获取水害监测实时数据
     /// </summary>
     [HttpPost]
-    public async Task<SqlSugarPagedList<WaterRealtime>> GetPage([FromBody] PageInputBase input)
+    public async Task<SqlSugarPagedList<WaterRealtime>> GetPage( BasePageInput input)
     {
         return await _db.Queryable<WaterRealtime>()
             .OrderBy(it => it.Id, OrderByType.Desc)
-            .ToPagedListAsync(input.Current, input.Size);
+            .ToPagedListAsync(input.Page, input.PageSize);
     }
 
     /// <summary>

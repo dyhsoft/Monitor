@@ -20,11 +20,11 @@ public class PersonService : IDynamicApiController
     /// 获取人员定位实时数据
     /// </summary>
     [HttpPost]
-    public async Task<SqlSugarPagedList<PersonLocation>> GetPage([FromBody] PageInputBase input)
+    public async Task<SqlSugarPagedList<PersonLocation>> GetPage( BasePageInput input)
     {
         return await _db.Queryable<PersonLocation>()
             .OrderBy(it => it.Id, OrderByType.Desc)
-            .ToPagedListAsync(input.Current, input.Size);
+            .ToPagedListAsync(input.Page, input.PageSize);
     }
 
     /// <summary>

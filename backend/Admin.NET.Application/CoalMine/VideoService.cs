@@ -20,11 +20,11 @@ public class VideoService : IDynamicApiController
     /// 获取视频设备列表
     /// </summary>
     [HttpPost]
-    public async Task<SqlSugarPagedList<VideoDevice>> GetPage([FromBody] PageInputBase input)
+    public async Task<SqlSugarPagedList<VideoDevice>> GetPage( BasePageInput input)
     {
         return await _db.Queryable<VideoDevice>()
             .OrderBy(it => it.Id, OrderByType.Desc)
-            .ToPagedListAsync(input.Current, input.Size);
+            .ToPagedListAsync(input.Page, input.PageSize);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class VideoService : IDynamicApiController
     /// <summary>
     /// 新增视频设备
     /// </summary>
-    public async Task<long> Add([FromBody] VideoDevice input)
+    public async Task<long> Add( VideoDevice input)
     {
         return await _db.Insertable(input).ExecuteReturnIdentityAsync();
     }
@@ -46,7 +46,7 @@ public class VideoService : IDynamicApiController
     /// <summary>
     /// 更新视频设备
     /// </summary>
-    public async Task Update([FromBody] VideoDevice input)
+    public async Task Update( VideoDevice input)
     {
         await _db.Updateable(input).ExecuteCommandAsync();
     }

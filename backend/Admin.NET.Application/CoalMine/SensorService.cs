@@ -20,11 +20,11 @@ public class SensorService : IDynamicApiController
     /// 获取传感器列表
     /// </summary>
     [HttpPost]
-    public async Task<SqlSugarPagedList<CoalSensor>> GetPage([FromBody] PageInputBase input)
+    public async Task<SqlSugarPagedList<CoalSensor>> GetPage( BasePageInput input)
     {
         return await _db.Queryable<CoalSensor>()
             .OrderBy(it => it.Id, OrderByType.Desc)
-            .ToPagedListAsync(input.Current, input.Size);
+            .ToPagedListAsync(input.Page, input.PageSize);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class SensorService : IDynamicApiController
     /// <summary>
     /// 新增传感器
     /// </summary>
-    public async Task<long> Add([FromBody] CoalSensor input)
+    public async Task<long> Add( CoalSensor input)
     {
         return await _db.Insertable(input).ExecuteReturnIdentityAsync();
     }
@@ -46,7 +46,7 @@ public class SensorService : IDynamicApiController
     /// <summary>
     /// 更新传感器
     /// </summary>
-    public async Task Update([FromBody] CoalSensor input)
+    public async Task Update( CoalSensor input)
     {
         await _db.Updateable(input).ExecuteCommandAsync();
     }

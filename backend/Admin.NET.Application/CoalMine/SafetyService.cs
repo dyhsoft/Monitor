@@ -20,11 +20,11 @@ public class SafetyService : IDynamicApiController
     /// 获取安全监测实时数据
     /// </summary>
     [HttpPost]
-    public async Task<SqlSugarPagedList<SafetyRealtime>> GetPage([FromBody] PageInputBase input)
+    public async Task<SqlSugarPagedList<SafetyRealtime>> GetPage( BasePageInput input)
     {
         return await _db.Queryable<SafetyRealtime>()
             .OrderBy(it => it.Id, OrderByType.Desc)
-            .ToPagedListAsync(input.Current, input.Size);
+            .ToPagedListAsync(input.Page, input.PageSize);
     }
 
     /// <summary>

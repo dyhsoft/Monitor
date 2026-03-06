@@ -20,11 +20,11 @@ public class GatewayConfigService : IDynamicApiController
     /// 获取网关配置列表
     /// </summary>
     [HttpPost]
-    public async Task<SqlSugarPagedList<CoalGatewayConfig>> GetPage([FromBody] PageInputBase input)
+    public async Task<SqlSugarPagedList<CoalGatewayConfig>> GetPage( BasePageInput input)
     {
         return await _db.Queryable<CoalGatewayConfig>()
             .OrderBy(it => it.Id, OrderByType.Desc)
-            .ToPagedListAsync(input.Current, input.Size);
+            .ToPagedListAsync(input.Page, input.PageSize);
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class GatewayConfigService : IDynamicApiController
     /// <summary>
     /// 新增网关配置
     /// </summary>
-    public async Task<long> Add([FromBody] CoalGatewayConfig input)
+    public async Task<long> Add( CoalGatewayConfig input)
     {
         return await _db.Insertable(input).ExecuteReturnIdentityAsync();
     }
@@ -46,7 +46,7 @@ public class GatewayConfigService : IDynamicApiController
     /// <summary>
     /// 更新网关配置
     /// </summary>
-    public async Task Update([FromBody] CoalGatewayConfig input)
+    public async Task Update( CoalGatewayConfig input)
     {
         await _db.Updateable(input).ExecuteCommandAsync();
     }
