@@ -9,6 +9,7 @@ namespace Admin.NET.Core;
 /// <summary>
 /// 系统菜单表种子数据
 /// </summary>
+[IncreSeed]
 public class SysMenuSeedData : ISqlSugarEntitySeedData<SysMenu>
 {
     /// <summary>
@@ -305,6 +306,77 @@ public class SysMenuSeedData : ISqlSugarEntitySeedData<SysMenu>
             new SysMenu{ Id=1300600040101, Pid=1300600000101, Title="SqlSugar", Path="/doc/SqlSugar", Name="sysSqlSugar", Component="layout/routerView/link", IsIframe=false, IsKeepAlive=false, OutLink="https://www.donet5.com/Home/Doc", Icon="ele-Coin", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2022-02-10 00:00:00"), OrderNo=130 },
 
 	        #endregion 帮助文档
+
+            #region 煤矿安全监测系统
+
+            // 煤矿管理
+            new SysMenu{ Id=1301000010001, Pid=0, Title="煤矿管理", Path="/coalMine", Name="coalMine", Component="Layout", Icon="ele-OfficeBuilding", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=20000 },
+            new SysMenu{ Id=1301000010002, Pid=1301000010001, Title="煤矿管理", Path="/coalMine/coalMine", Name="coalMineManage", Component="coalMine/coalMine/index", Icon="ele-OfficeBuilding", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000010101, Pid=1301000010002, Title="查询", Permission="coalMine:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000010102, Pid=1301000010002, Title="新增", Permission="coalMine:add", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000010103, Pid=1301000010002, Title="编辑", Permission="coalMine:update", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000010104, Pid=1301000010002, Title="删除", Permission="coalMine:delete", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=130 },
+            new SysMenu{ Id=1301000010201, Pid=1301000010001, Title="区域管理", Path="/coalMine/coalMineArea", Name="coalMineArea", Component="coalMine/coalMineArea/index", Icon="ele-Location", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=200 },
+            new SysMenu{ Id=1301000010301, Pid=1301000010201, Title="查询", Permission="coalMineArea:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000010302, Pid=1301000010201, Title="新增", Permission="coalMineArea:add", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000010303, Pid=1301000010201, Title="编辑", Permission="coalMineArea:update", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000010304, Pid=1301000010201, Title="删除", Permission="coalMineArea:delete", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=130 },
+
+            // 人员定位
+            new SysMenu{ Id=1301000020001, Pid=0, Title="人员定位", Path="/location", Name="location", Component="Layout", Icon="ele-Position", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=20100 },
+            new SysMenu{ Id=1301000020002, Pid=1301000020001, Title="实时监测", Path="/location/realTime", Name="locationRealTime", Component="Layout", Icon="ele-Monitor", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000020101, Pid=1301000020002, Title="井下人员实时数据", Path="/location/realTime/person", Name="locationPersonReal", Component="coalMine/locationRealTime/person/index", Icon="ele-User", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000020102, Pid=1301000020002, Title="井下基站实时数据", Path="/location/realTime/station", Name="locationStationReal", Component="coalMine/locationRealTime/station/index", Icon="ele-Antenna", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000020103, Pid=1301000020002, Title="井下超时实时数据", Path="/location/realTime/overtime", Name="locationOvertimeReal", Component="coalMine/locationRealTime/overtime/index", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000020104, Pid=1301000020002, Title="井下超员实时数据", Path="/location/realTime/overcount", Name="locationOvercountReal", Component="coalMine/locationRealTime/overcount/index", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=130 },
+            new SysMenu{ Id=1301000020105, Pid=1301000020002, Title="基站报警实时数据", Path="/location/realTime/alarm", Name="locationAlarmReal", Component="coalMine/locationRealTime/alarm/index", Icon="ele-AlarmClock", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=140 },
+            new SysMenu{ Id=1301000020106, Pid=1301000020002, Title="井下人员曲线", Path="/location/realTime/curve", Name="locationCurveReal", Component="coalMine/locationRealTime/curve/index", Icon="ele-DataLine", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=150 },
+            new SysMenu{ Id=1301000021001, Pid=1301000020001, Title="历史查询", Path="/location/history", Name="locationHistory", Component="Layout", Icon="ele-Document", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=200 },
+            new SysMenu{ Id=1301000021101, Pid=1301000021001, Title="井下超时历史数据", Path="/location/history/overtime", Name="locationOvertimeHistory", Component="coalMine/locationHistory/overtime/index", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000021201, Pid=1301000021001, Title="井下超员历史数据", Path="/location/history/overcount", Name="locationOvercountHistory", Component="coalMine/locationHistory/overcount/index", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000021301, Pid=1301000021001, Title="井下人员历史曲线", Path="/location/history/curve", Name="locationCurveHistory", Component="coalMine/locationHistory/curve/index", Icon="ele-DataLine", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000021401, Pid=1301000021001, Title="人员下井查询", Path="/location/history/person", Name="locationPersonHistory", Component="coalMine/locationHistory/person/index", Icon="ele-User", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=130 },
+            new SysMenu{ Id=1301000022001, Pid=1301000020001, Title="配置管理", Path="/location/config", Name="locationConfig", Component="Layout", Icon="ele-Setting", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=300 },
+            new SysMenu{ Id=1301000022101, Pid=1301000022001, Title="矿领导配置", Path="/location/config/leader", Name="locationLeader", Component="coalMine/locationConfig/leader/index", Icon="ele-VideoCamera", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000022102, Pid=1301000022101, Title="查询", Permission="locationLeader:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000022103, Pid=1301000022101, Title="新增", Permission="locationLeader:add", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000022104, Pid=1301000022101, Title="编辑", Permission="locationLeader:update", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000022105, Pid=1301000022101, Title="删除", Permission="locationLeader:delete", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=130 },
+            new SysMenu{ Id=1301000022201, Pid=1301000022001, Title="限定人数配置", Path="/location/config/limit", Name="locationLimit", Component="coalMine/locationConfig/limit/index", Icon="ele-UserFilled", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=200 },
+            new SysMenu{ Id=1301000022202, Pid=1301000022201, Title="查询", Permission="locationLimit:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000022203, Pid=1301000022201, Title="新增", Permission="locationLimit:add", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000022204, Pid=1301000022201, Title="编辑", Permission="locationLimit:update", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000022205, Pid=1301000022201, Title="删除", Permission="locationLimit:delete", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=130 },
+
+            // 安全监测
+            new SysMenu{ Id=1301000030001, Pid=0, Title="安全监测", Path="/safety", Name="safety", Component="Layout", Icon="ele-Safety", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=20200 },
+            new SysMenu{ Id=1301000030002, Pid=1301000030001, Title="实时监测", Path="/safety/realTime", Name="safetyRealTime", Component="Layout", Icon="ele-Monitor", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000030101, Pid=1301000030002, Title="安全监测实时数据", Path="/safety/realTime/data", Name="safetyDataReal", Component="coalMine/safetyRealTime/data/index", Icon="ele-DataAnalysis", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000030102, Pid=1301000030002, Title="安全监测异常数据", Path="/safety/realTime/abnormal", Name="safetyAbnormalReal", Component="coalMine/safetyRealTime/abnormal/index", Icon="ele-Warning", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000030103, Pid=1301000030002, Title="安全监测实时曲线", Path="/safety/realTime/curve", Name="safetyCurveReal", Component="coalMine/safetyRealTime/curve/index", Icon="ele-DataLine", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000031001, Pid=1301000030001, Title="历史查询", Path="/safety/history", Name="safetyHistory", Component="Layout", Icon="ele-Document", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=200 },
+            new SysMenu{ Id=1301000031101, Pid=1301000031001, Title="异常统计", Path="/safety/history/abnormalStats", Name="safetyAbnormalStats", Component="coalMine/safetyHistory/abnormalStats/index", Icon="ele-PieChart", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000031201, Pid=1301000031001, Title="历史曲线", Path="/safety/history/curve", Name="safetyCurveHistory", Component="coalMine/safetyHistory/curve/index", Icon="ele-DataLine", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000031301, Pid=1301000031001, Title="测点变更", Path="/safety/history/pointChange", Name="safetyPointChange", Component="coalMine/safetyHistory/pointChange/index", Icon="ele-Change", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000031401, Pid=1301000031001, Title="报警统计", Path="/safety/history/alarmStats", Name="safetyAlarmStats", Component="coalMine/safetyHistory/alarmStats/index", Icon="ele-AlarmClock", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=130 },
+
+            // 矿压监测
+            new SysMenu{ Id=1301000050001, Pid=0, Title="矿压监测", Path="/pressure", Name="pressure", Component="Layout", Icon="ele-DataLine", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=20300 },
+            new SysMenu{ Id=1301000050002, Pid=1301000050001, Title="实时监测", Path="/pressure/realTime", Name="pressureRealTime", Component="Layout", Icon="ele-Monitor", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000050101, Pid=1301000050002, Title="矿压实时数据", Path="/pressure/realTime/data", Name="pressureDataReal", Component="coalMine/pressureRealTime/data/index", Icon="ele-DataAnalysis", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000050102, Pid=1301000050002, Title="矿压实时曲线", Path="/pressure/realTime/curve", Name="pressureCurveReal", Component="coalMine/pressureRealTime/curve/index", Icon="ele-DataLine", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+
+            // 水文监测
+            new SysMenu{ Id=1301000060001, Pid=0, Title="水文监测", Path="/water", Name="water", Component="Layout", Icon="ele-IceCream", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=20400 },
+            new SysMenu{ Id=1301000060002, Pid=1301000060001, Title="实时监测", Path="/water/realTime", Name="waterRealTime", Component="Layout", Icon="ele-Monitor", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000060101, Pid=1301000060002, Title="水文实时数据", Path="/water/realTime/data", Name="waterDataReal", Component="coalMine/waterRealTime/data/index", Icon="ele-DataAnalysis", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000060102, Pid=1301000060002, Title="水文实时曲线", Path="/water/realTime/curve", Name="waterCurveReal", Component="coalMine/waterRealTime/curve/index", Icon="ele-DataLine", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=110 },
+
+            // 视频监控
+            new SysMenu{ Id=1301000070001, Pid=0, Title="视频监控", Path="/video", Name="video", Component="Layout", Icon="ele-VideoCamera", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=20500 },
+            new SysMenu{ Id=1301000070101, Pid=1301000070001, Title="视频列表", Path="/video/list", Name="videoList", Component="coalMine/video/list/index", Icon="ele-VideoCamera", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
+
+            #endregion 煤矿安全监测系统
 
             // 关于项目
             new SysMenu{ Id=1300700000101, Pid=0, Title="关于项目", Path="/about", Name="about", Component="/about/index", Icon="ele-InfoFilled", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2023-03-12 00:00:00"), OrderNo=15000 },

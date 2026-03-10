@@ -9,7 +9,7 @@ namespace Admin.NET.Core;
 /// <summary>
 /// 系统租户菜单表种子数据
 /// </summary>
-[IgnoreUpdateSeed]
+[IncreSeed]
 public class SysTenantMenuSeedData : ISqlSugarEntitySeedData<SysTenantMenu>
 {
     /// <summary>
@@ -18,12 +18,15 @@ public class SysTenantMenuSeedData : ISqlSugarEntitySeedData<SysTenantMenu>
     /// <returns></returns>
     public IEnumerable<SysTenantMenu> HasData()
     {
-        return App.GetService<SysTenantService>().GetTenantDefaultMenuList()
-            .Select(u => new SysTenantMenu
-            {
-                Id = CommonUtil.GetFixedHashCode("" + SqlSugarConst.DefaultTenantId + u.MenuId, 1300000000000),
-                TenantId = SqlSugarConst.DefaultTenantId,
-                MenuId = u.MenuId
-            });
+        // 获取所有菜单
+        var allMenus = new SysMenuSeedData().HasData().ToList();
+        
+        // 生成租户菜单映射 - 包含所有菜单
+        return allMenus.Select(menu => new SysTenantMenu
+        {
+            Id = CommonUtil.GetFixedHashCode("" + SqlSugarConst.DefaultTenantId + menu.Id, 1300000000000),
+            TenantId = SqlSugarConst.DefaultTenantId,
+            MenuId = menu.Id
+        });
     }
 }
