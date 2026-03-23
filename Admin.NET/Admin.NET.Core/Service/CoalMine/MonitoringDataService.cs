@@ -3,6 +3,7 @@
 // 本项目主要遵循 MIT 许可证和 Apache 许可证（版本 2.0）进行分发和使用。许可证位于源代码树根目录中的 LICENSE-MIT 和 LICENSE-APACHE 文件。
 //
 // 不得利用本项目从事危害国家安全、扰乱社会秩序、侵犯他人合法权益等法律法规禁止的活动！任何基于本项目二次开发而产生的一切法律纠纷和责任，我们不承担任何责任！
+using Admin.NET.Core;
 
 namespace Admin.NET.Core.Service;
 
@@ -185,12 +186,19 @@ public class PersonRecordService : IDynamicApiController, ITransient
     [DisplayName("获取人员进出记录分页列表")]
     public async Task<SqlSugarPagedList<PersonRecordOutput>> GetPage([FromQuery] PagePersonRecordInput input)
     {
-        return await _personRecordRep.AsQueryable()
-            .WhereIF(input.MineId.HasValue, u => u.MineId == input.MineId)
-            .WhereIF(!string.IsNullOrWhiteSpace(input.CardId), u => u.CardId.Contains(input.CardId))
-            .WhereIF(input.RecordType.HasValue, u => u.RecordType == input.RecordType)
-            .WhereIF(input.StartTime.HasValue, u => u.RecordTime >= input.StartTime)
-            .WhereIF(input.EndTime.HasValue, u => u.RecordTime <= input.EndTime)
+        var query = _personRecordRep.AsQueryable();
+        if (input.MineId != null && input.MineId > 0)
+            query = query.Where(u => u.MineId == input.MineId);
+        if (!string.IsNullOrWhiteSpace(input.CardId))
+            query = query.Where(u => u.CardId.Contains(input.CardId));
+        if (input.RecordType != null && input.RecordType > 0)
+            query = query.Where(u => u.RecordType == input.RecordType);
+        if (input.StartTime != null)
+            query = query.Where(u => u.RecordTime >= input.StartTime);
+        if (input.EndTime != null)
+            query = query.Where(u => u.RecordTime <= input.EndTime);
+        
+        return await query
             .LeftJoin<CoalMine>((u, m) => u.MineId == m.Id)
             .OrderBy(u => u.RecordTime, OrderByType.Desc)
             .Select((u, m) => new PersonRecordOutput

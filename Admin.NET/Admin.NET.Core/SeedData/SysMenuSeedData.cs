@@ -376,6 +376,51 @@ public class SysMenuSeedData : ISqlSugarEntitySeedData<SysMenu>
             new SysMenu{ Id=1301000070001, Pid=0, Title="视频监控", Path="/video", Name="video", Component="Layout", Icon="ele-VideoCamera", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=20500 },
             new SysMenu{ Id=1301000070101, Pid=1301000070001, Title="视频列表", Path="/video/list", Name="videoList", Component="coalMine/video/list/index", Icon="ele-VideoCamera", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-10 00:00:00"), OrderNo=100 },
 
+            // FTP配置
+            new SysMenu{ Id=1301000080001, Pid=0, Title="FTP配置", Path="/ftpConfig", Name="ftpConfig", Component="Layout", Icon="ele-Folder", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=20600 },
+            new SysMenu{ Id=1301000080002, Pid=1301000080001, Title="FTP服务器", Path="/ftpConfig/server", Name="ftpServer", Component="coalMine/ftp/index", Icon="ele-Monitor", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000080101, Pid=1301000080002, Title="查询", Permission="ftpConfig:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000080102, Pid=1301000080002, Title="新增", Permission="ftpConfig:add", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000080103, Pid=1301000080002, Title="编辑", Permission="ftpConfig:update", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000080104, Pid=1301000080002, Title="删除", Permission="ftpConfig:delete", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=130 },
+            new SysMenu{ Id=1301000080003, Pid=1301000080001, Title="数据源配置", Path="/ftpConfig/dataSource", Name="dataSource", Component="coalMine/dataSource/index", Icon="ele-DataBoard", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=200 },
+
+            // 报警管理
+            new SysMenu{ Id=1301000090001, Pid=0, Title="报警管理", Path="/alarm", Name="alarm", Component="Layout", Icon="ele-AlarmClock", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=20700 },
+            new SysMenu{ Id=1301000090002, Pid=1301000090001, Title="报警配置", Path="/alarm/config", Name="alarmConfig", Component="coalMine/alarmConfig/index", Icon="ele-Setting", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000090101, Pid=1301000090002, Title="查询", Permission="alarmConfig:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000090102, Pid=1301000090002, Title="新增", Permission="alarmConfig:add", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000090103, Pid=1301000090002, Title="编辑", Permission="alarmConfig:update", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000090104, Pid=1301000090002, Title="删除", Permission="alarmConfig:delete", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=130 },
+            new SysMenu{ Id=1301000090003, Pid=1301000090001, Title="报警记录", Path="/alarm/record", Name="alarmRecord", Component="coalMine/alarmRecord/index", Icon="ele-Document", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=200 },
+            new SysMenu{ Id=1301000090201, Pid=1301000090003, Title="查询", Permission="alarmRecord:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000090202, Pid=1301000090003, Title="确认", Permission="alarmRecord:confirm", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000090203, Pid=1301000090003, Title="解决", Permission="alarmRecord:resolve", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=120 },
+
+            // 基站管理
+            new SysMenu{ Id=1301000100001, Pid=0, Title="基站管理", Path="/station", Name="station", Component="Layout", Icon="ele-Antenna", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=20800 },
+            new SysMenu{ Id=1301000100002, Pid=1301000100001, Title="基站列表", Path="/station/list", Name="stationList", Component="coalMine/station/index", Icon="ele-List", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000100101, Pid=1301000100002, Title="查询", Permission="station:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000100102, Pid=1301000100002, Title="新增", Permission="station:add", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000100103, Pid=1301000100002, Title="编辑", Permission="station:update", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000100104, Pid=1301000100002, Title="删除", Permission="station:delete", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=130 },
+
+            // 人员管理
+            new SysMenu{ Id=1301000110001, Pid=0, Title="人员管理", Path="/personManage", Name="personManage", Component="Layout", Icon="ele-User", Type=MenuTypeEnum.Dir, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=20900 },
+            new SysMenu{ Id=1301000110002, Pid=1301000110001, Title="人员信息", Path="/personManage/info", Name="personInfo", Component="coalMine/personInfo/index", Icon="ele-User", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000110101, Pid=1301000110002, Title="查询", Permission="personInfo:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+            new SysMenu{ Id=1301000110102, Pid=1301000110002, Title="新增", Permission="personInfo:add", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=110 },
+            new SysMenu{ Id=1301000110103, Pid=1301000110002, Title="编辑", Permission="personInfo:update", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=120 },
+            new SysMenu{ Id=1301000110104, Pid=1301000110002, Title="删除", Permission="personInfo:delete", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=130 },
+            new SysMenu{ Id=1301000110003, Pid=1301000110001, Title="人员出勤", Path="/personManage/attendance", Name="personAttendance", Component="coalMine/personAttendance/index", Icon="ele-Calendar", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=200 },
+            new SysMenu{ Id=1301000110201, Pid=1301000110003, Title="查询", Permission="personAttendance:page", Type=MenuTypeEnum.Btn, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=100 },
+
+            // 系统概览
+            new SysMenu{ Id=1301000120001, Pid=0, Title="系统概览", Path="/dashboard", Name="dashboard", Component="coalMine/dashboard/index", Icon="ele-DataAnalysis", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=20010 },
+
+            // 解析日志
+            new SysMenu{ Id=1301000130001, Pid=0, Title="解析日志", Path="/parseLog", Name="parseLog", Component="coalMine/parseLog/index", Icon="ElementPlus.Document", Type=MenuTypeEnum.Menu, CreateTime=DateTime.Parse("2026-03-12 00:00:00"), OrderNo=21000 },
+
             #endregion 煤矿安全监测系统
 
             // 关于项目

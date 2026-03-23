@@ -25,6 +25,18 @@ public class FtpConfig : EntityBaseTenantDel
     public CoalMine CoalMine { get; set; }
 
     /// <summary>
+    /// FTP主机地址
+    /// </summary>
+    [SugarColumn(ColumnDescription = "FTP主机地址", Length = 100)]
+    public string Host { get; set; }
+
+    /// <summary>
+    /// FTP端口
+    /// </summary>
+    [SugarColumn(ColumnDescription = "FTP端口", DefaultValue = "21")]
+    public int Port { get; set; } = 21;
+
+    /// <summary>
     /// FTP用户名
     /// </summary>
     [SugarColumn(ColumnDescription = "FTP用户名", Length = 50)]

@@ -58,7 +58,7 @@ public class SafetyData : EntityBase
     /// 更新时间
     /// </summary>
     [SugarColumn(ColumnDescription = "更新时间")]
-    public DateTime UpdateTime { get; set; }
+    public new DateTime UpdateTime { get; set; }
 }
 
 /// <summary>
@@ -137,7 +137,7 @@ public class PersonLocation : EntityBase
     /// 更新时间
     /// </summary>
     [SugarColumn(ColumnDescription = "更新时间")]
-    public DateTime UpdateTime { get; set; }
+    public new DateTime UpdateTime { get; set; }
 }
 
 /// <summary>
@@ -247,7 +247,7 @@ public class PressureData : EntityBase
     /// 更新时间
     /// </summary>
     [SugarColumn(ColumnDescription = "更新时间")]
-    public DateTime UpdateTime { get; set; }
+    public new DateTime UpdateTime { get; set; }
 }
 
 /// <summary>
@@ -302,7 +302,123 @@ public class WaterData : EntityBase
     /// 更新时间
     /// </summary>
     [SugarColumn(ColumnDescription = "更新时间")]
-    public DateTime UpdateTime { get; set; }
+    public new DateTime UpdateTime { get; set; }
+}
+
+/// <summary>
+/// 报警记录
+/// </summary>
+[SugarTable("AlarmRecords", "报警记录表")]
+public class AlarmRecord : EntityBase
+{
+    /// <summary>
+    /// 煤矿ID
+    /// </summary>
+    [SugarColumn(ColumnDescription = "煤矿ID")]
+    public long MineId { get; set; }
+
+    /// <summary>
+    /// 传感器编号
+    /// </summary>
+    [SugarColumn(ColumnDescription = "传感器编号", Length = 50, IsNullable = true)]
+    public string SensorCode { get; set; }
+
+    /// <summary>
+    /// 报警类型
+    /// </summary>
+    [SugarColumn(ColumnDescription = "报警类型", Length = 50)]
+    public string AlarmType { get; set; }
+
+    /// <summary>
+    /// 报警值
+    /// </summary>
+    [SugarColumn(ColumnDescription = "报警值", Length = 50, IsNullable = true)]
+    public string AlarmValue { get; set; }
+
+    /// <summary>
+    /// 阈值
+    /// </summary>
+    [SugarColumn(ColumnDescription = "阈值", Length = 50, IsNullable = true)]
+    public string Threshold { get; set; }
+
+    /// <summary>
+    /// 报警时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "报警时间")]
+    public DateTime AlarmTime { get; set; }
+
+    /// <summary>
+    /// 状态:1-未处理,2-已处理,3-已忽略
+    /// </summary>
+    [SugarColumn(ColumnDescription = "状态", DefaultValue = "1")]
+    public int Status { get; set; }
+
+    /// <summary>
+    /// 处理时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "处理时间", IsNullable = true)]
+    public DateTime? HandleTime { get; set; }
+
+    /// <summary>
+    /// 处理人
+    /// </summary>
+    [SugarColumn(ColumnDescription = "处理人", Length = 50, IsNullable = true)]
+    public string Handler { get; set; }
+
+    /// <summary>
+    /// 处理备注
+    /// </summary>
+    [SugarColumn(ColumnDescription = "处理备注", Length = 500, IsNullable = true)]
+    public string Remark { get; set; }
+}
+
+/// <summary>
+/// 基站状态
+/// </summary>
+[SugarTable("StationStatus", "基站状态表")]
+public class StationStatus : EntityBase
+{
+    /// <summary>
+    /// 煤矿ID
+    /// </summary>
+    [SugarColumn(ColumnDescription = "煤矿ID")]
+    public long MineId { get; set; }
+
+    /// <summary>
+    /// 基站编号
+    /// </summary>
+    [SugarColumn(ColumnDescription = "基站编号", Length = 50)]
+    public string StationId { get; set; }
+
+    /// <summary>
+    /// 基站名称
+    /// </summary>
+    [SugarColumn(ColumnDescription = "基站名称", Length = 100, IsNullable = true)]
+    public string StationName { get; set; }
+
+    /// <summary>
+    /// 状态:0-离线,1-在线
+    /// </summary>
+    [SugarColumn(ColumnDescription = "状态", DefaultValue = "1")]
+    public int Status { get; set; }
+
+    /// <summary>
+    /// 电量
+    /// </summary>
+    [SugarColumn(ColumnDescription = "电量", IsNullable = true)]
+    public decimal? Power { get; set; }
+
+    /// <summary>
+    /// 信号强度
+    /// </summary>
+    [SugarColumn(ColumnDescription = "信号强度", IsNullable = true)]
+    public int? Signal { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    [SugarColumn(ColumnDescription = "更新时间")]
+    public new DateTime UpdateTime { get; set; }
 }
 
 /// <summary>

@@ -1,0 +1,951 @@
+fail: 2026-03-20 16:45:43.2213028 +08:00 Friday L System.Logging.StringLogging[0] #31
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 16:45:43——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:43.2686052 +08:00 Friday L System.Logging.LoggingMonitor[0] #31
+      [Admin.NET.Core.dll] async Task Admin.NET.Core.CoalDataParseJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken)
+      煤矿数据解析作业执行异常      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such column: ListenerType'.
+         at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+         at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()
+         at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()
+         at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+         at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+         at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+         at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+         at SqlSugar.AdoProvider.GetDataReaderAsync(String sql, SugarParameter[] parameters)
+         at SqlSugar.QueryableProvider`1.GetDataAsync[TResult](KeyValuePair`2 sqlObj)
+         at SqlSugar.QueryableProvider`1._ToListAsync[TResult]()
+         at Admin.NET.Core.CoalDataParseJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/CoalDataParseJob.cs:line 40
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:43.3821864 +08:00 Friday L Microsoft.Extensions.Hosting.Internal.Host[11] #1
+      [Microsoft.Extensions.Logging.Abstractions.dll] void Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, EventId eventId, Exception exception, string message, params object[] args)
+      Hosting failed to start      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.IO.IOException: Failed to bind to address http://[::]:5005: address already in use.
+       ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+       ---> System.Net.Sockets.SocketException (98): Address already in use
+         at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+         at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+         at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.AnyIPListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+         at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+         at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7144674 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_EnumToDictJob> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7200783 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_EnumToDictJob> trigger of <job_EnumToDictJob> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7223399 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_log> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7235753 +08:00 Friday L System.Logging.ScheduleService[0] #29
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Error occurred executing in <job_onlineUser> 清理在线用户 [S] <job_onlineUser trigger_onlineUser> 1s 清理在线用户 1ts 2026-03-20 16:45:41.572 +08:00 [Overrun].      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 44
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7244680 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_log> trigger of <job_log> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7257829 +08:00 Friday L Admin.NET.Core.Service.JobMonitor[0] #29
+      [Microsoft.Extensions.Logging.Abstractions.dll] void Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, string message, params object[] args)
+      定时任务【清理在线用户】错误：System.InvalidOperationException: Error occurred executing in <job_onlineUser> 清理在线用户 [S] <job_onlineUser trigger_onlineUser> 1s 清理在线用户 1ts 2026-03-20 16:45:41.572 +08:00 [Overrun].
+       ---> System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 44
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+         --- End of inner exception stack trace ---
+fail: 2026-03-20 16:45:44.7270744 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_onlineUser> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7305233 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_onlineUser> trigger of <job_onlineUser> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7351822 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7373120 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_EnumToDictJob> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7395070 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_onlineUser> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7425851 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_coalDataParse> trigger of <job_coalDataParse> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7445159 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_onlineUser> trigger of <job_onlineUser> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7468523 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_EnumToDictJob> trigger of <job_EnumToDictJob> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7490431 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_coalDataParse> trigger of <job_coalDataParse> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:45:44.7508602 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:54:13.0597821 +08:00 Friday L Microsoft.Extensions.Hosting.Internal.Host[11] #1
+      [Microsoft.Extensions.Logging.Abstractions.dll] void Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, EventId eventId, Exception exception, string message, params object[] args)
+      Hosting failed to start      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.IO.IOException: Failed to bind to address http://[::]:5005: address already in use.
+       ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+       ---> System.Net.Sockets.SocketException (98): Address already in use
+         at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+         at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+         at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.AnyIPListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+         at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+         at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:54:13.5208630 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.TypeInitializationException: The type initializer for 'Admin.NET.Core.SqlSugarCache' threw an exception.
+       ---> System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Furion.App.GetRequiredService(Type type, IServiceProvider serviceProvider)
+         at Furion.App.GetRequiredService[TService](IServiceProvider serviceProvider)
+         at Admin.NET.Core.SqlSugarCache..cctor() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 17
+         --- End of inner exception stack trace ---
+         at Admin.NET.Core.SqlSugarCache.GetAllKey[V]() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 41
+         at SqlSugar.CacheSchemeMain.RemoveCache(ICacheService cacheService, String tableName)
+         at SqlSugar.DeleteableProvider`1.<RemoveDataCache>b__67_0()
+         at SqlSugar.DeleteableProvider`1.After(String sql)
+         at SqlSugar.DeleteableProvider`1.ExecuteCommandAsync()
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 32
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 137
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 16:54:13.5208630 +08:00 Friday L System.Logging.ScheduleService[0] #39
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.TypeInitializationException: The type initializer for 'Admin.NET.Core.SqlSugarCache' threw an exception.
+       ---> System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Furion.App.GetRequiredService(Type type, IServiceProvider serviceProvider)
+         at Furion.App.GetRequiredService[TService](IServiceProvider serviceProvider)
+         at Admin.NET.Core.SqlSugarCache..cctor() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 17
+         --- End of inner exception stack trace ---
+         at Admin.NET.Core.SqlSugarCache.GetAllKey[V]() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 41
+         at SqlSugar.CacheSchemeMain.RemoveCache(ICacheService cacheService, String tableName)
+         at SqlSugar.DeleteableProvider`1.<RemoveDataCache>b__67_0()
+         at SqlSugar.DeleteableProvider`1.After(String sql)
+         at SqlSugar.DeleteableProvider`1.ExecuteCommandAsync()
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 32
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 137
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:44.7716653 +08:00 Friday L Microsoft.Extensions.Hosting.Internal.Host[11] #1
+      [Microsoft.Extensions.Logging.Abstractions.dll] void Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, EventId eventId, Exception exception, string message, params object[] args)
+      Hosting failed to start      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.IO.IOException: Failed to bind to address http://[::]:5005: address already in use.
+       ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+       ---> System.Net.Sockets.SocketException (98): Address already in use
+         at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+         at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+         at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.AnyIPListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+         at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+         at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:44.7834652 +08:00 Friday L System.Logging.StringLogging[0] #40
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 17:02:44——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:44.8114841 +08:00 Friday L System.Logging.LoggingMonitor[0] #40
+      [Admin.NET.Core.dll] async Task Admin.NET.Core.CoalDataParseJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken)
+      煤矿数据解析作业执行异常      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      Microsoft.Data.Sqlite.SqliteException (0x80004005): SQLite Error 1: 'no such column: ListenerType'.
+         at Microsoft.Data.Sqlite.SqliteException.ThrowExceptionForRC(Int32 rc, sqlite3 db)
+         at Microsoft.Data.Sqlite.SqliteCommand.PrepareAndEnumerateStatements()+MoveNext()
+         at Microsoft.Data.Sqlite.SqliteCommand.GetStatements()+MoveNext()
+         at Microsoft.Data.Sqlite.SqliteDataReader.NextResult()
+         at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReader(CommandBehavior behavior)
+         at Microsoft.Data.Sqlite.SqliteCommand.ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+         at Microsoft.Data.Sqlite.SqliteCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+         at SqlSugar.AdoProvider.GetDataReaderAsync(String sql, SugarParameter[] parameters)
+         at SqlSugar.QueryableProvider`1.GetDataAsync[TResult](KeyValuePair`2 sqlObj)
+         at SqlSugar.QueryableProvider`1._ToListAsync[TResult]()
+         at Admin.NET.Core.CoalDataParseJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/CoalDataParseJob.cs:line 40
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:46.4987292 +08:00 Friday L System.Logging.ScheduleService[0] #30
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Error occurred executing in <job_onlineUser> 清理在线用户 [S] <job_onlineUser trigger_onlineUser> 1s 清理在线用户 1ts 2026-03-20 17:02:43.078 +08:00 [Overrun].      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 44
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:46.5012611 +08:00 Friday L Admin.NET.Core.Service.JobMonitor[0] #30
+      [Microsoft.Extensions.Logging.Abstractions.dll] void Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, string message, params object[] args)
+      定时任务【清理在线用户】错误：System.InvalidOperationException: Error occurred executing in <job_onlineUser> 清理在线用户 [S] <job_onlineUser trigger_onlineUser> 1s 清理在线用户 1ts 2026-03-20 17:02:43.078 +08:00 [Overrun].
+       ---> System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 44
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+         --- End of inner exception stack trace ---
+fail: 2026-03-20 17:02:46.9992605 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_EnumToDictJob> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0029412 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_EnumToDictJob> trigger of <job_EnumToDictJob> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0053166 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_log> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0076468 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_log> trigger of <job_log> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0096359 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_onlineUser> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0116765 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_onlineUser> trigger of <job_onlineUser> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0140532 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_onlineUser> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0160941 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_EnumToDictJob> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0189765 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0211868 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_coalDataParse> trigger of <job_coalDataParse> job failed.      
+   .Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_onlineUser> trigger of <job_onlineUser> job failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnTriggerChangedAsync(PersistenceTriggerContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 153
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0140532 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_onlineUser> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0160941 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_EnumToDictJob> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0189765 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateScope()
+         at Admin.NET.Core.Service.DbJobPersistence.OnChangedAsync(PersistenceContext context) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Service/Job/DbJobPersistence.cs:line 126
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:02:47.0211868 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      Persistence of <trigger_coalDataParse> trigger of <job_coalDataParse> job failed.      
+   fail: 2026-03-20 17:07:48.8402045 +08:00 Friday L Microsoft.Extensions.Hosting.Internal.Host[11] #1
+      [Microsoft.Extensions.Logging.Abstractions.dll] void Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, EventId eventId, Exception exception, string message, params object[] args)
+      Hosting failed to start      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.IO.IOException: Failed to bind to address http://[::]:5005: address already in use.
+       ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+       ---> System.Net.Sockets.SocketException (98): Address already in use
+         at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+         at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+         at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.AnyIPListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+         at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+         at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:07:49.3432657 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.TypeInitializationException: The type initializer for 'Admin.NET.Core.SqlSugarCache' threw an exception.
+       ---> System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Furion.App.GetRequiredService(Type type, IServiceProvider serviceProvider)
+         at Furion.App.GetRequiredService[TService](IServiceProvider serviceProvider)
+         at Admin.NET.Core.SqlSugarCache..cctor() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 17
+         --- End of inner exception stack trace ---
+         at Admin.NET.Core.SqlSugarCache.GetAllKey[V]() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 41
+         at SqlSugar.CacheSchemeMain.RemoveCache(ICacheService cacheService, String tableName)
+         at SqlSugar.DeleteableProvider`1.<RemoveDataCache>b__67_0()
+         at SqlSugar.DeleteableProvider`1.After(String sql)
+         at SqlSugar.DeleteableProvider`1.ExecuteCommandAsync()
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 32
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:07:49.3432657 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.TypeInitializationException: The type initializer for 'Admin.NET.Core.SqlSugarCache' threw an exception.
+       ---> System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Furion.App.GetRequiredService(Type type, IServiceProvider serviceProvider)
+         at Furion.App.GetRequiredService[TService](IServiceProvider serviceProvider)
+         at Admin.NET.Core.SqlSugarCache..cctor() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 17
+         --- End of inner exception stack trace ---
+         at Admin.NET.Core.SqlSugarCache.GetAllKey[V]() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 41
+         at SqlSugar.CacheSchemeMain.RemoveCache(ICacheService cacheService, String tableName)
+         at SqlSugar.DeleteableProvider`1.<RemoveDataCache>b__67_0()
+         at SqlSugar.DeleteableProvider`1.After(String sql)
+         at SqlSugar.DeleteableProvider`1.ExecuteCommandAsync()
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 32
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:08:22.3973055 +08:00 Friday L System.Logging.StringLogging[0] #37
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 17:08:22——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:13:21.8889698 +08:00 Friday L System.Logging.StringLogging[0] #34
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 17:13:21——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:18:22.8732626 +08:00 Friday L System.Logging.StringLogging[0] #29
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 17:18:22——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:23:21.7429298 +08:00 Friday L System.Logging.StringLogging[0] #46
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 17:23:21——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:28:21.8960704 +08:00 Friday L System.Logging.StringLogging[0] #3
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 17:28:21——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:33:21.8428109 +08:00 Friday L System.Logging.StringLogging[0] #44
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 17:33:21——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:38:22.1508650 +08:00 Friday L System.Logging.StringLogging[0] #37
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 17:38:22——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:43:21.8787852 +08:00 Friday L System.Logging.StringLogging[0] #31
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.LogError()
+      【03/20/2026 17:43:21——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:48:21.8783968 +08:00 Friday L System.Logging.StringLogging[0] #34
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.LogError()
+      【03/20/2026 17:48:21——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:53:21.8764853 +08:00 Friday L System.Logging.StringLogging[0] #40
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.LogError()
+      【03/20/2026 17:53:21——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 17:58:21.8827660 +08:00 Friday L System.Logging.StringLogging[0] #37
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.LogError()
+      【03/20/2026 17:58:21——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 18:03:22.1307112 +08:00 Friday L System.Logging.StringLogging[0] #43
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.LogError()
+      【03/20/2026 18:03:22——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 18:11:29.9938646 +08:00 Friday L System.Logging.StringLogging[0] #40
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 18:11:29——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 18:15:01.9773900 +08:00 Friday L System.Logging.StringLogging[0] #29
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 18:15:01——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 18:18:15.3863473 +08:00 Friday L System.Logging.StringLogging[0] #31
+      [Furion.Pure.dll] void Furion.Logging.StringLoggingPart.Log()
+      【03/20/2026 18:18:15——错误SQL】
+      
+      [Sql]:SELECT `MineId`,`ListenerType`,`ListenPath`,`Host`,`Port`,`Username`,`Password`,`DataType`,`BindSystem`,`FilePattern`,`FieldSeparator`,`RecordSeparator`,`ProcessedPath`,`Enabled`,`TenantId`,`IsDelete`,`DeleteTime`,`CreateTime`,`UpdateTime`,`CreateUserId`,`CreateUserName`,`UpdateUserId`,`UpdateUserName`,`Id` FROM `ListenerConfigs`  WHERE ( `Enabled` = @Enabled0 )  AND ( `IsDelete` = @IsDelete1 )  
+      [Pars]:
+      [Name]:@Enabled0 [Value]:1 [Type]:Int32    
+      [Name]:@IsDelete1 [Value]:False [Type]:Boolean    
+      
+            
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      SqlSugar.SqlSugarException: SQLite Error 1: 'no such column: ListenerType'.
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 18:20:26.2823479 +08:00 Friday L System.Logging.LoggingMonitor[0] #38
+      [Admin.NET.Core.dll] async Task Admin.NET.Core.CoalDataParseJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken)
+      煤矿数据解析作业执行异常      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.InvalidOperationException: No service for type 'SqlSugar.SqlSugarScope' has been registered.
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService[T](IServiceProvider provider)
+         at Admin.NET.Core.CoalDataParseJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/CoalDataParseJob.cs:line 38
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 18:23:59.6533926 +08:00 Friday L Microsoft.Extensions.Hosting.Internal.Host[11] #1
+      [Microsoft.Extensions.Logging.Abstractions.dll] void Microsoft.Extensions.Logging.LoggerExtensions.LogError(ILogger logger, EventId eventId, Exception exception, string message, params object[] args)
+      Hosting failed to start      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.IO.IOException: Failed to bind to address http://[::]:5005: address already in use.
+       ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+       ---> System.Net.Sockets.SocketException (98): Address already in use
+         at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+         at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+         at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+         at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         --- End of inner exception stack trace ---
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.ListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.AnyIPListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+         at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+         at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+         at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 18:24:00.2959420 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.TypeInitializationException: The type initializer for 'Admin.NET.Core.SqlSugarCache' threw an exception.
+       ---> System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Furion.App.GetRequiredService(Type type, IServiceProvider serviceProvider)
+         at Furion.App.GetRequiredService[TService](IServiceProvider serviceProvider)
+         at Admin.NET.Core.SqlSugarCache..cctor() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 17
+         --- End of inner exception stack trace ---
+         at Admin.NET.Core.SqlSugarCache.GetAllKey[V]() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 41
+         at SqlSugar.CacheSchemeMain.RemoveCache(ICacheService cacheService, String tableName)
+         at SqlSugar.DeleteableProvider`1.<RemoveDataCache>b__67_0()
+         at SqlSugar.DeleteableProvider`1.After(String sql)
+         at SqlSugar.DeleteableProvider`1.ExecuteCommandAsync()
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 32
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+fail: 2026-03-20 18:24:00.2959420 +08:00 Friday L System.Logging.ScheduleService[0] #38
+      [Furion.Pure.dll] void Furion.Schedule.ScheduleLogger.Log(LogLevel logLevel, string message, object[] args, Exception ex)
+      The JobDetail of <job_coalDataParse> persist failed.      
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      System.TypeInitializationException: The type initializer for 'Admin.NET.Core.SqlSugarCache' threw an exception.
+       ---> System.ObjectDisposedException: Cannot access a disposed object.
+      Object name: 'IServiceProvider'.
+         at Microsoft.Extensions.DependencyInjection.ServiceLookup.ThrowHelper.ThrowObjectDisposedException()
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+         at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType)
+         at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+         at Furion.App.GetRequiredService(Type type, IServiceProvider serviceProvider)
+         at Furion.App.GetRequiredService[TService](IServiceProvider serviceProvider)
+         at Admin.NET.Core.SqlSugarCache..cctor() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 17
+         --- End of inner exception stack trace ---
+         at Admin.NET.Core.SqlSugarCache.GetAllKey[V]() in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Cache/SqlSugarCache.cs:line 41
+         at SqlSugar.CacheSchemeMain.RemoveCache(ICacheService cacheService, String tableName)
+         at SqlSugar.DeleteableProvider`1.<RemoveDataCache>b__67_0()
+         at SqlSugar.DeleteableProvider`1.After(String sql)
+         at SqlSugar.DeleteableProvider`1.ExecuteCommandAsync()
+         at Admin.NET.Core.OnlineUserJob.ExecuteAsync(JobExecutingContext context, CancellationToken stoppingToken) in /home/yourname/.openclaw/workspace/Admin.NET/Admin.NET.Core/Job/OnlineUserJob.cs:line 32
+         at Furion.Schedule.SchedulerFactory.ProcessQueueAsync()
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_3.<<BackgroundProcessing>b__3>d.MoveNext()
+      --- End of stack trace from previous location ---
+         at Furion.FriendlyException.Retry.InvokeAsync(Func`1 action, Int32 numRetries, Int32 retryTimeout, Boolean finalThrow, Type[] exceptionTypes, Func`2 fallbackPolicy, Action`2 retryAction, Func`1 shouldExit)
+         at Furion.Schedule.ScheduleHostedService.<>c__DisplayClass23_2.<<BackgroundProcessing>b__2>d.MoveNext()
+      ++++++++++++++++++++++++++++++++++++++++++++++++++++++++

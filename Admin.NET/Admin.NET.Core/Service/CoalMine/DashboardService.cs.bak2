@@ -1,0 +1,381 @@
+// Admin.NET 项目的版权、商标、专利和其他相关权利均受相应法律法规的保护。使用本项目应遵守相关法律法规和许可证的要求。
+//
+// 本项目主要遵循 MIT 许可证和 Apache 许可证（版本 2.0）进行分发和使用。许可证位于源代码树根目录中的 LICENSE-MIT 和 LICENSE-APACHE 文件。
+//
+// 不得利用本项目从事危害国家安全、扰乱社会秩序、侵犯他人合法权益等法律法规禁止的活动！任何基于本项目二次开发而产生的一切法律纠纷和责任，我们不承担任何责任！
+using Admin.NET.Core;
+
+namespace Admin.NET.Core.Service;
+
+/// <summary>
+/// 系统概览服务
+/// </summary>
+[ApiDescriptionSettings("Dashboard", Description = "系统概览")]
+public class DashboardService : IDynamicApiController, ITransient
+{
+    private readonly SqlSugarRepository<CoalMine> _coalMineRep;
+    private readonly SqlSugarRepository<SafetyData> _safetyRep;
+    private readonly SqlSugarRepository<PersonLocation> _personRep;
+    private readonly SqlSugarRepository<AlarmRecord> _alarmRep;
+    private readonly SqlSugarRepository<StationStatus> _stationRep;
+
+    public DashboardService(
+        SqlSugarRepository<CoalMine> coalMineRep,
+        SqlSugarRepository<SafetyData> safetyRep,
+        SqlSugarRepository<PersonLocation> personRep,
+        SqlSugarRepository<AlarmRecord> alarmRep,
+        SqlSugarRepository<StationStatus> stationRep)
+    {
+        _coalMineRep = coalMineRep;
+        _safetyRep = safetyRep;
+        _personRep = personRep;
+        _alarmRep = alarmRep;
+        _stationRep = stationRep;
+    }
+
+    /// <summary>
+    /// 获取系统概览数据
+    /// </summary>
+    [DisplayName("获取系统概览数据")]
+    public async Task<DashboardOverviewOutput> GetOverview([FromQuery] long? mineId)
+    {
+        // 煤矿数量
+        var mineCount = await _coalMineRep.AsQueryable()
+            .Where(u => u.Enabled == 1)
+            .CountAsync();
+
+        // 基站统计
+        var stationQuery = _stationRep.AsQueryable();
+        if (mineId.HasValue)
+        {
+            stationQuery = stationQuery.Where(u => u.MineId == mineId);
+        }
+        var stations = await stationQuery.ToListAsync();
+        var stationCount = stations.Count;
+        var stationOnline = stations.Count(u => u.Status == 1);
+
+        // 人员统计
+        var personQuery = _personRep.AsQueryable();
+        if (mineId.HasValue)
+        {
+            personQuery = personQuery.Where(u => u.MineId == mineId);
+        }
+        var personCount = await personQuery.CountAsync();
+
+        // 今日报警统计
+        var today = DateTime.Today;
+        var tomorrow = today.AddDays(1);
+        var alarmQuery = _alarmRep.AsQueryable()
+            .Where(u => u.AlarmTime >= today && u.AlarmTime < tomorrow);
+        if (mineId.HasValue)
+        {
+            alarmQuery = alarmQuery.Where(u => u.MineId == mineId);
+        }
+        var todayAlarms = await alarmQuery.ToListAsync();
+        var alarmCount = todayAlarms.Count;
+        var unhandledAlarm = todayAlarms.Count(u => u.Status == 1);
+
+        // 传感器统计
+        var sensorQuery = _safetyRep.AsQueryable();
+        if (mineId.HasValue)
+        {
+            sensorQuery = sensorQuery.Where(u => u.MineId == mineId);
+        }
+        var sensorCount = await sensorQuery.Distinct().CountAsync(u => u.SensorCode);
+
+        // 今日数据解析统计
+        var safetyQuery = _safetyRep.AsQueryable()
+            .Where(u => u.UpdateTime >= today && u.UpdateTime < tomorrow);
+        if (mineId.HasValue)
+        {
+            safetyQuery = safetyQuery.Where(u => u.MineId == mineId);
+        }
+        var todayDataCount = await safetyQuery.CountAsync();
+
+        return new DashboardOverviewOutput
+        {
+            MineCount = mineCount,
+            StationCount = stationCount,
+            StationOnline = stationOnline,
+            PersonCount = personCount,
+            AlarmCount = alarmCount,
+            UnhandledAlarm = unhandledAlarm,
+            SensorCount = sensorCount,
+            TodayDataCount = todayDataCount
+        };
+    }
+
+    /// <summary>
+    /// 获取煤矿下拉列表
+    /// </summary>
+    [DisplayName("获取煤矿下拉列表")]
+    public async Task<List<CoalMineSelectOutput>> GetCoalMineSelect()
+    {
+        return await _coalMineRep.AsQueryable()
+            .Where(u => u.Enabled == 1)
+            .OrderBy(u => u.Code)
+            .Select(u => new CoalMineSelectOutput
+            {
+                Id = u.Id,
+                Code = u.Code,
+                Name = u.Name
+            })
+            .ToListAsync();
+    }
+
+    /// <summary>
+    /// 获取最近报警列表
+    /// </summary>
+    [DisplayName("获取最近报警列表")]
+    public async Task<List<RecentAlarmOutput>> GetRecentAlarms([FromQuery] int top = 10)
+    {
+        return await _alarmRep.AsQueryable()
+            .Where(u => u.Status == 1)
+            .OrderByDescending(u => u.AlarmTime)
+            .Take(top)
+            .Select(u => new RecentAlarmOutput
+            {
+                Id = u.Id,
+                MineId = u.MineId,
+                SensorCode = u.SensorCode,
+                AlarmType = u.AlarmType,
+                AlarmValue = u.AlarmValue,
+                AlarmTime = u.AlarmTime
+            })
+            .ToListAsync();
+    }
+
+    /// <summary>
+    /// 获取煤矿实时数据概览
+    /// </summary>
+    [DisplayName("获取煤矿实时数据概览")]
+    public async Task<MineRealTimeOverviewOutput> GetMineRealTimeOverview([FromQuery] long mineId)
+    {
+        // 在线人数
+        var personCount = await _personRep.AsQueryable()
+            .Where(u => u.MineId == mineId)
+            .CountAsync();
+
+        // 基站状态
+        var stations = await _stationRep.AsQueryable()
+            .Where(u => u.MineId == mineId)
+            .ToListAsync();
+        var stationOnline = stations.Count(u => u.Status == 1);
+        var stationTotal = stations.Count;
+
+        // 今日报警
+        var today = DateTime.Today;
+        var tomorrow = today.AddDays(1);
+        var todayAlarmCount = await _alarmRep.AsQueryable()
+            .Where(u => u.MineId == mineId)
+            .Where(u => u.AlarmTime >= today && u.AlarmTime < tomorrow)
+            .CountAsync();
+
+        // 实时传感器数据
+        var latestSensors = await _safetyRep.AsQueryable()
+            .Where(u => u.MineId == mineId)
+            .OrderByDescending(u => u.UpdateTime)
+            .Take(10)
+            .Select(u => new SensorLatestOutput
+            {
+                SensorCode = u.SensorCode,
+                SensorName = u.SensorName,
+                SensorType = u.SensorType,
+                Value = u.Value,
+                Unit = u.Unit,
+                Status = u.Status,
+                UpdateTime = u.UpdateTime
+            })
+            .ToListAsync();
+
+        return new MineRealTimeOverviewOutput
+        {
+            MineId = mineId,
+            PersonCount = personCount,
+            StationOnline = stationOnline,
+            StationTotal = stationTotal,
+            TodayAlarmCount = todayAlarmCount,
+            LatestSensors = latestSensors
+        };
+    }
+}
+
+/// <summary>
+/// 系统概览输出
+/// </summary>
+public class DashboardOverviewOutput
+{
+    /// <summary>
+    /// 煤矿数量
+    /// </summary>
+    public int MineCount { get; set; }
+
+    /// <summary>
+    /// 基站总数
+    /// </summary>
+    public int StationCount { get; set; }
+
+    /// <summary>
+    /// 基站在线数
+    /// </summary>
+    public int StationOnline { get; set; }
+
+    /// <summary>
+    /// 人员数量
+    /// </summary>
+    public int PersonCount { get; set; }
+
+    /// <summary>
+    /// 今日报警数
+    /// </summary>
+    public int AlarmCount { get; set; }
+
+    /// <summary>
+    /// 未处理报警
+    /// </summary>
+    public int UnhandledAlarm { get; set; }
+
+    /// <summary>
+    /// 传感器数量
+    /// </summary>
+    public int SensorCount { get; set; }
+
+    /// <summary>
+    /// 今日数据条数
+    /// </summary>
+    public int TodayDataCount { get; set; }
+}
+
+/// <summary>
+/// 煤矿下拉输出
+/// </summary>
+public class CoalMineSelectOutput
+{
+    /// <summary>
+    /// Id
+    /// </summary>
+    public long Id { get; set; }
+
+    /// <summary>
+    /// 煤矿编码
+    /// </summary>
+    public string Code { get; set; }
+
+    /// <summary>
+    /// 煤矿名称
+    /// </summary>
+    public string Name { get; set; }
+}
+
+/// <summary>
+/// 最近报警输出
+/// </summary>
+public class RecentAlarmOutput
+{
+    /// <summary>
+    /// Id
+    /// </summary>
+    public long Id { get; set; }
+
+    /// <summary>
+    /// 煤矿ID
+    /// </summary>
+    public long MineId { get; set; }
+
+    /// <summary>
+    /// 传感器编号
+    /// </summary>
+    public string SensorCode { get; set; }
+
+    /// <summary>
+    /// 报警类型
+    /// </summary>
+    public string AlarmType { get; set; }
+
+    /// <summary>
+    /// 报警值
+    /// </summary>
+    public string AlarmValue { get; set; }
+
+    /// <summary>
+    /// 报警时间
+    /// </summary>
+    public DateTime AlarmTime { get; set; }
+}
+
+/// <summary>
+/// 煤矿实时概览输出
+/// </summary>
+public class MineRealTimeOverviewOutput
+{
+    /// <summary>
+    /// 煤矿ID
+    /// </summary>
+    public long MineId { get; set; }
+
+    /// <summary>
+    /// 在线人数
+    /// </summary>
+    public int PersonCount { get; set; }
+
+    /// <summary>
+    /// 基站在线数
+    /// </summary>
+    public int StationOnline { get; set; }
+
+    /// <summary>
+    /// 基站总数
+    /// </summary>
+    public int StationTotal { get; set; }
+
+    /// <summary>
+    /// 今日报警数
+    /// </summary>
+    public int TodayAlarmCount { get; set; }
+
+    /// <summary>
+    /// 最新传感器数据
+    /// </summary>
+    public List<SensorLatestOutput> LatestSensors { get; set; }
+}
+
+/// <summary>
+/// 传感器最新数据输出
+/// </summary>
+public class SensorLatestOutput
+{
+    /// <summary>
+    /// 传感器编号
+    /// </summary>
+    public string SensorCode { get; set; }
+
+    /// <summary>
+    /// 传感器名称
+    /// </summary>
+    public string SensorName { get; set; }
+
+    /// <summary>
+    /// 传感器类型
+    /// </summary>
+    public string SensorType { get; set; }
+
+    /// <summary>
+    /// 监测值
+    /// </summary>
+    public decimal Value { get; set; }
+
+    /// <summary>
+    /// 单位
+    /// </summary>
+    public string Unit { get; set; }
+
+    /// <summary>
+    /// 状态
+    /// </summary>
+    public int Status { get; set; }
+
+    /// <summary>
+    /// 更新时间
+    /// </summary>
+    public DateTime UpdateTime { get; set; }
+}
