@@ -16,6 +16,7 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" icon="ele-Plus" @click="openAdd"> 新增 </el-button>
+                    <el-button type="success" icon="ele-Upload" @click="autoImport"> 自动导入 </el-button>
                 </el-form-item>
             </el-form>
         </el-card>
@@ -115,6 +116,19 @@ function delData(row: any) {
     }).then(() => {
         getAPI(CoalMineApi).delete(row.id).then(() => {
             ElMessage.success('删除成功');
+            handleQuery();
+        });
+    });
+}
+
+function autoImport() {
+    ElMessageBox.confirm('将从数据文件夹自动扫描并导入煤矿，确定执行吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+    }).then(() => {
+        getAPI(CoalMineApi).autoImportCoalMines([]).then((res) => {
+            ElMessage.success(`导入成功，共导入 ${res.data} 个煤矿`);
             handleQuery();
         });
     });

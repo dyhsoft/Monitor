@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 import { ElMessage } from 'element-plus';
 
 const state = reactive({
@@ -54,17 +54,24 @@ function loadMineTree() {
 
 function handleNodeClick(data: any) { state.queryParams.mineId = data.id; loadData(); }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { time: '00:00', sensorName: '甲烷传感器1', value: '0.12%', status: '正常' },
-            { time: '01:00', sensorName: '甲烷传感器1', value: '0.15%', status: '正常' },
-            { time: '02:00', sensorName: '甲烷传感器1', value: '0.18%', status: '正常' },
-        ];
+    try {
+        const res = await getAPI(SafetyApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 50 });
+        const data = res.data.result?.rows || res.data.result || [];
+        state.tableData = data.map((item: any) => ({
+            time: new Date(item.updateTime).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }),
+            sensorName: item.sensorName,
+            value: item.value + item.unit,
+            status: item.status === 1 ? '正常' : '异常'
+        }));
+    } catch (error) {
+        console.error('加载日报失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 
 function exportData() { ElMessage.success('导出Excel成功'); }

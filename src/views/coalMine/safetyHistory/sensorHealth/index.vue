@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -55,18 +55,26 @@ function loadMineTree() {
 
 function handleNodeClick(data: any) { state.queryParams.mineId = data.id; loadData(); }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { sensorId: 'CH4-001', sensorName: '甲烷传感器1', faultCount: 1, faultDuration: 2, driftValue: '0.01%', healthScore: 95 },
-            { sensorId: 'CH4-002', sensorName: '甲烷传感器2', faultCount: 3, faultDuration: 8, driftValue: '0.05%', healthScore: 72 },
-            { sensorId: 'CO-001', sensorName: '一氧化碳传感器', faultCount: 0, faultDuration: 0, driftValue: '0', healthScore: 98 },
-            { sensorId: 'TEMP-001', sensorName: '温度传感器', faultCount: 2, faultDuration: 5, driftValue: '0.5℃', healthScore: 85 },
-        ];
+    try {
+        const res = await getAPI(SafetyApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 100 });
+        const data = res.data.result?.rows || res.data.result || [];
+        state.tableData = data.map((item: any) => ({
+            sensorId: item.sensorCode,
+            sensorName: item.sensorName,
+            faultCount: item.status === 3 ? 1 : 0,
+            faultDuration: item.status === 3 ? 2 : 0,
+            driftValue: '0',
+            healthScore: item.status === 1 ? 95 : item.status === 2 ? 60 : 30
+        }));
+    } catch (error) {
+        console.error('加载传感器健康数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

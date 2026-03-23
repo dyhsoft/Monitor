@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, DashboardApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false,
@@ -64,18 +64,18 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    // 模拟基站数据
-    setTimeout(() => {
-        state.tableData = [
-            { stationId: 'ST001', stationName: '主井基站', areaName: '主井', x: 100, y: 200, status: 1, updateTime: new Date().toLocaleString() },
-            { stationId: 'ST002', stationName: '副井基站', areaName: '副井', x: 150, y: 250, status: 1, updateTime: new Date().toLocaleString() },
-            { stationId: 'ST003', stationName: '东巷基站', areaName: '东巷', x: 200, y: 300, status: 0, updateTime: new Date().toLocaleString() },
-        ];
+    try {
+        const res = await getAPI(DashboardApi).getStationList({ mineId: state.queryParams.mineId });
+        state.tableData = res.data.result || [];
+    } catch (error) {
+        console.error('加载基站数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

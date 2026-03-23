@@ -48,7 +48,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi, PersonLocationApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false,
@@ -76,7 +76,7 @@ function loadMineList() {
 
 function handleQuery() {
     state.loading = true;
-    getAPI(PersonLocationApi).getPage(state.queryParams).then((res) => {
+    getAPI(PersonApi).getRealtimePage(state.queryParams).then((res) => {
         state.tableData = res.data.result?.items || [];
         state.total = res.data.result?.total || 0;
     }).finally(() => {

@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi, PersonRecordApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -68,7 +68,7 @@ function loadData() {
         params.startTime = state.dateRange[0];
         params.endTime = state.dateRange[1];
     }
-    getAPI(PersonRecordApi).getPage(params).then((res) => {
+    getAPI(PersonApi).getRecordPage(params).then((res) => {
         state.tableData = res.data.result?.items || [];
     }).finally(() => { state.loading = false; });
 }

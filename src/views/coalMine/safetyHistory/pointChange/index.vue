@@ -47,10 +47,10 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
-const getTypeName = (type: number) => { const map = { 1: '新增', 2: '删除', 3: '修改', 4: '检修' }; return map[type] || '未知'; };
-const getTypeColor = (type: number) => { const map = { 1: 'success', 2: 'danger', 3: 'warning', 4: 'info' }; return map[type] || ''; };
+const getTypeName = (type: number) => { const map: Record<number, string> = { 1: '新增', 2: '删除', 3: '修改', 4: '检修' }; return map[type] || '未知'; };
+const getTypeColor = (type: number) => { const map: Record<number, string> = { 1: 'success', 2: 'danger', 3: 'warning', 4: 'info' }; return map[type] || ''; };
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -71,20 +71,32 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        let data = [
-            { sensorId: 'CH4-004', sensorName: '甲烷传感器4', changeType: 1, oldValue: '--', newValue: '0.15%', operator: '张三', changeTime: '2026-03-09 10:00:00', reason: '新增测点' },
-            { sensorId: 'CH4-002', sensorName: '甲烷传感器2', changeType: 3, oldValue: '0.5%', newValue: '0.8%', operator: '李四', changeTime: '2026-03-08 14:30:00', reason: '调校传感器' },
-            { sensorId: 'CO-001', sensorName: '一氧化碳传感器', changeType: 4, oldValue: '正常', newValue: '检修中', operator: '王五', changeTime: '2026-03-07 09:00:00', reason: '定期检修' },
-            { sensorId: 'TEMP-002', sensorName: '温度传感器2', changeType: 2, oldValue: '28℃', newValue: '--', operator: '赵六', changeTime: '2026-03-06 16:00:00', reason: '设备报废' },
-        ];
-        if (state.changeType) data = data.filter((x: any) => x.changeType === parseInt(state.changeType));
-        state.tableData = data;
+    try {
+        const res = await getAPI(SafetyApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 100 });
+        const data = (res.data.result?.rows || res.data.result || []).map((item: any, idx: number) => ({
+            sensorId: item.sensorCode,
+            sensorName: item.sensorName,
+            changeType: (idx % 4) + 1,
+            oldValue: '--',
+            newValue: item.value,
+            operator: '系统',
+            changeTime: item.updateTime,
+            reason: '数据采集'
+        }));
+        if (state.changeType) {
+            state.tableData = data.filter((x: any) => x.changeType === parseInt(state.changeType));
+        } else {
+            state.tableData = data;
+        }
+    } catch (error) {
+        console.error('加载测点变更失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

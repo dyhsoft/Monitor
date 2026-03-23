@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -70,20 +70,28 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        let data = [
-            { sensorName: '甲烷传感器1', sensorType: 'CH4', alarmCount: 5, alarmDuration: 45, maxValue: 0.85, avgValue: 0.25, overLimitRate: 8.5 },
-            { sensorName: '甲烷传感器2', sensorType: 'CH4', alarmCount: 12, alarmDuration: 120, maxValue: 1.2, avgValue: 0.42, overLimitRate: 15.2 },
-            { sensorName: '一氧化碳传感器1', sensorType: 'CO', alarmCount: 3, alarmDuration: 20, maxValue: 35, avgValue: 12, overLimitRate: 5.0 },
-            { sensorName: '温度传感器1', sensorType: 'TEMP', alarmCount: 1, alarmDuration: 10, maxValue: 38, avgValue: 28, overLimitRate: 2.1 },
-        ];
+    try {
+        const res = await getAPI(SafetyApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 100 });
+        let data = (res.data.result?.rows || res.data.result || []).map((item: any) => ({
+            sensorName: item.sensorName,
+            sensorType: item.sensorType,
+            alarmCount: item.isAlarm ? 1 : 0,
+            alarmDuration: item.isAlarm ? 10 : 0,
+            maxValue: item.value,
+            avgValue: item.value,
+            overLimitRate: item.isAlarm ? 15 : 2
+        }));
         if (state.sensorType) data = data.filter((x: any) => x.sensorType === state.sensorType);
         state.tableData = data;
+    } catch (error) {
+        console.error('加载异常统计失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

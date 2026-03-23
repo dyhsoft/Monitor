@@ -42,14 +42,14 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
-const getStatusName = (s: number) => { const m = { 1: '在线', 2: '离线', 3: '故障' }; return m[s] || '未知'; };
-const getStatusType = (s: number) => { const m = { 1: 'success', 2: 'info', 3: 'danger' }; return m[s] || ''; };
+const getStatusName = (s: number) => { const m: Record<number, string> = { 1: '在线', 2: '离线', 3: '故障' }; return m[s] || '未知'; };
+const getStatusType = (s: number) => { const m: Record<number, string> = { 1: 'success', 2: 'info', 3: 'danger' }; return m[s] || ''; };
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
-    treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null },
+    treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null, page: 1, pageSize: 100 },
     sensorType: ''
 });
 
@@ -63,20 +63,32 @@ function loadMineTree() {
 
 function handleNodeClick(data: any) { state.queryParams.mineId = data.id; loadData(); }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        let data = [
-            { sensorId: 'CH4-001', sensorName: '甲烷传感器1', sensorType: 'CH4', position: '采煤面A', status: 1, onlineRate: 99.5, lastUpdate: new Date().toLocaleString() },
-            { sensorId: 'CH4-002', sensorName: '甲烷传感器2', sensorType: 'CH4', position: '掘进面1', status: 2, onlineRate: 0, lastUpdate: new Date().toLocaleString() },
-            { sensorId: 'CO-001', sensorName: '一氧化碳传感器', sensorType: 'CO', position: '中央变电所', status: 1, onlineRate: 98.8, lastUpdate: new Date().toLocaleString() },
-            { sensorId: 'TEMP-001', sensorName: '温度传感器', sensorType: 'TEMP', position: '采煤面A', status: 3, onlineRate: 85.0, lastUpdate: new Date().toLocaleString() },
-        ];
-        if (state.sensorType) data = data.filter((x: any) => x.sensorType === state.sensorType);
-        state.tableData = data;
+    try {
+        const params = {
+            mineId: state.queryParams.mineId,
+            page: state.queryParams.page,
+            pageSize: state.queryParams.pageSize,
+            sensorType: state.sensorType || undefined
+        };
+        const res = await getAPI(SafetyApi).getRealtimePage(params);
+        state.tableData = (res.data.result?.rows || res.data.result || []).map((item: any) => ({
+            sensorId: item.sensorCode,
+            sensorName: item.sensorName,
+            sensorType: item.sensorType,
+            position: item.location,
+            status: item.status || 1,
+            onlineRate: item.status === 1 ? 99.5 : 0,
+            lastUpdate: item.updateTime
+        }));
+    } catch (error) {
+        console.error('加载传感器状态失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi, PersonLocationApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false,
@@ -63,7 +63,7 @@ function handleNodeClick(data: any) {
 function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    getAPI(PersonLocationApi).getRealTime(state.queryParams.mineId).then((res) => {
+    getAPI(PersonApi).getRealTime(state.queryParams.mineId).then((res) => {
         state.tableData = res.data.result || [];
     }).finally(() => { state.loading = false; });
 }

@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi, AlarmRecordApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -81,24 +81,39 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        const data = [
-            { date: '2026-03-09', totalAlarm: 8, overLimit: 5, powerOff: 2, fault: 1, alarmRate: 12.5 },
-            { date: '2026-03-08', totalAlarm: 12, overLimit: 8, powerOff: 3, fault: 1, alarmRate: 15.2 },
-            { date: '2026-03-07', totalAlarm: 6, overLimit: 4, powerOff: 1, fault: 1, alarmRate: 8.3 },
-            { date: '2026-03-06', totalAlarm: 15, overLimit: 10, powerOff: 3, fault: 2, alarmRate: 18.7 },
-            { date: '2026-03-05', totalAlarm: 9, overLimit: 6, powerOff: 2, fault: 1, alarmRate: 11.1 },
-        ];
-        state.tableData = data;
-        state.stats.totalAlarm = data.reduce((sum, x) => sum + x.totalAlarm, 0);
-        state.stats.overLimit = data.reduce((sum, x) => sum + x.overLimit, 0);
-        state.stats.powerOff = data.reduce((sum, x) => sum + x.powerOff, 0);
-        state.stats.fault = data.reduce((sum, x) => sum + x.fault, 0);
+    try {
+        const params: any = { mineId: state.queryParams.mineId, page: 1, pageSize: 100 };
+        if (state.dateRange && state.dateRange.length === 2) {
+            params.startTime = state.dateRange[0];
+            params.endTime = state.dateRange[1];
+        }
+        const res = await getAPI(AlarmRecordApi).getPage(params);
+        const data = res.data.result?.rows || res.data.result || [];
+        // 统计报警类型
+        let overLimit = 0, powerOff = 0, fault = 0;
+        data.forEach((d: any) => {
+            if (d.alarmType === 1) overLimit++;
+            else if (d.alarmType === 2) powerOff++;
+            else fault++;
+        });
+        state.tableData = [{ 
+            date: state.dateRange?.[0] || new Date().toISOString().split('T')[0], 
+            totalAlarm: data.length, overLimit, powerOff, fault, 
+            alarmRate: ((data.length / 100) * 100).toFixed(1) 
+        }];
+        state.stats.totalAlarm = data.length;
+        state.stats.overLimit = overLimit;
+        state.stats.powerOff = powerOff;
+        state.stats.fault = fault;
+    } catch (error) {
+        console.error('加载报警统计失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

@@ -45,13 +45,13 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
     treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null },
     personType: ''
-);
+});
 
 onMounted(() => { loadMineTree(); });
 
@@ -69,18 +69,25 @@ function handleNodeClick(data: any) {
 function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        let data = [
-            { personType: 1, totalCount: 200, inCount: 150, outCount: 50, inRate: 75 },
-            { personType: 2, totalCount: 50, inCount: 30, outCount: 20, inRate: 60 },
-            { personType: 3, totalCount: 10, inCount: 5, outCount: 5, inRate: 50 },
-        ];
-        if (state.personType) {
-            data = data.filter((x: any) => x.personType === parseInt(state.personType));
-        }
-        state.tableData = data;
-        state.loading = false;
-    }, 300);
+    getAPI(PersonApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 1000 }).then((res) => {
+        const data = res.data.result?.rows || res.data.result || [];
+        const typeMap = new Map<number, any>();
+        data.forEach((p: any) => {
+            const t = p.personType || 1;
+            if (!typeMap.has(t)) typeMap.set(t, { personType: t, totalCount: 0, inCount: 0, outCount: 0 });
+            const item = typeMap.get(t);
+            item.totalCount++;
+            if (p.status === 1) item.inCount++;
+            else item.outCount++;
+        });
+        let result = Array.from(typeMap.values()).map(item => ({
+            ...item,
+            inRate: item.totalCount > 0 ? Math.round(item.inCount / item.totalCount * 100) : 0
+        }));
+        if (state.personType) result = result.filter((x: any) => x.personType === parseInt(state.personType));
+        state.tableData = result;
+    }).catch(() => { state.tableData = []; })
+    .finally(() => { state.loading = false; });
 }
 </script>
 

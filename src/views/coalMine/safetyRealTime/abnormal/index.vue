@@ -49,10 +49,10 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
-const getAlarmTypeName = (type: number) => { const map = { 1: '超限报警', 2: '断电报警', 3: '故障报警' }; return map[type] || '未知'; };
-const getAlarmTypeColor = (type: number) => { const map = { 1: 'danger', 2: 'warning', 3: 'info' }; return map[type] || ''; };
+const getAlarmTypeName = (type: number) => { const map: Record<number, string> = { 1: '超限报警', 2: '断电报警', 3: '故障报警' }; return map[type] || '未知'; };
+const getAlarmTypeColor = (type: number) => { const map: Record<number, string> = { 1: 'danger', 2: 'warning', 3: 'info' }; return map[type] || ''; };
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -73,20 +73,29 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        let data = [
-            { sensorId: 'CH4-002', sensorName: '甲烷传感器2', alarmType: 1, alarmValue: 0.85, limitValue: 0.5, position: '掘进面1', alarmTime: '2026-03-09 14:30:00', status: 1 },
-            { sensorId: 'CH4-003', sensorName: '甲烷传感器3', alarmType: 2, alarmValue: 1.2, limitValue: 0.5, position: '采煤面B', alarmTime: '2026-03-09 13:20:00', status: 2 },
-            { sensorId: 'CO-002', sensorName: '一氧化碳传感器2', alarmType: 1, alarmValue: 35, limitValue: 24, position: '中央泵房', alarmTime: '2026-03-09 12:10:00', status: 1 },
-            { sensorId: 'TEMP-002', sensorName: '温度传感器2', alarmType: 3, alarmValue: '--', limitValue: '--', position: '采煤面A', alarmTime: '2026-03-09 11:00:00', status: 2 },
-        ];
+    try {
+        const res = await getAPI(SafetyApi).getAlarms({ mineId: state.queryParams.mineId });
+        let data = (res.data.result || []).map((item: any) => ({
+            sensorId: item.sensorCode,
+            sensorName: item.sensorName,
+            alarmType: item.alarmType || 1,
+            alarmValue: item.value,
+            limitValue: item.threshold,
+            position: item.location,
+            alarmTime: item.alarmTime || item.updateTime,
+            status: item.status || 1
+        }));
         if (state.alarmType) data = data.filter((x: any) => x.alarmType === parseInt(state.alarmType));
         state.tableData = data;
+    } catch (error) {
+        console.error('加载异常数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

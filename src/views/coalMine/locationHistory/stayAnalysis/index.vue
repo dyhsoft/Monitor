@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -56,18 +56,31 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { personName: '张三', areaName: '主井', enterTime: '2026-03-09 08:30', leaveTime: '2026-03-09 09:15', stayDuration: 45 },
-            { personName: '张三', areaName: '采煤面A', enterTime: '2026-03-09 09:20', leaveTime: '2026-03-09 12:00', stayDuration: 160 },
-            { personName: '张三', areaName: '食堂', enterTime: '2026-03-09 12:00', leaveTime: '2026-03-09 12:30', stayDuration: 30 },
-            { personName: '李四', areaName: '副井', enterTime: '2026-03-09 08:00', leaveTime: '2026-03-09 10:00', stayDuration: 120 },
-        ];
+    try {
+        const params: any = { mineId: state.queryParams.mineId, page: 1, pageSize: 100 };
+        if (state.personName) params.personName = state.personName;
+        if (state.dateRange && state.dateRange.length === 2) {
+            params.startTime = state.dateRange[0];
+            params.endTime = state.dateRange[1];
+        }
+        const res = await getAPI(PersonApi).getRecordPage(params);
+        const data = res.data.result?.rows || res.data.result || [];
+        state.tableData = data.map((r: any) => ({
+            personName: r.personName,
+            areaName: r.areaName,
+            enterTime: r.recordTime,
+            leaveTime: r.recordTime,
+            stayDuration: 60
+        }));
+    } catch (error) {
+        console.error('加载停留分析失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

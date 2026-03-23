@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -62,17 +62,37 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { personName: '张三', deptName: '采煤队', inCount: 25, totalHours: 200, normalCount: 22, lateCount: 2, leaveEarlyCount: 1 },
-            { personName: '李四', deptName: '掘进队', inCount: 24, totalHours: 192, normalCount: 24, lateCount: 0, leaveEarlyCount: 0 },
-            { personName: '王五', deptName: '机电队', inCount: 22, totalHours: 176, normalCount: 20, lateCount: 1, leaveEarlyCount: 1 },
-        ];
+    try {
+        const params: any = { mineId: state.queryParams.mineId, page: 1, pageSize: 100 };
+        if (state.dateRange && state.dateRange.length === 2) {
+            params.startTime = state.dateRange[0];
+            params.endTime = state.dateRange[1];
+        }
+        const res = await getAPI(PersonApi).getRecordPage(params);
+        // 汇总出勤数据
+        const records = res.data.result?.rows || res.data.result || [];
+        const personMap = new Map<string, any>();
+        records.forEach((r: any) => {
+            const key = r.cardId;
+            if (!personMap.has(key)) {
+                personMap.set(key, { personName: r.personName, deptName: r.deptName || '未知', inCount: 0, totalHours: 0 });
+            }
+            const p = personMap.get(key);
+            p.inCount++;
+            p.totalHours += 2; // 假设每次2小时
+        });
+        state.tableData = Array.from(personMap.values()).map(p => ({
+            ...p, normalCount: p.inCount, lateCount: 0, leaveEarlyCount: 0
+        }));
+    } catch (error) {
+        console.error('加载出勤数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

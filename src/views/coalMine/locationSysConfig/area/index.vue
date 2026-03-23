@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 import { ElMessage } from 'element-plus';
 
 const state = reactive({
@@ -87,17 +87,25 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { areaName: '采煤面A', areaType: 1, limitCount: 20, isKey: true, enabled: true },
-            { areaName: '掘进面1', areaType: 2, limitCount: 10, isKey: false, enabled: true },
-            { areaName: '主巷道', areaType: 3, limitCount: 50, isKey: false, enabled: true },
-        ];
+    try {
+        const res = await getAPI(PersonApi).getAreaStatistics(state.queryParams.mineId);
+        const data = res.data.result || [];
+        state.tableData = data.map((item: any) => ({
+            areaName: item.areaName,
+            areaType: 3,
+            limitCount: 20,
+            isKey: false,
+            enabled: true
+        }));
+    } catch (error) {
+        console.error('加载区域数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 
 function openAdd() {

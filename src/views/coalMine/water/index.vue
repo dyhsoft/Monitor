@@ -49,7 +49,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi, WaterDataApi } from '/@/api-services/api';
+import { CoalMineApi, WaterApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false,
@@ -77,7 +77,7 @@ function loadMineList() {
 
 function handleQuery() {
     state.loading = true;
-    getAPI(WaterDataApi).getPage(state.queryParams).then((res) => {
+    getAPI(WaterApi).getRealtimePage(state.queryParams).then((res) => {
         state.tableData = res.data.result?.items || [];
         state.total = res.data.result?.total || 0;
     }).finally(() => {

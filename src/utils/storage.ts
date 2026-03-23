@@ -11,7 +11,8 @@ export const Local = {
 	// 查看 v2.4.3版本更新日志
 	setKey(key: string) {
 		// @ts-ignore
-		return `${__NEXT_NAME__}:${key}`;
+		const prefix = typeof __NEXT_NAME__ !== 'undefined' ? __NEXT_NAME__ : 'admin.net';
+		return `${prefix}:${key}`;
 	},
 	// 设置永久缓存
 	set<T>(key: string, val: T) {

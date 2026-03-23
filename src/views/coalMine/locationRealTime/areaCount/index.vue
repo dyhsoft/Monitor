@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -49,19 +49,23 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { areaName: '主井', personCount: 15, limitCount: 30 },
-            { areaName: '副井', personCount: 8, limitCount: 20 },
-            { areaName: '东巷', personCount: 22, limitCount: 25 },
-            { areaName: '西巷', personCount: 12, limitCount: 20 },
-            { areaName: '采煤面', personCount: 18, limitCount: 20 },
-        ];
+    try {
+        const res = await getAPI(PersonApi).getAreaStatistics(state.queryParams.mineId);
+        state.tableData = (res.data.result || []).map((item: any) => ({
+            areaName: item.areaName,
+            personCount: item.personCount,
+            limitCount: 20,
+            status: item.personCount > 20 ? '超员' : '正常'
+        }));
+    } catch (error) {
+        console.error('加载区域统计失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

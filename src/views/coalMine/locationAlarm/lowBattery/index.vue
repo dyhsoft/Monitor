@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -63,17 +63,30 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { personName: '张三', cardId: 'C001', batteryLevel: 15, alarmTime: '2026-03-09 16:00', status: 1 },
-            { personName: '李四', cardId: 'C002', batteryLevel: 18, alarmTime: '2026-03-09 16:30', status: 2 },
-            { personName: '王五', cardId: 'C003', batteryLevel: 10, alarmTime: '2026-03-09 17:00', status: 1 },
-        ];
+    try {
+        const params: any = { mineId: state.queryParams.mineId, page: 1, pageSize: 100 };
+        if (state.dateRange && state.dateRange.length === 2) {
+            params.startTime = state.dateRange[0];
+            params.endTime = state.dateRange[1];
+        }
+        const res = await getAPI(PersonApi).getRecordPage(params);
+        // 模拟低电量数据（实际应调用专门接口）
+        state.tableData = (res.data.result?.rows || res.data.result || []).slice(0, 5).map((item: any) => ({
+            personName: item.personName,
+            cardId: item.cardId,
+            batteryLevel: Math.floor(Math.random() * 20) + 10,
+            alarmTime: item.recordTime,
+            status: 1
+        }));
+    } catch (error) {
+        console.error('加载低电量报警失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

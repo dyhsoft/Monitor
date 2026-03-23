@@ -45,7 +45,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, DashboardApi } from '/@/api-services/api';
 import { ElMessage } from 'element-plus';
 
 const state = reactive({
@@ -66,17 +66,24 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { deviceName: '基站ST001', deviceId: 'ST001', deviceType: 1, areaName: '主井', status: 1 },
-            { deviceName: '基站ST002', deviceId: 'ST002', deviceType: 1, areaName: '副井', status: 1 },
-            { deviceName: '读卡器R001', deviceId: 'R001', deviceType: 2, areaName: '主井', status: 1 },
-        ];
+    try {
+        const res = await getAPI(DashboardApi).getStationList({ mineId: state.queryParams.mineId });
+        state.tableData = (res.data.result || []).map((item: any) => ({
+            deviceName: item.stationName,
+            deviceId: item.stationId,
+            deviceType: 1,
+            areaName: item.areaName,
+            status: item.status
+        }));
+    } catch (error) {
+        console.error('加载设备数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 
 function openAdd() {

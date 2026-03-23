@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -68,22 +68,28 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        let data = [
-            { areaName: '采煤面A', areaType: 1, personCount: 18, limitCount: 20 },
-            { areaName: '采煤面B', areaType: 1, personCount: 15, limitCount: 18 },
-            { areaName: '掘进面1', areaType: 2, personCount: 8, limitCount: 10 },
-            { areaName: '掘进面2', areaType: 2, personCount: 6, limitCount: 10 },
-        ];
+    try {
+        const res = await getAPI(PersonApi).getAreaStatistics(state.queryParams.mineId);
+        let data = (res.data.result || []).map((item: any) => ({
+            areaName: item.areaName,
+            areaType: 3,
+            personCount: item.personCount,
+            limitCount: 20,
+            status: item.personCount > 20 ? '超员' : '正常'
+        }));
         if (state.areaType) {
             data = data.filter((x: any) => x.areaType === parseInt(state.areaType));
         }
         state.tableData = data;
+    } catch (error) {
+        console.error('加载重点区域数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

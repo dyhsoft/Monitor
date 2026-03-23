@@ -36,12 +36,12 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 import { ElMessage } from 'element-plus';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
-    treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null }
+    treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null, page: 1, pageSize: 100 }
 });
 
 onMounted(() => { loadMineTree(); });
@@ -54,17 +54,24 @@ function loadMineTree() {
 
 function handleNodeClick(data: any) { state.queryParams.mineId = data.id; loadData(); }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { sensorId: 'CH4-001', sensorName: '甲烷传感器1', sensorType: '甲烷', position: '采煤面A', enabled: true },
-            { sensorId: 'CH4-002', sensorName: '甲烷传感器2', sensorType: '甲烷', position: '掘进面1', enabled: true },
-            { sensorId: 'CO-001', sensorName: '一氧化碳传感器', sensorType: '一氧化碳', position: '中央变电所', enabled: true },
-        ];
+    try {
+        const res = await getAPI(SafetyApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 100 });
+        state.tableData = (res.data.result?.rows || res.data.result || []).map((item: any) => ({
+            sensorId: item.sensorCode,
+            sensorName: item.sensorName,
+            sensorType: item.sensorType,
+            position: item.location,
+            enabled: true
+        }));
+    } catch (error) {
+        console.error('加载传感器数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 
 function openAdd() { if (!state.queryParams.mineId) { ElMessage.warning('请先选择煤矿'); return; } ElMessage.info('新增传感器'); }

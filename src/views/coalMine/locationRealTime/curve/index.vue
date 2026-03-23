@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi, PersonLocationApi, LocationLimitConfigApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi, LocationLimitConfigApi } from '/@/api-services/api';
 
 const state = reactive({
     treeData: [] as any[], treeProps: { children: 'children', label: 'name' },
@@ -53,7 +53,7 @@ function handleNodeClick(data: any) {
 
 function loadData() {
     if (!state.queryParams.mineId) return;
-    getAPI(PersonLocationApi).getRealTime(state.queryParams.mineId).then((res) => {
+    getAPI(PersonApi).getRealTime(state.queryParams.mineId).then((res) => {
         const count = (res.data.result || []).length;
         console.log('当前人数:', count);
     });

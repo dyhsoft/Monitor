@@ -47,14 +47,13 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
 const sensorTypeMap: Record<string, string> = { CH4: '甲烷', CO: '一氧化碳', TEMP: '温度', WIND: '风速', PRESS: '负压' };
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
-    treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null },
-    sensorType: ''
+    treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null, page: 1, pageSize: 100, sensorType: '' },
 });
 
 onMounted(() => { loadMineTree(); });
@@ -70,21 +69,24 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        let data = [
-            { sensorId: 'CH4-001', sensorName: '甲烷传感器1', sensorType: 'CH4', value: 0.12, unit: '%', position: '采煤面A', isAlarm: false, updateTime: new Date().toLocaleString() },
-            { sensorId: 'CH4-002', sensorName: '甲烷传感器2', sensorType: 'CH4', value: 0.85, unit: '%', position: '掘进面1', isAlarm: true, updateTime: new Date().toLocaleString() },
-            { sensorId: 'CO-001', sensorName: '一氧化碳传感器', sensorType: 'CO', value: 8, unit: 'ppm', position: '中央变电所', isAlarm: false, updateTime: new Date().toLocaleString() },
-            { sensorId: 'TEMP-001', sensorName: '温度传感器', sensorType: 'TEMP', value: 26.5, unit: '℃', position: '采煤面A', isAlarm: false, updateTime: new Date().toLocaleString() },
-            { sensorId: 'WIND-001', sensorName: '风速传感器', sensorType: 'WIND', value: 2.8, unit: 'm/s', position: '主井', isAlarm: false, updateTime: new Date().toLocaleString() },
-        ];
-        if (state.sensorType) data = data.filter((x: any) => x.sensorType === state.sensorType);
-        state.tableData = data;
+    try {
+        const params = {
+            mineId: state.queryParams.mineId,
+            page: state.queryParams.page,
+            pageSize: state.queryParams.pageSize,
+            sensorType: state.sensorType || undefined
+        };
+        const res = await getAPI(SafetyApi).getRealtimePage(params);
+        state.tableData = res.data.result?.rows || res.data.result || [];
+    } catch (error) {
+        console.error('加载安全监测数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

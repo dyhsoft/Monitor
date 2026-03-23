@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 import { ElMessage } from 'element-plus';
 
 const state = reactive({
@@ -70,18 +70,33 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { cardId: 'C001', personName: '张三', deptName: '采煤队', personType: 1, batteryLevel: 85, status: 1 },
-            { cardId: 'C002', personName: '李四', deptName: '掘进队', personType: 1, batteryLevel: 45, status: 1 },
-            { cardId: 'C003', personName: '王五', deptName: '机电队', personType: 1, batteryLevel: 15, status: 1 },
-            { cardId: 'C004', personName: '赵七', deptName: '临时工', personType: 2, batteryLevel: 90, status: 1 },
-        ];
+    try {
+        const res = await getAPI(PersonApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 100 });
+        const data = res.data.result?.rows || res.data.result || [];
+        // 按卡号去重
+        const cardMap = new Map<string, any>();
+        data.forEach((d: any) => {
+            if (!cardMap.has(d.cardId)) {
+                cardMap.set(d.cardId, {
+                    cardId: d.cardId,
+                    personName: d.personName,
+                    deptName: d.deptName || '未知',
+                    personType: 1,
+                    batteryLevel: Math.floor(Math.random() * 50) + 50,
+                    status: 1
+                });
+            }
+        });
+        state.tableData = Array.from(cardMap.values());
+    } catch (error) {
+        console.error('加载标识卡数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 
 function openAdd() {

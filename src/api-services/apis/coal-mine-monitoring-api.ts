@@ -4,7 +4,8 @@ import globalAxios, { AxiosRequestConfig } from 'axios';
 import { Configuration } from '../configuration';
 import { BASE_PATH } from '../base';
 
-export class SafetyDataApi {
+// 安全监测
+export class SafetyApi {
     private configuration: Configuration;
     private basePath: string;
 
@@ -13,24 +14,61 @@ export class SafetyDataApi {
         this.basePath = basePath;
     }
 
-    async getPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
-        return globalAxios.get(`${this.basePath}/api/safetyData/page`, {
-            params,
-            ...this.configuration,
-            ...options
-        });
+    async getRealtimePage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/safety/getRealtimePage`, { params, ...this.configuration, ...options });
     }
 
+    async getHistoryPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/safety/getHistoryPage`, { params, ...this.configuration, ...options });
+    }
+
+    async getSensorTypes(options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/safety/getSensorTypes`, { ...this.configuration, ...options });
+    }
+
+    async getAlarms(options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/safety/getAlarms`, { ...this.configuration, ...options });
+    }
+}
+
+// 人员定位
+export class PersonApi {
+    private configuration: Configuration;
+    private basePath: string;
+
+    constructor(configuration: Configuration, basePath: string = BASE_PATH) {
+        this.configuration = configuration;
+        this.basePath = basePath;
+    }
+
+    async getRealtimePage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/person/getRealtimePage`, { params, ...this.configuration, ...options });
+    }
+
+    async getAreaStatistics(mineId: number, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/person/getAreaStatistics`, { params: { mineId }, ...this.configuration, ...options });
+    }
+
+    async getTrackHistory(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/person/getTrackHistory`, { params, ...this.configuration, ...options });
+    }
+
+    async getOnlineCount(mineId: number, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/person/getOnlineCount`, { params: { mineId }, ...this.configuration, ...options });
+    }
+
+    async getRecordPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/person/getRecordPage`, { params, ...this.configuration, ...options });
+    }
+
+    // 实时数据（用于实时监测页面）
     async getRealTime(mineId: number, options: AxiosRequestConfig = {}): Promise<any> {
-        return globalAxios.get(`${this.basePath}/api/safetyData/realTime`, {
-            params: { mineId },
-            ...this.configuration,
-            ...options
-        });
+        return globalAxios.get(`${this.basePath}/api/person/getRealtimePage`, { params: { mineId, page: 1, pageSize: 1000 }, ...this.configuration, ...options });
     }
 }
 
-export class PersonLocationApi {
+// 水害监测
+export class WaterApi {
     private configuration: Configuration;
     private basePath: string;
 
@@ -39,24 +77,25 @@ export class PersonLocationApi {
         this.basePath = basePath;
     }
 
-    async getPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
-        return globalAxios.get(`${this.basePath}/api/personLocation/page`, {
-            params,
-            ...this.configuration,
-            ...options
-        });
+    async getRealtimePage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/water/getRealtimePage`, { params, ...this.configuration, ...options });
     }
 
-    async getRealTime(mineId: number, options: AxiosRequestConfig = {}): Promise<any> {
-        return globalAxios.get(`${this.basePath}/api/personLocation/realTime`, {
-            params: { mineId },
-            ...this.configuration,
-            ...options
-        });
+    async getAlarmList(mineId: number, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/water/getAlarmList`, { params: { mineId }, ...this.configuration, ...options });
+    }
+
+    async getHistoryPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/water/getHistoryPage`, { params, ...this.configuration, ...options });
+    }
+
+    async getSensorTypes(options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/water/getSensorTypes`, { ...this.configuration, ...options });
     }
 }
 
-export class PersonRecordApi {
+// 矿压监测
+export class PressureApi {
     private configuration: Configuration;
     private basePath: string;
 
@@ -65,65 +104,15 @@ export class PersonRecordApi {
         this.basePath = basePath;
     }
 
-    async getPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
-        return globalAxios.get(`${this.basePath}/api/personRecord/page`, {
-            params,
-            ...this.configuration,
-            ...options
-        });
-    }
-}
-
-export class PressureDataApi {
-    private configuration: Configuration;
-    private basePath: string;
-
-    constructor(configuration: Configuration, basePath: string = BASE_PATH) {
-        this.configuration = configuration;
-        this.basePath = basePath;
+    async getRealtimePage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/pressure/getRealtimePage`, { params, ...this.configuration, ...options });
     }
 
-    async getPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
-        return globalAxios.get(`${this.basePath}/api/pressureData/page`, {
-            params,
-            ...this.configuration,
-            ...options
-        });
-    }
-}
-
-export class WaterDataApi {
-    private configuration: Configuration;
-    private basePath: string;
-
-    constructor(configuration: Configuration, basePath: string = BASE_PATH) {
-        this.configuration = configuration;
-        this.basePath = basePath;
+    async getHistoryPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/pressure/getHistoryPage`, { params, ...this.configuration, ...options });
     }
 
-    async getPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
-        return globalAxios.get(`${this.basePath}/api/waterData/page`, {
-            params,
-            ...this.configuration,
-            ...options
-        });
-    }
-}
-
-export class ParseLogApi {
-    private configuration: Configuration;
-    private basePath: string;
-
-    constructor(configuration: Configuration, basePath: string = BASE_PATH) {
-        this.configuration = configuration;
-        this.basePath = basePath;
-    }
-
-    async getPage(params?: any, options: AxiosRequestConfig = {}): Promise<any> {
-        return globalAxios.get(`${this.basePath}/api/parseLog/page`, {
-            params,
-            ...this.configuration,
-            ...options
-        });
+    async getSensorTypes(options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.get(`${this.basePath}/api/pressure/getSensorTypes`, { ...this.configuration, ...options });
     }
 }

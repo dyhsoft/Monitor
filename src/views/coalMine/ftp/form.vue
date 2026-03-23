@@ -6,6 +6,12 @@
                     <el-option v-for="item in mineList" :key="item.id" :label="item.name" :value="item.id" />
                 </el-select>
             </el-form-item>
+            <el-form-item label="FTP地址" prop="host">
+                <el-input v-model="state.form.host" placeholder="请输入FTP服务器地址" />
+            </el-form-item>
+            <el-form-item label="端口" prop="port">
+                <el-input-number v-model="state.form.port" :min="1" :max="65535" :step="1" :stepStrictly="true" />
+            </el-form-item>
             <el-form-item label="FTP用户名" prop="username">
                 <el-input v-model="state.form.username" placeholder="请输入FTP用户名" />
             </el-form-item>
@@ -64,6 +70,8 @@ const enabled = computed({
 
 const rules = {
     mineId: [{ required: true, message: '请选择煤矿', trigger: 'change' }],
+    host: [{ required: true, message: '请输入FTP服务器地址', trigger: 'blur' }],
+    port: [{ required: true, message: '请输入端口', trigger: 'blur' }],
     username: [{ required: true, message: '请输入FTP用户名', trigger: 'blur' }],
     password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
     rootDirectory: [{ required: true, message: '请输入根目录', trigger: 'blur' }],

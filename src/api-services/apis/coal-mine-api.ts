@@ -29,6 +29,14 @@ export class CoalMineApi {
         });
     }
 
+    async autoImportCoalMines(folders?: string[], options: AxiosRequestConfig = {}): Promise<any> {
+        return globalAxios.post(`${this.basePath}/api/coalMine/AutoImportCoalMines`, null, {
+            params: { folders },
+            ...this.configuration,
+            ...options
+        });
+    }
+
     async get(id: number, options: AxiosRequestConfig = {}): Promise<any> {
         return globalAxios.get(`${this.basePath}/api/coalMine/${id}`, {
             ...this.configuration,

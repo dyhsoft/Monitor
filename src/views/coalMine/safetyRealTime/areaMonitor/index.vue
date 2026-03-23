@@ -31,11 +31,11 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
-    treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null }
+    treeProps: { children: 'children', label: 'name' }, queryParams: { mineId: null as number | null, page: 1, pageSize: 1000 }
 });
 
 onMounted(() => { loadMineTree(); });
@@ -48,19 +48,32 @@ function loadMineTree() {
 
 function handleNodeClick(data: any) { state.queryParams.mineId = data.id; loadData(); }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { areaName: '采煤面A', areaType: '采煤面', sensorCount: 8, normalCount: 7, alarmCount: 1, offlineCount: 0 },
-            { areaName: '采煤面B', areaType: '采煤面', sensorCount: 6, normalCount: 6, alarmCount: 0, offlineCount: 0 },
-            { areaName: '掘进面1', areaType: '掘进面', sensorCount: 5, normalCount: 4, alarmCount: 0, offlineCount: 1 },
-            { areaName: '主井', areaType: '巷道', sensorCount: 4, normalCount: 4, alarmCount: 0, offlineCount: 0 },
-            { areaName: '副井', areaType: '巷道', sensorCount: 3, normalCount: 3, alarmCount: 0, offlineCount: 0 },
-        ];
+    try {
+        const res = await getAPI(SafetyApi).getRealtimePage(state.queryParams);
+        const data = res.data.result?.rows || res.data.result || [];
+        // 按区域分组统计
+        const areaMap = new Map<string, any>();
+        data.forEach((item: any) => {
+            const areaName = item.areaName || item.location || '未知区域';
+            if (!areaMap.has(areaName)) {
+                areaMap.set(areaName, { areaName, areaType: '采煤面', sensorCount: 0, normalCount: 0, alarmCount: 0, offlineCount: 0 });
+            }
+            const area = areaMap.get(areaName);
+            area.sensorCount++;
+            if (item.status === 1) area.normalCount++;
+            else if (item.status === 2) area.offlineCount++;
+            else if (item.isAlarm) area.alarmCount++;
+        });
+        state.tableData = Array.from(areaMap.values());
+    } catch (error) {
+        console.error('加载区域监控数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

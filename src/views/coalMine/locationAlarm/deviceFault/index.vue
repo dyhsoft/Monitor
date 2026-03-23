@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, DashboardApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -60,17 +60,27 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { deviceName: '基站ST001', deviceId: 'ST001', deviceType: '定位基站', faultType: '通信故障', alarmTime: '2026-03-09 10:00', status: 2 },
-            { deviceName: '读卡器R001', deviceId: 'R001', deviceType: '读卡器', faultType: '硬件损坏', alarmTime: '2026-03-09 11:30', status: 1 },
-            { deviceName: '基站ST005', deviceId: 'ST005', deviceType: '定位基站', faultType: '电源故障', alarmTime: '2026-03-09 14:00', status: 1 },
-        ];
+    try {
+        const res = await getAPI(DashboardApi).getStationList({ mineId: state.queryParams.mineId });
+        const data = res.data.result || [];
+        // 模拟故障数据（实际需专门接口）
+        state.tableData = data.filter((s: any) => s.status === 0).map((s: any) => ({
+            deviceName: s.stationName,
+            deviceId: s.stationId,
+            deviceType: '定位基站',
+            faultType: '通信故障',
+            alarmTime: s.updateTime,
+            status: 1
+        }));
+    } catch (error) {
+        console.error('加载设备故障数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

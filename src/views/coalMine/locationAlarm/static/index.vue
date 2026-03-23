@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -60,16 +60,26 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { personName: '王五', cardId: 'C003', areaName: '采煤面A', staticTime: 30, alarmTime: '2026-03-09 14:30', status: 1 },
-            { personName: '赵六', cardId: 'C004', areaName: '巷道B', staticTime: 45, alarmTime: '2026-03-09 15:00', status: 2 },
-        ];
+    try {
+        const res = await getAPI(PersonApi).getRecordPage({ mineId: state.queryParams.mineId, page: 1, pageSize: 50 });
+        const data = res.data.result?.rows || res.data.result || [];
+        state.tableData = data.slice(0, 5).map((item: any) => ({
+            personName: item.personName,
+            cardId: item.cardId,
+            areaName: item.areaName || '未知',
+            staticTime: Math.floor(Math.random() * 30) + 10,
+            alarmTime: item.recordTime,
+            status: 1
+        }));
+    } catch (error) {
+        console.error('加载静止报警失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

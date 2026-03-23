@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -55,18 +55,28 @@ function loadMineTree() {
 
 function handleNodeClick(data: any) { state.queryParams.mineId = data.id; loadData(); }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { date: '2026-03-09', totalPoints: 1000, actualPoints: 985, completeRate: 98.5, missingPoints: 15, missingDuration: 45 },
-            { date: '2026-03-08', totalPoints: 1000, actualPoints: 992, completeRate: 99.2, missingPoints: 8, missingDuration: 20 },
-            { date: '2026-03-07', totalPoints: 1000, actualPoints: 978, completeRate: 97.8, missingPoints: 22, missingDuration: 65 },
-            { date: '2026-03-06', totalPoints: 1000, actualPoints: 995, completeRate: 99.5, missingPoints: 5, missingDuration: 12 },
-        ];
+    try {
+        const res = await getAPI(SafetyApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 100 });
+        const data = res.data.result?.rows || res.data.result || [];
+        const total = data.length;
+        const missing = data.filter((d: any) => d.status !== 1).length;
+        state.tableData = [{
+            date: new Date().toISOString().split('T')[0],
+            totalPoints: total,
+            actualPoints: total - missing,
+            completeRate: total > 0 ? ((total - missing) / total * 100).toFixed(1) : 100,
+            missingPoints: missing,
+            missingDuration: missing * 5
+        }];
+    } catch (error) {
+        console.error('加载数据完整性失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

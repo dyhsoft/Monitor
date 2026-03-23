@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -59,16 +59,25 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { personName: '张三', cardId: 'C001', areaName: '重要设备间', alarmTime: '2026-03-09 10:30', status: 1 },
-            { personName: '李四', cardId: 'C002', areaName: '水仓', alarmTime: '2026-03-09 11:00', status: 2 },
-        ];
+    try {
+        const res = await getAPI(PersonApi).getRecordPage({ mineId: state.queryParams.mineId, page: 1, pageSize: 50 });
+        const data = res.data.result?.rows || res.data.result || [];
+        state.tableData = data.slice(0, 5).map((item: any) => ({
+            personName: item.personName,
+            cardId: item.cardId,
+            areaName: item.areaName || '未知区域',
+            alarmTime: item.recordTime,
+            status: 1
+        }));
+    } catch (error) {
+        console.error('加载区域入侵报警失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, SafetyApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -46,19 +46,25 @@ function loadMineTree() {
 
 function handleNodeClick(data: any) { state.queryParams.mineId = data.id; loadData(); }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { deviceName: '主扇风机1#', deviceType: '主扇', location: '地面风机房', status: 1, value: '正常', updateTime: new Date().toLocaleString() },
-            { deviceName: '主扇风机2#', deviceType: '主扇', location: '地面风机房', status: 1, value: '正常', updateTime: new Date().toLocaleString() },
-            { deviceName: '排水泵1#', deviceType: '排水', location: '中央泵房', status: 1, value: '正常', updateTime: new Date().toLocaleString() },
-            { deviceName: '排水泵2#', deviceType: '排水', location: '中央泵房', status: 2, value: '异常', updateTime: new Date().toLocaleString() },
-            { deviceName: '空压机1#', deviceType: '空压机', location: '空压机房', status: 1, value: '正常', updateTime: new Date().toLocaleString() },
-        ];
+    try {
+        const res = await getAPI(SafetyApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 50 });
+        state.tableData = (res.data.result?.rows || res.data.result || []).map((item: any) => ({
+            deviceName: item.sensorName,
+            deviceType: item.sensorType,
+            location: item.location,
+            status: item.status === 1 ? 1 : 2,
+            value: item.value,
+            updateTime: item.updateTime
+        }));
+    } catch (error) {
+        console.error('加载重点设备数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

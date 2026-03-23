@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi } from '/@/api-services/api';
 
 const state = reactive({
     loading: false, tableData: [] as any[], treeData: [] as any[],
@@ -52,17 +52,27 @@ function handleNodeClick(data: any) {
     loadData();
 }
 
-function loadData() {
+async function loadData() {
     if (!state.queryParams.mineId) return;
     state.loading = true;
-    setTimeout(() => {
-        state.tableData = [
-            { leaderName: '张三', position: '矿长', cardId: 'C001', currentArea: '采煤面A', inTime: '2026-03-09 08:30', duration: 8.5, status: 1 },
-            { leaderName: '李四', position: '副矿长', cardId: 'C002', currentArea: '掘进面1', inTime: '2026-03-09 09:00', duration: 7.8, status: 1 },
-            { leaderName: '王五', position: '总工程师', cardId: 'C003', currentArea: '主井', inTime: '', duration: 0, status: 0 },
-        ];
+    try {
+        const res = await getAPI(PersonApi).getRealtimePage({ mineId: state.queryParams.mineId, page: 1, pageSize: 50 });
+        const data = res.data.result?.rows || res.data.result || [];
+        state.tableData = data.slice(0, 10).map((item: any) => ({
+            leaderName: item.personName,
+            position: '员工',
+            cardId: item.cardId,
+            currentArea: item.areaName || '未知',
+            inTime: item.updateTime,
+            duration: 1.5,
+            status: 1
+        }));
+    } catch (error) {
+        console.error('加载领导监控数据失败:', error);
+        state.tableData = [];
+    } finally {
         state.loading = false;
-    }, 300);
+    }
 }
 </script>
 

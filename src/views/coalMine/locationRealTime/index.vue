@@ -80,7 +80,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi, PersonLocationApi, LocationAlarmApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi, LocationAlarmApi } from '/@/api-services/api';
 
 const state = reactive({
     treeData: [] as any[],
@@ -118,7 +118,7 @@ function handleNodeClick(data: any) {
 function loadData() {
     if (!state.queryParams.mineId) return;
     
-    getAPI(PersonLocationApi).getRealTime(state.queryParams.mineId).then((res) => {
+    getAPI(PersonApi).getRealTime(state.queryParams.mineId).then((res) => {
         state.personList = res.data.result || [];
         state.stats.inMineCount = state.personList.length;
     });

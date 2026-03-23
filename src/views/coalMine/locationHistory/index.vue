@@ -77,7 +77,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
-import { CoalMineApi, PersonLocationApi, PersonRecordApi, LocationAlarmApi } from '/@/api-services/api';
+import { CoalMineApi, PersonApi, LocationAlarmApi } from '/@/api-services/api';
 
 const state = reactive({
     activeTab: 'records',
@@ -115,7 +115,7 @@ function handleQuery() {
             params.startTime = state.dateRange[0];
             params.endTime = state.dateRange[1];
         }
-        getAPI(PersonRecordApi).getPage(params).then((res) => {
+        getAPI(PersonApi).getRecordPage(params).then((res) => {
             state.tableData = res.data.result?.items || [];
             state.total = res.data.result?.total || 0;
         }).finally(() => {
