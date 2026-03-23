@@ -85,10 +85,11 @@ public class PersonAttendanceService : IDynamicApiController, ITransient
     /// 批量生成出勤记录（从人员定位数据）
     /// </summary>
     [DisplayName("批量生成出勤记录")]
-    public async Task GenerateAttendance([FromQuery] long mineId, [FromQuery] DateTime date)
+    public Task GenerateAttendance([FromQuery] long mineId, [FromQuery] DateTime date)
     {
         // TODO: 根据实际业务逻辑，从人员定位数据生成出勤记录
         // 这里需要结合煤矿的上下班时间来判断
+        return Task.CompletedTask;
     }
 }
 

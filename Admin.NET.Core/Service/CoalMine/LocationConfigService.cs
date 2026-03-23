@@ -1,9 +1,10 @@
+using Admin.NET.Core;
+
 namespace Admin.NET.Core.Service;
 
 /// <summary>
 /// 矿领导配置服务
 /// </summary>
-using Admin.NET.Core;
 [ApiDescriptionSettings("LocationLeaderConfig", Description = "矿领导配置")]
 public class LocationLeaderConfigService : IDynamicApiController, ITransient
 {

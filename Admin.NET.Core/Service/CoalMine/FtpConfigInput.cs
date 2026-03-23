@@ -1,9 +1,10 @@
+using Admin.NET.Core;
+
 namespace Admin.NET.Core;
 
 /// <summary>
 /// FTP配置输入参数
 /// </summary>
-using Admin.NET.Core;
 public class AddFtpConfigInput
 {
     /// <summary>

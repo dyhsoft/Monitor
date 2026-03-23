@@ -194,7 +194,7 @@ public class CoalMineDataParser
 
     /// <summary>
     /// 解析文件头
-    /// 格式: <煤矿编号>;<煤矿名称>;<数据时间>
+    /// 格式: 煤矿编号;煤矿名称;数据时间
     /// 示例: 1234567890;测试煤矿;2024-01-15 10:00:00
     /// </summary>
     private static FileHeader ParseFileHeader(string headerLine, string fieldSeparator)

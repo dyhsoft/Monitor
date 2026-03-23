@@ -291,7 +291,7 @@ public class CoalMineAreaService : IDynamicApiController, ITransient
     /// </summary>
     [HttpGet]
     [DisplayName("初始化数据库列")]
-    public async Task<string> InitDbColumns()
+    public Task<string> InitDbColumns()
     {
         try
         {
@@ -300,11 +300,11 @@ public class CoalMineAreaService : IDynamicApiController, ITransient
             try { db.Ado.ExecuteCommand("ALTER TABLE ListenerConfigs ADD COLUMN ListenerType INTEGER DEFAULT 1"); } catch { }
             try { db.Ado.ExecuteCommand("ALTER TABLE ListenerConfigs ADD COLUMN FieldSeparator VARCHAR(10) DEFAULT ';'"); } catch { }
             try { db.Ado.ExecuteCommand("ALTER TABLE ListenerConfigs ADD COLUMN RecordSeparator VARCHAR(10) DEFAULT '~'"); } catch { }
-            return "初始化完成";
+            return Task.FromResult("初始化完成");
         }
         catch (Exception ex)
         {
-            return $"初始化失败: {ex.Message}";
+            return Task.FromResult($"初始化失败: {ex.Message}");
         }
     }
 }

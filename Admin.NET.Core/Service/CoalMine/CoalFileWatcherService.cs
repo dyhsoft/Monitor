@@ -67,18 +67,18 @@ public class CoalFileWatcherService : IDynamicApiController, ITransient
     /// <summary>
     /// 启动监听（内部方法）
     /// </summary>
-    private async Task StartWatcherAsync(ListenerConfig config)
+    private Task StartWatcherAsync(ListenerConfig config)
     {
         if (_watchers.ContainsKey(config.Id))
         {
             _logger.LogWarning("监听已存在: {ListenPath}", config.ListenPath);
-            return;
+            return Task.CompletedTask;
         }
 
         if (!Directory.Exists(config.ListenPath))
         {
             _logger.LogError("监听目录不存在: {ListenPath}", config.ListenPath);
-            return;
+            return Task.CompletedTask;
         }
 
         var watcher = new FileSystemWatcher(config.ListenPath)
@@ -98,13 +98,14 @@ public class CoalFileWatcherService : IDynamicApiController, ITransient
 
         _watchers[config.Id] = watcher;
         _logger.LogInformation("已启动监听: {ListenPath}", config.ListenPath);
+        return Task.CompletedTask;
     }
 
     /// <summary>
     /// 停止监听
     /// </summary>
     [DisplayName("停止文件监听")]
-    public async Task StopWatcherAsync(long configId)
+    public Task StopWatcherAsync(long configId)
     {
         if (_watchers.TryGetValue(configId, out var watcher))
         {
@@ -113,6 +114,7 @@ public class CoalFileWatcherService : IDynamicApiController, ITransient
             _watchers.Remove(configId);
             _logger.LogInformation("已停止监听: {ConfigId}", configId);
         }
+        return Task.CompletedTask;
     }
 
     /// <summary>

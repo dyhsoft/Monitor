@@ -75,12 +75,12 @@ public class FtpWatcherService : IDynamicApiController, ITransient
     /// <summary>
     /// 启动FTP客户端
     /// </summary>
-    private async Task StartFtpClientAsync(FtpConfig config)
+    private Task StartFtpClientAsync(FtpConfig config)
     {
         if (_ftpClients.ContainsKey(config.Id))
         {
             _logger.LogWarning("FTP客户端已存在: {ConfigId}", config.Id);
-            return;
+            return Task.CompletedTask;
         }
 
         // 创建临时目录用于下载文件
@@ -106,6 +106,7 @@ public class FtpWatcherService : IDynamicApiController, ITransient
         _timers[config.Id] = timer;
 
         _logger.LogInformation("已启动FTP监听: {BindSystem}", config.BindSystem);
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -223,7 +224,7 @@ public class FtpWatcherService : IDynamicApiController, ITransient
     /// 测试FTP连接
     /// </summary>
     [DisplayName("测试FTP连接")]
-    public async Task<FtpTestResult> TestConnectionAsync(TestFtpConnectionInput input)
+    public Task<FtpTestResult> TestConnectionAsync(TestFtpConnectionInput input)
     {
         try
         {
@@ -237,21 +238,21 @@ public class FtpWatcherService : IDynamicApiController, ITransient
 
             var isConnected = client.IsConnected;
 
-            return new FtpTestResult
+            return Task.FromResult(new FtpTestResult
             {
                 Success = true,
                 Message = "连接成功",
                 IsConnected = isConnected
-            };
+            });
         }
         catch (Exception ex)
         {
-            return new FtpTestResult
+            return Task.FromResult(new FtpTestResult
             {
                 Success = false,
                 Message = $"连接失败: {ex.Message}",
                 IsConnected = false
-            };
+            });
         }
     }
 

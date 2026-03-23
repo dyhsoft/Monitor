@@ -1,9 +1,10 @@
+using Admin.NET.Core;
+
 namespace Admin.NET.Core;
 
 /// <summary>
 /// 矿领导配置输入参数
 /// </summary>
-using Admin.NET.Core;
 public class AddLocationLeaderConfigInput
 {
     public long MineId { get; set; }

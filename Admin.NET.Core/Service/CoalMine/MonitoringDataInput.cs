@@ -1,9 +1,10 @@
+using Admin.NET.Core;
+
 namespace Admin.NET.Core;
 
 /// <summary>
 /// 安全监测数据查询输入参数
 /// </summary>
-using Admin.NET.Core;
 public class PageSafetyDataInput : BasePageInput
 {
     /// <summary>
