@@ -1,33 +1,60 @@
 <template>
-  <div class="pressure-stats-container">
-    <el-row :gutter="16">
-      <el-col :span="6">
-        <el-card><div class="stat-item"><div class="label">测点总数</div><div class="value">15</div></div></el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card><div class="stat-item"><div class="label">报警次数</div><div class="value warning">8</div></div></el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card><div class="stat-item"><div class="label">最大压力(MPa)</div><div class="value">18.5</div></div></el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card><div class="stat-item"><div class="label">平均压力(MPa)</div><div class="value">10.2</div></div></el-card>
-      </el-col>
-    </el-row>
-    <el-card class="chart-card" style="margin-top:16px">
-      <div ref="chartRef" style="width:100%;height:400px"></div>
-    </el-card>
-  </div>
+    <div class="page-layout">
+        <div class="left-tree">
+            <el-card shadow="hover">
+                <template #header><span style="font-weight: bold;">选择煤矿</span></template>
+                <el-tree :data="state.treeData" :props="state.treeProps" @node-click="handleNodeClick" node-key="id" default-expand-all highlight-current />
+            </el-card>
+        </div>
+        <div class="right-content">
+            <el-card shadow="hover">
+                <el-form :inline="true">
+                    <el-form-item><el-button type="primary" @click="loadData">查询</el-button></el-form-item>
+                </el-form>
+            </el-card>
+            <el-card shadow="hover" style="margin-top: 10px">
+                <el-table :data="state.tableData" v-loading="state.loading" border stripe height="400">
+                    <el-table-column type="index" label="序号" width="60" align="center" />
+                    <el-table-column prop="date" label="日期" align="center" />
+                    <el-table-column prop="avgValue" label="平均值" align="center" />
+                    <el-table-column prop="maxValue" label="最大值" align="center" />
+                </el-table>
+            </el-card>
+        </div>
+    </div>
 </template>
+
 <script setup lang="ts">
-import { ref } from 'vue'
-const chartRef = ref()
+import { onMounted, reactive } from 'vue';
+import { getAPI } from '/@/utils/axios-utils';
+import { CoalMineApi } from '/@/api-services/api';
+
+const state = reactive({
+    loading: false, tableData: [] as any[], treeData: [] as any[],
+    treeProps: { children: 'children', label: 'name' },
+    queryParams: { mineId: null as number | null }
+});
+
+onMounted(() => { loadMineTree(); });
+
+function loadMineTree() {
+    getAPI(CoalMineApi).getList({ page: 1, pageSize: 1000 }).then((res) => {
+        state.treeData = (res.data.result || []).map((item: any) => ({ id: item.id, name: item.name, children: [] }));
+    });
+}
+
+function handleNodeClick(data: any) {
+    state.queryParams.mineId = data.id;
+    loadData();
+}
+
+function loadData() {
+    if (!state.queryParams.mineId) return;
+}
 </script>
+
 <style scoped>
-.pressure-stats-container { padding: 16px; }
-.stat-item { text-align: center; padding: 20px; }
-.stat-item .label { font-size: 14px; color: #909399; margin-bottom: 10px; }
-.stat-item .value { font-size: 28px; font-weight: bold; }
-.stat-item .value.warning { color: #e6a23c; }
-.chart-card { min-height: 450px; }
+.page-layout { display: flex; gap: 10px; height: calc(100vh - 150px); }
+.left-tree { width: 250px; overflow: auto; }
+.right-content { flex: 1; overflow: auto; }
 </style>

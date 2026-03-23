@@ -1,115 +1,88 @@
 <template>
-    <div class="parse-log-container">
-        <el-card shadow="hover">
-            <el-form :model="state.queryParams" :inline="true">
-                <el-form-item label="煤矿">
-                    <el-select v-model="state.queryParams.mineId" placeholder="请选择煤矿" clearable filterable @change="handleQuery">
-                        <el-option v-for="item in state.mineList" :key="item.id" :label="item.name" :value="item.id" />
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="数据类型">
-                    <el-select v-model="state.queryParams.dataType" placeholder="请选择" clearable @change="handleQuery">
-                        <el-option label="CDSS(传感器)" value="CDSS" />
-                        <el-option label="RWSS(人员定位)" value="RWSS" />
-                        <el-option label="KYGL(矿压)" value="KYGL" />
-                        <el-option label="SWJC(水文)" value="SWJC" />
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="状态">
-                    <el-select v-model="state.queryParams.status" placeholder="请选择" clearable @change="handleQuery">
-                        <el-option label="成功" :value="1" />
-                        <el-option label="失败" :value="0" />
-                    </el-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" icon="ele-Search" @click="handleQuery"> 查询 </el-button>
-                    <el-button icon="ele-Refresh" @click="resetQuery"> 重置 </el-button>
-                </el-form-item>
-            </el-form>
-        </el-card>
-
-        <el-card class="full-table" shadow="hover" style="margin-top: 10px">
-            <el-table :data="state.tableData" v-loading="state.loading" border stripe>
-                <el-table-column type="index" label="序号" width="60" align="center" />
-                <el-table-column prop="mineName" label="煤矿" min-width="100" align="center" />
-                <el-table-column prop="fileName" label="文件名" min-width="200" align="center" show-overflow-tooltip />
-                <el-table-column prop="dataType" label="数据类型" width="100" align="center" />
-                <el-table-column prop="bindSystem" label="绑定系统" width="100" align="center" />
-                <el-table-column prop="recordCount" label="记录数" width="80" align="center" />
-                <el-table-column prop="duration" label="耗时(ms)" width="80" align="center" />
-                <el-table-column label="状态" width="80" align="center">
-                    <template #default="scope">
-                        <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
-                            {{ scope.row.status === 1 ? '成功' : '失败' }}
-                        </el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column prop="errorMessage" label="错误信息" min-width="150" align="center" show-overflow-tooltip />
-                <el-table-column prop="createTime" label="解析时间" width="160" align="center" />
-            </el-table>
-            <el-pagination 
-                v-model:current-page="state.queryParams.page" 
-                v-model:page-size="state.queryParams.pageSize"
-                :page-sizes="[10, 20, 50, 100]"
-                :total="state.total"
-                layout="total, sizes, prev, pager, next, jumper"
-                @size-change="handleQuery"
-                @current-change="handleQuery"
-                style="margin-top: 10px" 
-            />
-        </el-card>
+    <div class="page-layout">
+        <div class="left-tree">
+            <el-card shadow="hover">
+                <template #header><span style="font-weight: bold;">选择煤矿</span></template>
+                <el-tree :data="state.treeData" :props="state.treeProps" @node-click="handleNodeClick" node-key="id" default-expand-all highlight-current />
+            </el-card>
+        </div>
+        <div class="right-content">
+            <el-card shadow="hover">
+                <el-form :inline="true">
+                    <el-form-item label="数据类型">
+                        <el-select v-model="state.dataType" placeholder="请选择" clearable style="width: 150px;">
+                            <el-option label="CDSS(传感器)" value="CDSS" />
+                            <el-option label="RWSS(人员定位)" value="RWSS" />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="状态">
+                        <el-select v-model="state.status" placeholder="请选择" clearable style="width: 100px;">
+                            <el-option label="成功" :value="1" />
+                            <el-option label="失败" :value="0" />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item><el-button type="primary" @click="loadData">查询</el-button></el-form-item>
+                </el-form>
+            </el-card>
+            <el-card shadow="hover" style="margin-top: 10px">
+                <el-table :data="state.tableData" v-loading="state.loading" border stripe height="400">
+                    <el-table-column type="index" label="序号" width="60" align="center" />
+                    <el-table-column prop="fileName" label="文件名" align="center" />
+                    <el-table-column prop="dataType" label="数据类型" align="center" />
+                    <el-table-column prop="recordCount" label="记录数" align="center" />
+                    <el-table-column prop="status" label="状态" align="center">
+                        <template #default="scope">
+                            <el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">
+                                {{ scope.row.status === 1 ? '成功' : '失败' }}
+                            </el-tag>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-card>
+        </div>
     </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
 import { CoalMineApi, ParseLogApi } from '/@/api-services/api';
 
 const state = reactive({
-    loading: false,
-    total: 0,
-    tableData: [] as any[],
-    mineList: [] as any[],
-    queryParams: {
-        page: 1,
-        pageSize: 10,
-        mineId: null as number | null,
-        dataType: '',
-        status: null as number | null
-    }
+    loading: false, tableData: [] as any[], treeData: [] as any[],
+    treeProps: { children: 'children', label: 'name' },
+    queryParams: { mineId: null as number | null, dataType: '', status: null as number | null }
 });
 
-onMounted(() => {
-    loadMineList();
-    handleQuery();
-});
+onMounted(() => { loadMineTree(); });
 
-function loadMineList() {
+function loadMineTree() {
     getAPI(CoalMineApi).getList({ page: 1, pageSize: 1000 }).then((res) => {
-        state.mineList = res.data.result || [];
+        state.treeData = (res.data.result || []).map((item: any) => ({ id: item.id, name: item.name, children: [] }));
     });
 }
 
-function handleQuery() {
+function handleNodeClick(data: any) {
+    state.queryParams.mineId = data.id;
+    loadData();
+}
+
+async function loadData() {
+    if (!state.queryParams.mineId) return;
     state.loading = true;
-    getAPI(ParseLogApi).getPage(state.queryParams).then((res) => {
+    try {
+        const res = await getAPI(ParseLogApi).getPage(state.queryParams);
         state.tableData = res.data.result?.items || [];
-        state.total = res.data.result?.total || 0;
-    }).finally(() => {
+    } catch (error) {
+        console.error('加载解析日志失败:', error);
+    } finally {
         state.loading = false;
-    });
-}
-
-function resetQuery() {
-    state.queryParams.mineId = null;
-    state.queryParams.dataType = '';
-    state.queryParams.status = null;
-    handleQuery();
+    }
 }
 </script>
 
 <style scoped>
-.parse-log-container { padding: 10px; }
-.full-table { height: calc(100vh - 220px); overflow: auto; }
+.page-layout { display: flex; gap: 10px; height: calc(100vh - 150px); }
+.left-tree { width: 250px; overflow: auto; }
+.right-content { flex: 1; overflow: auto; }
 </style>

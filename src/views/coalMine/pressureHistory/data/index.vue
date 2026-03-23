@@ -1,83 +1,61 @@
 <template>
-  <div class="pressure-history-container">
-    <el-card class="search-card">
-      <el-form :inline="true" :model="searchForm">
-        <el-form-item label="煤矿">
-          <el-select v-model="searchForm.mineId" clearable @change="handleSearch">
-            <el-option v-for="item in mineOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="时间范围">
-          <el-date-picker v-model="searchForm.timeRange" type="datetimerange" range-separator="至" />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSearch">查询</el-button>
-          <el-button type="success" @click="exportData">导出</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-    <el-card class="table-card">
-      <el-table :data="tableData" border stripe v-loading="loading">
-        <el-table-column prop="mineName" label="煤矿名称" />
-        <el-table-column prop="sensorName" label="传感器名称" />
-        <el-table-column prop="location" label="位置" />
-        <el-table-column prop="pressure" label="压力(MPa)" />
-        <el-table-column prop="displacement" label="位移(mm)" />
-        <el-table-column prop="recordTime" label="记录时间" />
-      </el-table>
-    </el-card>
-  </div>
+    <div class="page-layout">
+        <div class="left-tree">
+            <el-card shadow="hover">
+                <template #header><span style="font-weight: bold;">选择煤矿</span></template>
+                <el-tree :data="state.treeData" :props="state.treeProps" @node-click="handleNodeClick" node-key="id" default-expand-all highlight-current />
+            </el-card>
+        </div>
+        <div class="right-content">
+            <el-card shadow="hover">
+                <el-form :inline="true">
+                    <el-form-item><el-button type="primary" @click="loadData">查询</el-button></el-form-item>
+                </el-form>
+            </el-card>
+            <el-card shadow="hover" style="margin-top: 10px">
+                <el-table :data="state.tableData" v-loading="state.loading" border stripe height="400">
+                    <el-table-column type="index" label="序号" width="60" align="center" />
+                    <el-table-column prop="sensorName" label="传感器名称" align="center" />
+                    <el-table-column prop="value" label="监测值" align="center" />
+                    <el-table-column prop="status" label="状态" align="center" />
+                </el-table>
+            </el-card>
+        </div>
+    </div>
 </template>
+
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { onMounted, reactive } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
 import { CoalMineApi, PressureApi } from '/@/api-services/api';
-import { ElMessage } from 'element-plus';
 
-const loading = ref(false)
-const mineOptions = ref<any[]>([])
-const searchForm = reactive({ mineId: null as number | null, timeRange: [] })
-const tableData = ref<any[]>([])
+const state = reactive({
+    loading: false, tableData: [] as any[], treeData: [] as any[],
+    treeProps: { children: 'children', label: 'name' },
+    queryParams: { mineId: null as number | null }
+});
 
-const loadMineOptions = async () => {
-  try {
-    const res = await getAPI(CoalMineApi).getList({ page: 1, pageSize: 1000 });
-    mineOptions.value = (res.data.result || []).map((item: any) => ({ label: item.name, value: item.id }));
-  } catch (error) {
-    console.error('加载煤矿列表失败:', error);
-  }
+onMounted(() => { loadMineTree(); });
+
+function loadMineTree() {
+    getAPI(CoalMineApi).getList({ page: 1, pageSize: 1000 }).then((res) => {
+        state.treeData = (res.data.result || []).map((item: any) => ({ id: item.id, name: item.name, children: [] }));
+    });
 }
 
-const handleSearch = async () => {
-  if (!searchForm.mineId) { tableData.value = []; return; }
-  loading.value = true;
-  try {
-    const params: any = { mineId: searchForm.mineId, page: 1, pageSize: 100 };
-    if (searchForm.timeRange && searchForm.timeRange.length === 2) {
-      params.startTime = searchForm.timeRange[0];
-      params.endTime = searchForm.timeRange[1];
-    }
-    const res = await getAPI(PressureApi).getHistoryPage(params);
-    tableData.value = res.data.result?.rows || res.data.result || [];
-  } catch (error) {
-    console.error('加载历史数据失败:', error);
-    tableData.value = [];
-  } finally {
-    loading.value = false;
-  }
+function handleNodeClick(data: any) {
+    state.queryParams.mineId = data.id;
+    loadData();
 }
 
-const exportData = () => { ElMessage.success('导出成功') }
-
-onMounted(async () => {
-  await loadMineOptions();
-  if (mineOptions.value.length > 0) {
-    searchForm.mineId = mineOptions.value[0].value;
-    handleSearch();
-  }
-})
+function loadData() {
+    if (!state.queryParams.mineId) return;
+    state.loading = false;
+}
 </script>
+
 <style scoped>
-.pressure-history-container { padding: 16px; }
-.search-card { margin-bottom: 16px; }
+.page-layout { display: flex; gap: 10px; height: calc(100vh - 150px); }
+.left-tree { width: 250px; overflow: auto; }
+.right-content { flex: 1; overflow: auto; }
 </style>
