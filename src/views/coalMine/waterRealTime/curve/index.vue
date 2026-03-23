@@ -1,161 +1,114 @@
 <template>
-  <div class="water-curve-container">
-    <el-card class="search-card">
-      <el-form :inline="true" :model="searchForm" class="search-form">
-        <el-form-item label="煤矿">
-          <el-select v-model="searchForm.mineId" placeholder="请选择煤矿" clearable @change="handleSearch">
-            <el-option v-for="item in mineOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="传感器">
-          <el-select v-model="searchForm.sensorId" placeholder="请选择传感器" clearable>
-            <el-option label="水位传感器01" value="1"></el-option>
-            <el-option label="流量传感器01" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="曲线类型">
-          <el-radio-group v-model="searchForm.curveType">
-            <el-radio label="waterLevel">水位曲线</el-radio>
-            <el-radio label="flow">流量曲线</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="时间范围">
-          <el-date-picker
-            v-model="searchForm.timeRange"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSearch">查询</el-button>
-          <el-button @click="exportData">导出</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
-
-    <el-card class="chart-card">
-      <div ref="chartRef" style="width: 100%; height: 450px;"></div>
-    </el-card>
-
-    <el-row :gutter="16" class="data-summary">
-      <el-col :span="8">
-        <el-card>
-          <template #header>
-            <span>最高水位(m)</span>
-          </template>
-          <div class="summary-value warning">6.2</div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card>
-          <template #header>
-            <span>最大流量(m³/h)</span>
-          </template>
-          <div class="summary-value">120.5</div>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card>
-          <template #header>
-            <span>平均排水量(m³/h)</span>
-          </template>
-          <div class="summary-value">85.2</div>
-        </el-card>
-      </el-col>
-    </el-row>
-  </div>
+    <div class="page-layout">
+        <div class="left-tree">
+            <el-card shadow="hover">
+                <template #header><span style="font-weight: bold;">选择煤矿</span></template>
+                <el-tree :data="state.treeData" :props="state.treeProps" @node-click="handleNodeClick" node-key="id" default-expand-all highlight-current />
+            </el-card>
+        </div>
+        <div class="right-content">
+            <el-card shadow="hover">
+                <el-form :inline="true">
+                    <el-form-item label="传感器">
+                        <el-select v-model="state.sensorId" placeholder="请选择传感器" clearable style="width: 150px;">
+                            <el-option label="水位传感器01" value="1" />
+                            <el-option label="流量传感器01" value="2" />
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="曲线类型">
+                        <el-radio-group v-model="state.curveType">
+                            <el-radio label="waterLevel">水位曲线</el-radio>
+                            <el-radio label="flow">流量曲线</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="时间范围">
+                        <el-date-picker v-model="state.dateRange" type="datetimerange" range-separator="至" start-placeholder="开始" end-placeholder="结束" value-format="YYYY-MM-DD HH:mm:ss" />
+                    </el-form-item>
+                    <el-form-item><el-button type="primary" @click="loadData">查询</el-button></el-form-item>
+                </el-form>
+            </el-card>
+            <el-card shadow="hover" style="margin-top: 10px">
+                <div ref="chartRef" style="width: 100%; height: 350px;"></div>
+            </el-card>
+            <el-row :gutter="10" style="margin-top: 10px">
+                <el-col :span="8">
+                    <el-card shadow="hover">
+                        <div class="stat-value">最高水位: {{ state.stats.max }} m</div>
+                    </el-card>
+                </el-col>
+                <el-col :span="8">
+                    <el-card shadow="hover">
+                        <div class="stat-value">最大流量: {{ state.stats.maxFlow }} m³/h</div>
+                    </el-card>
+                </el-col>
+                <el-col :span="8">
+                    <el-card shadow="hover">
+                        <div class="stat-value">平均排水量: {{ state.stats.avg }} m³/h</div>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { onMounted, reactive, ref } from 'vue';
 import { getAPI } from '/@/utils/axios-utils';
 import { CoalMineApi, WaterApi } from '/@/api-services/api';
-import { ElMessage } from 'element-plus';
 
-const chartRef = ref<HTMLElement>()
-const mineOptions = ref<any[]>([])
+const chartRef = ref<HTMLElement>();
 
-const searchForm = reactive({
-  mineId: null as number | null,
-  sensorId: '',
-  curveType: 'waterLevel',
-  timeRange: []
-})
+const state = reactive({
+    loading: false,
+    treeData: [] as any[],
+    treeProps: { children: 'children', label: 'name' },
+    queryParams: { mineId: null as number | null, sensorId: '', curveType: 'waterLevel', dateRange: null as any },
+    stats: { max: 0, maxFlow: 0, avg: 0 },
+    tableData: [] as any[]
+});
 
-// 加载煤矿列表
-const loadMineOptions = async () => {
-  try {
-    const res = await getAPI(CoalMineApi).getList({ page: 1, pageSize: 1000 });
-    mineOptions.value = (res.data.result || []).map((item: any) => ({ label: item.name, value: item.id }));
-  } catch (error) {
-    console.error('加载煤矿列表失败:', error);
-  }
+onMounted(() => { loadMineTree(); });
+
+function loadMineTree() {
+    getAPI(CoalMineApi).getList({ page: 1, pageSize: 1000 }).then((res) => {
+        state.treeData = (res.data.result || []).map((item: any) => ({ id: item.id, name: item.name, children: [] }));
+    });
 }
 
-const initChart = async () => {
-  if (!chartRef.value || !searchForm.mineId) return
-  
-  try {
-    // TODO: 调用真实API获取曲线数据
-    const xData = []
-    const yData = []
-    const now = new Date()
-    for (let i = 23; i >= 0; i--) {
-      const time = new Date(now.getTime() - i * 3600000)
-      xData.push(time.getHours() + ':00')
-      yData.push((Math.random() * 3 + 1).toFixed(2))
+function handleNodeClick(data: any) {
+    state.queryParams.mineId = data.id;
+    loadData();
+}
+
+async function loadData() {
+    if (!state.queryParams.mineId) return;
+    state.loading = true;
+    try {
+        const params: any = { mineId: state.queryParams.mineId, page: 1, pageSize: 100 };
+        if (state.queryParams.dateRange && state.queryParams.dateRange.length === 2) {
+            params.startTime = state.queryParams.dateRange[0];
+            params.endTime = state.queryParams.dateRange[1];
+        }
+        const res = await getAPI(WaterApi).getHistoryPage(params);
+        const data = res.data.result?.rows || res.data.result || [];
+        state.tableData = data;
+        if (data.length > 0) {
+            const values = data.map((d: any) => Number(d.waterLevel || d.flow) || 0);
+            state.stats.max = Math.max(...values).toFixed(2);
+            state.stats.maxFlow = state.stats.max;
+            state.stats.avg = (values.reduce((a: number, b: number) => a + b, 0) / values.length).toFixed(2);
+        }
+    } catch (error) {
+        console.error('加载水文曲线数据失败:', error);
+    } finally {
+        state.loading = false;
     }
-    console.log('水文曲线数据:', { x: xData, y: yData, type: searchForm.curveType })
-  } catch (error) {
-    console.error('加载曲线数据失败:', error);
-  }
 }
-
-const handleSearch = () => {
-  if (!searchForm.mineId) {
-    ElMessage.warning('请先选择煤矿');
-    return;
-  }
-  initChart()
-}
-
-const exportData = () => {
-  ElMessage.success('数据导出成功')
-}
-
-onMounted(async () => {
-  await loadMineOptions();
-  if (mineOptions.value.length > 0) {
-    searchForm.mineId = mineOptions.value[0].value;
-    initChart();
-  }
-})
 </script>
 
 <style scoped>
-.water-curve-container {
-  padding: 16px;
-}
-.search-card {
-  margin-bottom: 16px;
-}
-.chart-card {
-  margin-bottom: 16px;
-  min-height: 500px;
-}
-.data-summary {
-  margin-top: 16px;
-}
-.summary-value {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  padding: 20px;
-  color: #409eff;
-}
-.summary-value.warning {
-  color: #e6a23c;
-}
+.page-layout { display: flex; gap: 10px; height: calc(100vh - 150px); }
+.left-tree { width: 250px; overflow: auto; }
+.right-content { flex: 1; overflow: auto; }
+.stat-value { text-align: center; font-size: 16px; font-weight: bold; padding: 10px; }
 </style>
